@@ -38,4 +38,10 @@ public class HoaDon {
 
     public double getTongTien() { return tongTien; }
     public void setTongTien(double tongTien) { this.tongTien = tongTien; }
+
+    public void tinhTongTien(double tienPhong, double tienChiPhiPhu) {
+    this.tienPhong = tienPhong;
+    this.tienChiPhiPhu = tienChiPhiPhu;
+    this.tongTien = tienPhong + tienChiPhiPhu;
+    }
 }
