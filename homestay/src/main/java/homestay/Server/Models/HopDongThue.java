@@ -54,4 +54,10 @@ public class HopDongThue {
     public boolean isDangHieuLuc() {
         return ngayKetThuc == null || ngayKetThuc.isAfter(LocalDate.now());
     }
+
+    public int tinhSoNgayThue() {
+    if (ngayBatDau == null) return 0;
+    if (ngayKetThuc == null) return java.time.Period.between(ngayBatDau, LocalDate.now()).getDays() + 1;
+    return java.time.Period.between(ngayBatDau, ngayKetThuc).getDays() + 1;
+    }
 }
