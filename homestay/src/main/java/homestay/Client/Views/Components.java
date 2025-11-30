@@ -1,10 +1,18 @@
 package homestay.Client.Views;
 
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Panel;
 
-
+/**
+ * Lớp chứa các hàm dùng chung
+ */
 public class Components {
-    
+    // Các hàm dùng chung trả về View ở đây
     public static Button createMenuItem(String text) {
         Button btn = new Button(text);
         btn.setFont(new Font("Arial",Font.BOLD, 12));

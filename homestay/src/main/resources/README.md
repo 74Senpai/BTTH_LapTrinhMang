@@ -1,0 +1,1 @@
+### Nơi chứa các tài nguyên (ảnh, file, âm thanh, ...)
