@@ -15,6 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
+
 public class HomeView extends Frame {
 
     // Màu sắc chủ đạo
