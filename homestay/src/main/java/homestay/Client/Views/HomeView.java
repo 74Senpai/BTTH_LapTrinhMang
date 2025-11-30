@@ -1,6 +1,16 @@
 package homestay.Client.Views;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.ScrollPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -21,9 +31,8 @@ public class HomeView extends Frame {
         setTitle("Homestay Dashboard");
         setSize(1100, 700);
         setLayout(new BorderLayout());
-        setBackground(COLOR_BG);
 
-        // 1.2. Khởi tạo Dashboard & Main Content và room
+        // 1.2. Khởi tạo Dashboard và các giao diện khác ở đây
         DashboardView dashboard = new DashboardView();
         dashboard.showDashboard();
         
@@ -46,7 +55,6 @@ public class HomeView extends Frame {
         // 1.3. Khởi tạo Sidebar (Cột trái)
         Panel pnlSidebar = new Panel();
         pnlSidebar.setLayout(new BorderLayout());
-        pnlSidebar.setBackground(COLOR_SIDEBAR);
         pnlSidebar.setPreferredSize(new Dimension(200, 700));
 
         // 1.4. Khởi tạo Logo & Menu Panel
@@ -71,7 +79,7 @@ public class HomeView extends Frame {
         // Gán sự kiện click, xử lý ẩn hiện, luồng dữ liệu
         // ====================================================================
 
-        // 2.1. Logic nút Home
+        // Logic các nút ở đây
         btnHome.addActionListener(e -> {
             Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, dashboard, "Dashboard");
             if (resultView == dashboard) {
@@ -126,8 +134,6 @@ public class HomeView extends Frame {
         pnlMenu.add(btnRoom);
         pnlMenu.add(btnCustomer);
         
-        pnlBottomMenu.add(btnLogout);
-
         pnlSidebar.add(pnlMenu, BorderLayout.NORTH);
         pnlSidebar.add(pnlBottomMenu, BorderLayout.SOUTH);
 
