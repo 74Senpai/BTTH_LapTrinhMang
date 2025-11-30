@@ -11,6 +11,7 @@ import java.awt.Label;
 import java.awt.Panel;
 import java.awt.ScrollPane;
 
+
 public class HomeView extends Frame {
 
     public HomeView() {

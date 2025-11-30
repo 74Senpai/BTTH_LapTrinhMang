@@ -8,6 +8,11 @@ import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+
 /**
  * Lớp chứa các hàm dùng chung
  */
@@ -19,7 +24,7 @@ public class Components {
         return btn;
     }
     
-    // Hàm phụ trợ: Tạo Card (Ô vuông thống kê).
+    // Hàm phụ trợ: Tạo Card
     public static Panel createCard(String title, String value, Color bgColor) {
         Panel card = new Panel();
         card.setLayout(new GridLayout(2, 1));
@@ -63,5 +68,28 @@ public class Components {
         item.add(new Label(">"));
         
         return item;
+    }
+    // Hàm để kiểm tra number
+    public static class NumericCellEditor extends DefaultCellEditor {
+        public NumericCellEditor() {
+            super(new JTextField());
+        }
+        @Override
+        public boolean stopCellEditing() {
+            String value = (String)getCellEditorValue();
+
+            try {
+                double num = Double.parseDouble(value);
+                if (num < 0) {
+                    JOptionPane.showMessageDialog(null,"Giá phải là số dương!");
+                    return false;
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,"Giá phải là số!");
+                return false;
+            }
+
+            return super.stopCellEditing();
+        }
     }
 }
