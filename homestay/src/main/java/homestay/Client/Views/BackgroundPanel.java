@@ -1,6 +1,10 @@
 package homestay.Client.Views;
 
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Panel;
+import java.awt.Toolkit;
 
 class BackgroundPanel extends Panel {
     private Image img;
