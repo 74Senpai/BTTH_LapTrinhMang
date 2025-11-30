@@ -15,10 +15,12 @@ public class LoginView extends Frame {
         super("Login - Homestay");
 
         //Cấu hình Frame chính đầy fullwindowscreen
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        Dimension d = tk.getScreenSize();
-        setSize(d.width, d.height);
-        setExtendedState(Frame.MAXIMIZED_BOTH);
+        // Toolkit tk = Toolkit.getDefaultToolkit();
+        // Dimension d = tk.getScreenSize();
+        // setSize(d.width, d.height);
+        // setExtendedState(Frame.MAXIMIZED_BOTH);
+        setSize(800, 600);
+        
 
         setLayout(new BorderLayout());
 

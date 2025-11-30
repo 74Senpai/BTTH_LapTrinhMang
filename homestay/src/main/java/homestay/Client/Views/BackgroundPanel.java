@@ -22,7 +22,6 @@ class BackgroundPanel extends Panel {
     public void paint(Graphics g) {
         //Vẽ ảnh căng tràn toàn bộ panel
         if (img != null) {
-            
             g.drawImage(img, 0, 0, getWidth(), getHeight(), this); 
         }
         
