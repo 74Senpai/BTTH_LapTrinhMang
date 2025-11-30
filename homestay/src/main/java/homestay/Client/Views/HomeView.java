@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.smartcardio.Card;
+
 
 public class HomeView extends Frame {
 
@@ -22,10 +24,18 @@ public class HomeView extends Frame {
         setLayout(new BorderLayout());
         setBackground(COLOR_BG);
 
-        // 1.2. Khởi tạo Dashboard & Main Content
+        // 1.2. Khởi tạo Dashboard & Main Content và room
         DashboardView dashboard = new DashboardView();
-        dashboard.showDashboard(); // Giả sử hàm này load dữ liệu
-        Panel pnlMain = dashboard.pnlMain;
+        dashboard.showDashboard();
+        
+        RoomView room = new RoomView();
+        room.showRoomView();
+        
+        CardLayout card = new CardLayout();
+        Panel pnlMain = new Panel(card);
+        pnlMain.add(dashboard.pnlMain, "Dashboard");
+        pnlMain.add(room.pnlRoom, "Room");
+
         
         ScrollPane scrollPane = new ScrollPane(); // Container cuộn cho nội dung chính
 
@@ -58,7 +68,7 @@ public class HomeView extends Frame {
 
         // 2.1. Logic nút Home
         btnHome.addActionListener(e -> {
-            pnlMain.setVisible(true);
+            card.show(pnlMain, "Dashboard");
             btnHome.setEnabled(false);
             btnRoom.setEnabled(true);
             //khi ẩn/hiện component cần validate lại để layout cập nhật
@@ -67,9 +77,9 @@ public class HomeView extends Frame {
 
         // 2.2. Logic nút Menu
         btnRoom.addActionListener(e -> {
-            pnlMain.setVisible(false); 
+            card.show(pnlMain, "Room");
             btnHome.setEnabled(true);
-            btnRoom.setEnabled(false);
+            btnRoom.setEnabled(false); 
             validate();
         });
 

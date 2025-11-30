@@ -11,7 +11,7 @@ public class Components {
         return btn;
     }
     
-    // Hàm phụ trợ: Tạo Card (Ô vuông thống kê)
+    // Hàm phụ trợ: Tạo Card (Ô vuông thống kê).
     public static Panel createCard(String title, String value, Color bgColor) {
         Panel card = new Panel();
         card.setLayout(new GridLayout(2, 1));

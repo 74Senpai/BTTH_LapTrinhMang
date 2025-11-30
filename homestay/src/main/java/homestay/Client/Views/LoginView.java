@@ -3,9 +3,6 @@ package homestay.Client.Views;
 import java.awt.*;
 import java.awt.event.*;
 
-
-
-
 public class LoginView extends Frame {
 
     private Label lblMessage;
@@ -130,7 +127,7 @@ public class LoginView extends Frame {
         bgPanel.add(box);
         
 
-        // EXIT
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 dispose();

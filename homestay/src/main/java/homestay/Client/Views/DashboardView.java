@@ -2,7 +2,7 @@ package homestay.Client.Views;
 
 import java.awt.*;
 
-public class DashboardView extends Frame {
+public class DashboardView extends Panel{
 
     final Color COLOR_CARD_BLUE = new Color(100, 120, 140);
     final Color COLOR_TEXT_HEADER = new Color(50, 50, 50);
@@ -14,6 +14,7 @@ public class DashboardView extends Frame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(10, 20, 10, 20);
+        gbc.weighty = 1.0;
         gbc.weightx = 1.0;
         gbc.gridx = 0;
 
