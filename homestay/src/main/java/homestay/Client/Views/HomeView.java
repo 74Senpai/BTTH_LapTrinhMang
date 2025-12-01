@@ -28,9 +28,19 @@ public class HomeView extends Frame {
         DashboardView dashboard = new DashboardView();
         dashboard.showDashboard();
         
+        RoomView room = new RoomView();
+        room.showRoomView();
+
+        CustomerView customer = new CustomerView();
+        customer.showCustomerView();
+        
         CardLayout card = new CardLayout();
         Panel pnlMain = new Panel(card);
         pnlMain.add(dashboard.pnlMain, "Dashboard");
+        pnlMain.add(room.pnlRoom, "Room");
+        pnlMain.add(customer.pnlCustomer, "Customer");
+        
+
         
         ScrollPane scrollPane = new ScrollPane(); // Container cuộn cho nội dung chính
 
@@ -49,6 +59,9 @@ public class HomeView extends Frame {
         // 1.5. Khởi tạo các Nút bấm (Buttons)
         // Lưu ý: Tạo biến cho tất cả các nút để dễ xử lý logic
         Button btnHome = Components.createMenuItem("Home");
+        Button btnRoom = Components.createMenuItem("Quản lý Phòng");
+        Button btnCustomer = Components.createMenuItem("Quản lý Khách Hàng");
+        Button btnLogout = Components.createMenuItem("Log Out");
 
         // 1.6. Thiết lập trạng thái ban đầu
         btnHome.setEnabled(false); // Mặc định đang ở Home nên disable nút Home
@@ -60,13 +73,51 @@ public class HomeView extends Frame {
 
         // Logic các nút ở đây
         btnHome.addActionListener(e -> {
-            //Controller ở đây
-            card.show(pnlMain, "Dashboard");
-            btnHome.setEnabled(false);
-            //khi ẩn/hiện component cần validate lại để layout cập nhật
-            validate();
+            if(room.confirmBeforeSwitch()||customer.confirmBeforeSwitch()){
+                card.show(pnlMain, "Dashboard");
+                btnHome.setEnabled(false);
+                btnRoom.setEnabled(true);
+                btnCustomer.setEnabled(true);
+                //khi ẩn/hiện component cần validate lại để layout cập nhật
+                validate();
+            }
         });
 
+        // 2.2. Logic nút Menu
+        btnRoom.addActionListener(e -> {
+            if(customer.confirmBeforeSwitch()){
+                card.show(pnlMain, "Room");
+                btnCustomer.setEnabled(true);
+                btnHome.setEnabled(true);
+                btnRoom.setEnabled(false); 
+                validate();
+            }
+        });
+        
+        // 2.3. Logic nút Customer
+        btnCustomer.addActionListener(e -> {
+            if(room.confirmBeforeSwitch()){
+                
+                card.show(pnlMain, "Customer");
+                btnHome.setEnabled(true);
+                btnRoom.setEnabled(true);
+                btnCustomer.setEnabled(false); 
+                validate();
+            }
+        });
+
+
+        // 2.4. Logic nút Logout
+        btnLogout.addActionListener(e -> {
+            
+        });
+
+        // 2.5. Logic đóng cửa sổ
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                System.exit(0);
+            }
+        });
 
         // ====================================================================
         // PHẦN 3: THÊM VÀO VIEW (ADD TO VIEW)
@@ -76,6 +127,8 @@ public class HomeView extends Frame {
         // 3.1. Lắp ráp Menu (Sidebar)
         pnlMenu.add(lblLogo);
         pnlMenu.add(btnHome);
+        pnlMenu.add(btnRoom);
+        pnlMenu.add(btnCustomer);
         
         pnlSidebar.add(pnlMenu, BorderLayout.NORTH);
         pnlSidebar.add(pnlBottomMenu, BorderLayout.SOUTH);
@@ -90,6 +143,7 @@ public class HomeView extends Frame {
         // 3.4. Hiển thị Frame (Luôn để cuối cùng)
         setLocationRelativeTo(null); // Căn giữa màn hình
     }
+    
 
     public static void main(String[] args) {
         HomeView view = new HomeView();
