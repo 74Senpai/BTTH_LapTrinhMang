@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 
 public class Components {
@@ -83,4 +84,7 @@ public class Components {
             return super.stopCellEditing();
         }
     }
+
+    
+    
 }
