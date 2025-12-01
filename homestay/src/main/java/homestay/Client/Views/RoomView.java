@@ -7,6 +7,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -296,5 +297,4 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
                 JOptionPane.WARNING_MESSAGE);
         return false;
     }
-
 }
