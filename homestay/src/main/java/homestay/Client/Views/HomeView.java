@@ -139,11 +139,8 @@ public class HomeView extends Frame {
         pnlSidebar.add(pnlBottomMenu, BorderLayout.SOUTH);
 
         // 3.2. Lắp ráp Main Content
-        scrollPane.add(pnlMain);
-
         // 3.3. Lắp ráp vào Frame chính
         add(pnlSidebar, BorderLayout.WEST);
-        add(scrollPane, BorderLayout.CENTER);
 
         // 3.4. Hiển thị Frame (Luôn để cuối cùng)
         setLocationRelativeTo(null); // Căn giữa màn hình

@@ -136,7 +136,6 @@ public class CustomerView extends javax.swing.JPanel implements Components.IView
             // Thêm dòng mới: Mã tự sinh hoặc để trống, các ô khác trống
             String[] newRow = { "", "", "" };
             model.addRow(newRow);
-
             btnHuy.setEnabled(true);
             btnLuu.setEnabled(true);
         });
@@ -207,7 +206,6 @@ public class CustomerView extends javax.swing.JPanel implements Components.IView
             isTableChanged = false;
             btnHuy.setEnabled(false);
             btnLuu.setEnabled(false);
-
             // Gọi Controller gửi về Server
 
             JOptionPane.showMessageDialog(null, "Đã lưu thành công!");
