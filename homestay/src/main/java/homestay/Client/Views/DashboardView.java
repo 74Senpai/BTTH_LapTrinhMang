@@ -2,7 +2,6 @@ package homestay.Client.Views;
 
 import java.awt.Panel;
 
-
 public class DashboardView extends Panel implements Components.IViewCheck{
 
     Panel pnlMain = new Panel();
@@ -47,6 +46,12 @@ public class DashboardView extends Panel implements Components.IViewCheck{
         pnlFiller.setBackground(new Color(248, 249, 250));
         pnlMain.add(pnlFiller, gbc);
 
+    }
+    
+    // Hàm check trước khi chuyển tab
+    @Override
+    public boolean confirmBeforeSwitch() {
+        return true; 
     }
     
     // Hàm check trước khi chuyển tab

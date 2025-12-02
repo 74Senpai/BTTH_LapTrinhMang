@@ -87,7 +87,6 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
                     // Nếu giống hệt nhau
                     return;
                 }
-
                 // Nếu khác nhau -> Mới gọi hàm gốc để cập nhật và bắn sự kiện UPDATE
                 super.setValueAt(aValue, row, column);
             }
@@ -234,6 +233,28 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
 
         });
 
+        
+        // Nút Xóa
+        btnXoa.setEnabled(false);
+        btnXoa.addActionListener(e -> {
+            int selectedRow = tb.getSelectedRow();
+            if (selectedRow == -1) return;
+            
+            int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Bạn có chắc chắn muốn xóa dòng này không?",
+                "Xác nhận xóa",
+                JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    model.removeRow(selectedRow);
+                    isTableChanged = true;
+                    btnHuy.setEnabled(true);
+                    btnLuu.setEnabled(true);
+                    
+                }
+                
+            });
+            
         // Sự kiện chọn dòng để bật nút Xóa
         tb.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
@@ -247,7 +268,6 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
                 }
             }
         });
-
         // Lắng nghe thay đổi trên ô dữ liệu
         tb.getModel().addTableModelListener(e -> {
             if (e.getType() == TableModelEvent.UPDATE) {
