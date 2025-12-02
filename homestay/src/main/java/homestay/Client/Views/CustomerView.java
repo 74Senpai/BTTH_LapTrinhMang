@@ -18,7 +18,6 @@ public class CustomerView extends javax.swing.JPanel implements Components.IView
     Button btnLuu = new Button("Lưu cập nhật");
     Button btnXoa = new Button("Xóa khách");
     Button btnThem = new Button("Thêm khách");
-
     // Biến lưu trữ dữ liệu gốc
     String originalData[][];
     public boolean isTableChanged = false;
@@ -77,7 +76,6 @@ public class CustomerView extends javax.swing.JPanel implements Components.IView
                     // Nếu giống hệt nhau
                     return;
                 }
-
                 // Nếu khác nhau -> Mới gọi hàm gốc để cập nhật và bắn sự kiện UPDATE
                 super.setValueAt(aValue, row, column);
             }
