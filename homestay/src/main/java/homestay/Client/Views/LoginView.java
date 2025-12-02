@@ -31,7 +31,7 @@ public class LoginView extends Frame {
         bgPanel.setLayout(new GridBagLayout()); // Căn giữa login box
         add(bgPanel, BorderLayout.CENTER);
 
-        // ----------- LOGIN BOX -----------
+        // --- Tạo Login Box ---
         Panel box = new Panel();
         box.setBackground(Color.WHITE);
         box.setPreferredSize(new Dimension(560, 520));
@@ -46,7 +46,7 @@ public class LoginView extends Frame {
         gbc.gridx = 0;
         gbc.insets = new Insets(0, 50, 2, 50);
         
-        // ------- TITLE -------
+        // --- TITLE ---
         Label lblTitle = new Label("Log in", Label.CENTER);
         lblTitle.setFont(new Font("SansSerif", Font.BOLD, 34));
         gbc.gridy = 0;
@@ -54,14 +54,14 @@ public class LoginView extends Frame {
         gbc.anchor = GridBagConstraints.CENTER;
         box.add(lblTitle, gbc);
 
-        // ------- SUBTITLE -------
+        // --- SUBTITLE ---
         Label lblSub = new Label("Welcome back! Please sign in.", Label.CENTER);
         lblSub.setFont(new Font("SansSerif", Font.PLAIN, 14));
         lblSub.setForeground(Color.GRAY);
         gbc.gridy = 1;
         box.add(lblSub, gbc);
 
-        // ------- USERNAME -------
+        // --- USERNAME ---
         Label lblUsername = new Label("Username :");
         lblUsername.setFont(new Font("SansSerif", Font.BOLD, 15));
         gbc.gridy = 2;
@@ -77,7 +77,7 @@ public class LoginView extends Frame {
         gbc.insets = new Insets(2, 50, 10, 50);
         box.add(txtUsername, gbc);
 
-        // ------- PASSWORD -------
+        // --- PASSWORD ---
         Label lblPass = new Label("Password :");
         lblPass.setFont(new Font("SansSerif", Font.BOLD, 15));
         gbc.gridy = 4;
@@ -94,14 +94,14 @@ public class LoginView extends Frame {
         gbc.insets = new Insets(2, 50, 10, 50);
         box.add(txtPassword, gbc);
         
-        //------- MESSAGE LABEL -------
+        //--- MESSAGE LABEL ---
         lblMessage = new Label();
         lblMessage.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblMessage.setForeground(Color.RED);
         gbc.gridy = 6;
         box.add(lblMessage, gbc);
 
-        // ------- LOGIN BUTTON -------
+        // --- LOGIN BUTTON ---
         Button btnLogin = new Button("Log in");
         btnLogin.setBackground(Color.BLACK);
         btnLogin.setForeground(Color.WHITE);

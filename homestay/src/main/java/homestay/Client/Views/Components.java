@@ -85,6 +85,97 @@ public class Components {
         }
     }
 
+    // Hàm để kiểm tra số điện thoại việt nam
+    public static class PhoneNumberCellEditor extends DefaultCellEditor {
+        public PhoneNumberCellEditor() {
+            super(new JTextField());
+        }
+        @Override
+        public boolean stopCellEditing() {
+            String value = (String)getCellEditorValue();
+            try{
+                if (value.charAt(0) != '0') {
+                    JOptionPane.showMessageDialog(null,"Số điện thoại phải bắt đầu bằng 0.");
+                    return false;
+                }
+                if (value.length() != 10) {
+                    JOptionPane.showMessageDialog(null,"Số điện thoại phải có đúng 10 chữ số.");
+                    return false;
+                }
+            }catch (Exception e) {
+                JOptionPane.showMessageDialog(null,"Số điện thoại phải là số.");
+                return false;
+            }
+            return super.stopCellEditing();
+        }
+    }
+
+    // Hàm để kiểm tra số CCCD việt nam
+    public static class CCCDCellEditor extends DefaultCellEditor {
+        public CCCDCellEditor() {
+            super(new JTextField());
+        }
+        @Override
+        public boolean stopCellEditing() {
+            String value = (String)getCellEditorValue();
+            try{
+                if (value.charAt(0) != '0') {
+                    JOptionPane.showMessageDialog(null,"CCCD phải được bắt đầu bằng 0.");
+                    return false;
+                    
+                }
+                if (value.length() != 12) {
+                    JOptionPane.showMessageDialog(null,"CCCD phải có đúng 12 chữ số.");
+                    return false;
+                }
+            }catch (Exception e) {
+                JOptionPane.showMessageDialog(null,"CCCD phải là số.");
+                return false;
+            }
+            return super.stopCellEditing();
+        }
+    }
+
+
+    // Hàm cập nhật trạng thái của nút
+    public static void updateMenuState(Button activeBtn,Button... allButtons) {
+        // Reset tất cả nút về trạng thái bật (true)
+        for (Button btn : allButtons) {
+            if (btn == activeBtn) {
+                btn.setEnabled(false);
+            } 
+            else {
+                btn.setEnabled(true);
+            }
+        }
+    }
+
+    // Định nghĩa Interface để chuyển view
+    public static interface IViewCheck {
+        boolean confirmBeforeSwitch();
+    }
+
+    // Hàm chuyển view
+    public static IViewCheck switchView(CardLayout cardLayout, Container container, 
+                                        IViewCheck currentView, IViewCheck targetView, 
+                                        String keyName){
+        // Nếu view hiện tại và view đích là một -> Không làm gì cả
+        if (currentView == targetView) {
+            return currentView;
+        }
+
+        // Kiểm tra View hiện tại
+        if (currentView != null) {
+            // Nếu View hiện tại trả về false -> Không chuyển view
+            if (!currentView.confirmBeforeSwitch()) {
+                return currentView; 
+            }
+        }
+
+        cardLayout.show(container, keyName);
+        
+        return targetView;
+    }
     
     
 }

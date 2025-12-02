@@ -2,7 +2,7 @@ package homestay.Client.Views;
 
 import java.awt.*;
 
-public class DashboardView extends Panel{
+public class DashboardView extends Panel implements Components.IViewCheck{
 
     final Color COLOR_CARD_BLUE = new Color(100, 120, 140);
     final Color COLOR_TEXT_HEADER = new Color(50, 50, 50);
@@ -65,5 +65,11 @@ public class DashboardView extends Panel{
         pnlList.add(Components.createListItem("Manage", "Team"));
         pnlList.add(Components.createListItem("Stay", "Client Updates"));
         pnlMain.add(pnlList, gbc);
+    }
+    
+    // Hàm check trước khi chuyển tab
+    @Override
+    public boolean confirmBeforeSwitch() {
+        return true; 
     }
 }

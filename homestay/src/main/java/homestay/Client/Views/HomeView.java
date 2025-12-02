@@ -10,6 +10,7 @@ public class HomeView extends Frame {
     // Màu sắc chủ đạo
     final Color COLOR_SIDEBAR = new Color(220, 222, 225); 
     final Color COLOR_BG = Color.WHITE;
+    private Components.IViewCheck currentView; 
 
     public HomeView() {
         // ====================================================================
@@ -72,35 +73,31 @@ public class HomeView extends Frame {
 
         // 2.1. Logic nút Home
         btnHome.addActionListener(e -> {
-            if(room.confirmBeforeSwitch()||customer.confirmBeforeSwitch()){
-                card.show(pnlMain, "Dashboard");
-                btnHome.setEnabled(false);
-                btnRoom.setEnabled(true);
-                btnCustomer.setEnabled(true);
-                //khi ẩn/hiện component cần validate lại để layout cập nhật
+            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, dashboard, "Dashboard");
+            if (resultView == dashboard) {
+                currentView = resultView;
+                Components.updateMenuState(btnHome, btnHome, btnRoom, btnCustomer);
+                // validate để cập nhật lại giao diện
                 validate();
             }
         });
 
         // 2.2. Logic nút Menu
         btnRoom.addActionListener(e -> {
-            if(customer.confirmBeforeSwitch()){
-                card.show(pnlMain, "Room");
-                btnCustomer.setEnabled(true);
-                btnHome.setEnabled(true);
-                btnRoom.setEnabled(false); 
+            Components.IViewCheck resultView  = Components.switchView(card, pnlMain, currentView, room, "Room");
+            if(resultView == room){
+                currentView = resultView;
+                Components.updateMenuState(btnRoom, btnHome, btnRoom, btnCustomer);
                 validate();
             }
         });
         
         // 2.3. Logic nút Customer
         btnCustomer.addActionListener(e -> {
-            if(room.confirmBeforeSwitch()){
-                
-                card.show(pnlMain, "Customer");
-                btnHome.setEnabled(true);
-                btnRoom.setEnabled(true);
-                btnCustomer.setEnabled(false); 
+            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, customer, "Customer");
+            if(resultView == customer){
+                currentView = resultView;
+                Components.updateMenuState(btnCustomer, btnHome, btnRoom, btnCustomer);
                 validate();
             }
         });
