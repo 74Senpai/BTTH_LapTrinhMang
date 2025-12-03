@@ -2,6 +2,7 @@ package homestay.Client.Views;
 
 import java.awt.Panel;
 
+
 public class DashboardView extends Panel implements Components.IViewCheck{
 
     Panel pnlMain = new Panel();
