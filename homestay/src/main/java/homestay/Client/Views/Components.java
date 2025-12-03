@@ -9,9 +9,11 @@ import java.awt.Label;
 import java.awt.Panel;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 
 /**
@@ -70,6 +72,17 @@ public class Components {
         
         return item;
     }
+
+    // Hàm căn giữa toàn bảng
+    public static void CenterTable (JTable table){
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+    }
+
     // Hàm để kiểm tra number
     public static class NumericCellEditor extends DefaultCellEditor {
         public NumericCellEditor() {
@@ -85,7 +98,7 @@ public class Components {
                     JOptionPane.showMessageDialog(null,"Giá phải là số dương!");
                     return false;
                 }
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null,"Giá phải là số!");
                 return false;
             }
@@ -102,17 +115,8 @@ public class Components {
         @Override
         public boolean stopCellEditing() {
             String value = (String)getCellEditorValue();
-            try{
-                if (value.charAt(0) != '0') {
-                    JOptionPane.showMessageDialog(null,"Số điện thoại phải bắt đầu bằng 0.");
-                    return false;
-                }
-                if (value.length() != 10) {
-                    JOptionPane.showMessageDialog(null,"Số điện thoại phải có đúng 10 chữ số.");
-                    return false;
-                }
-            }catch (Exception e) {
-                JOptionPane.showMessageDialog(null,"Số điện thoại phải là số.");
+            if (value == null || !value.matches("^0\\d{9}$")) {
+                JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ. Phải bắt đầu bằng 0 và có đúng 10 chữ số.");
                 return false;
             }
             return super.stopCellEditing();
@@ -127,24 +131,13 @@ public class Components {
         @Override
         public boolean stopCellEditing() {
             String value = (String)getCellEditorValue();
-            try{
-                if (value.charAt(0) != '0') {
-                    JOptionPane.showMessageDialog(null,"CCCD phải được bắt đầu bằng 0.");
-                    return false;
-                    
-                }
-                if (value.length() != 12) {
-                    JOptionPane.showMessageDialog(null,"CCCD phải có đúng 12 chữ số.");
-                    return false;
-                }
-            }catch (Exception e) {
-                JOptionPane.showMessageDialog(null,"CCCD phải là số.");
+            if (value == null || !value.matches("^0\\d{11}$")) {
+                JOptionPane.showMessageDialog(null, "CCCD không hợp lệ. Phải bắt đầu bằng 0 và có đúng 12 chữ số.");
                 return false;
             }
             return super.stopCellEditing();
         }
     }
-
 
     // Hàm cập nhật trạng thái của nút
     public static void updateMenuState(Button activeBtn,Button... allButtons) {
