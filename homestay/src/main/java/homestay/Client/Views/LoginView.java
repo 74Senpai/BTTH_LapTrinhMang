@@ -13,20 +13,18 @@ public class LoginView extends Frame {
     
     public LoginView() {
         super("Login - Homestay");
-
         //Cấu hình Frame chính đầy fullwindowscreen
         // Toolkit tk = Toolkit.getDefaultToolkit();
         // Dimension d = tk.getScreenSize();
         // setSize(d.width, d.height);
         // setExtendedState(Frame.MAXIMIZED_BOTH);
         setSize(800, 600);
-        
 
         setLayout(new BorderLayout());
 
-        //Tạo Background Panel (Lớp đáy chứa ảnh)
+        //Tạo Background Panel 
         BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\box\\javaM\\BTTH_LapTrinhMang\\homestay\\src\\main\\java\\homestay\\Client\\Views\\homestay2.jpg");
+                "D:\\box\\javaM\\BTTH_LapTrinhMang\\homestay\\src\\main\\java\\homestay\\Client\\Views\\bg.png");
 
         bgPanel.setLayout(new GridBagLayout()); // Căn giữa login box
         add(bgPanel, BorderLayout.CENTER);
@@ -116,8 +114,6 @@ public class LoginView extends Frame {
             if(Username.isEmpty() || Password.isEmpty()){
                 showMessage("Mật khẩu hoặc tên đăng nhập không được để trống!");
                 return;
-            } else {
-                showMessage("Đăng nhập thành công!");
             }
             //Controller xử lý đăng nhập
             
