@@ -1,118 +1,81 @@
 package homestay.Client.Views;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-// 1. **UtilityBillingView.java**  
-//    - Tính tiền các dịch vụ: Điện, Nước, Internet.  
-//    - Hiển thị form nhập **chỉ số cũ và mới**.  
-//    - Hiển thị **kết quả tổng tiền**.  
-//    - Các nút thao tác: **Tính**, **Lưu**, **In**.
+// 2. **StatisticsReportView.java**  
+//    - Hiển thị **báo cáo thống kê** theo loại: Doanh thu, Phòng trống, Khách hàng.  
+//    - Table thống kê dữ liệu chi tiết.  
+//    - Hiển thị **tổng quan ngắn gọn**.  
+//    - Các nút thao tác: **Tạo báo cáo**, **Xuất Excel**.
 
-
-//    ### UtilityBillingView.java
+// ### StatisticsReportView.java
 
 // - **UI Components**
-//   - `JComboBox<String> cmbService` : chọn dịch vụ
-//   - `JTextField txtOld, txtNew` : nhập chỉ số cũ/mới
-//   - `JLabel lblResult` : hiển thị kết quả
-//   - `JButton btnCalculate, btnSave, btnPrint` : các thao tác
-// - **Validation**
-//   - Chỉ số cũ/mới phải là số (`Double`)
-//   - Nếu dữ liệu không hợp lệ, hiển thị `JOptionPane`
+//   - `JComboBox<String> cmbType` : chọn loại báo cáo
+//   - `JLabel lblSummary` : hiển thị tổng quan
+//   - `JTable tblReport` : hiển thị dữ liệu chi tiết
+//   - `JButton btnGenerate, btnExport` : thao tác tạo và xuất báo cáo
 // - **Hàm override trống**
-//   - `addCalculateListener(ActionListener listener)`
-//   - `addSaveListener(ActionListener listener)`
-//   - `addPrintListener(ActionListener listener)`
+//   - `addGenerateListener(ActionListener listener)`
+//   - `addExportListener(ActionListener listener)`
 
 
-public class UtilityBillingView extends JFrame {
+public class StatisticsReportView extends JFrame {
 
-    private JComboBox<String> cmbService;
-    private JTextField txtOld, txtNew;
-    private JLabel lblResult;
-    private JButton btnCalculate, btnSave, btnPrint;
+    private JComboBox<String> cmbType;
+    private JButton btnGenerate, btnExport;
+    private JTable tblReport;
+    private JLabel lblSummary;
 
-    public UtilityBillingView() {
-        setTitle("Tính tiền dịch vụ");
-        setSize(500, 400);
+    public StatisticsReportView() {
+        setTitle("Báo cáo thống kê");
+        setSize(900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         initComponents();
     }
 
     private void initComponents() {
-        // Panel chính
-        JPanel panelMain = new JPanel(new BorderLayout(20, 20));
-        panelMain.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel panelMain = new JPanel(new BorderLayout(15,15));
+        panelMain.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
-        // Panel form input
-        JPanel pnlForm = new JPanel(new GridBagLayout());
-        pnlForm.setBorder(BorderFactory.createTitledBorder("Thông tin dịch vụ"));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        // Panel trên: chọn loại báo cáo + button
+        JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
+        cmbType = new JComboBox<>(new String[]{"Doanh thu", "Phòng trống", "Khách hàng"});
+        btnGenerate = new JButton("Tạo báo cáo");
+        btnExport = new JButton("Xuất Excel");
+        pnlTop.add(new JLabel("Loại báo cáo:")); pnlTop.add(cmbType);
+        pnlTop.add(btnGenerate); pnlTop.add(btnExport);
 
-        JLabel lblService = new JLabel("Dịch vụ:");
-        lblService.setFont(new Font("Arial", Font.BOLD, 14));
-        cmbService = new JComboBox<>(new String[]{"Điện", "Nước", "Internet"});
+        // Label tổng quan
+        lblSummary = new JLabel("Tổng quan: ", SwingConstants.LEFT);
+        lblSummary.setFont(new Font("Arial", Font.BOLD, 14));
+        lblSummary.setForeground(new Color(0, 128, 0));
 
-        JLabel lblOld = new JLabel("Chỉ số cũ:");
-        lblOld.setFont(new Font("Arial", Font.BOLD, 14));
-        txtOld = new JTextField();
+        // Table
+        tblReport = new JTable(new DefaultTableModel(new Object[]{"STT","Tên","Giá trị"},0));
+        tblReport.setRowHeight(25);
+        tblReport.setFont(new Font("Arial", Font.PLAIN, 13));
+        JScrollPane scroll = new JScrollPane(tblReport);
 
-        JLabel lblNew = new JLabel("Chỉ số mới:");
-        lblNew.setFont(new Font("Arial", Font.BOLD, 14));
-        txtNew = new JTextField();
-
-        lblResult = new JLabel("Tổng tiền: 0 VNĐ", SwingConstants.CENTER);
-        lblResult.setFont(new Font("Arial", Font.BOLD, 16));
-        lblResult.setForeground(new Color(0, 128, 255));
-        lblResult.setBorder(BorderFactory.createEtchedBorder());
-
-        btnCalculate = new JButton("Tính");
-        btnSave = new JButton("Lưu");
-        btnPrint = new JButton("In");
-
-        // Sắp xếp GridBag
-        gbc.gridx = 0; gbc.gridy = 0; pnlForm.add(lblService, gbc);
-        gbc.gridx = 1; pnlForm.add(cmbService, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; pnlForm.add(lblOld, gbc);
-        gbc.gridx = 1; pnlForm.add(txtOld, gbc);
-        gbc.gridx = 0; gbc.gridy = 2; pnlForm.add(lblNew, gbc);
-        gbc.gridx = 1; pnlForm.add(txtNew, gbc);
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; pnlForm.add(lblResult, gbc);
-
-        // Panel button
-        JPanel pnlButtons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        pnlButtons.add(btnCalculate);
-        pnlButtons.add(btnSave);
-        pnlButtons.add(btnPrint);
-
-        panelMain.add(pnlForm, BorderLayout.CENTER);
-        panelMain.add(pnlButtons, BorderLayout.SOUTH);
+        panelMain.add(pnlTop, BorderLayout.NORTH);
+        panelMain.add(lblSummary, BorderLayout.CENTER);
+        panelMain.add(scroll, BorderLayout.SOUTH);
 
         add(panelMain);
     }
 
-    // Getter + validate
-    public String getService() { return cmbService.getSelectedItem().toString(); }
+    public String getSelectedReportType() { return cmbType.getSelectedItem().toString(); }
 
-    public Double getOldIndex() {
-        try { return Double.parseDouble(txtOld.getText().trim()); }
-        catch(Exception e){ JOptionPane.showMessageDialog(this,"Chỉ số cũ phải là số!"); return null; }
-    }
+    public JTable getTable() { return tblReport; }
 
-    public Double getNewIndex() {
-        try { return Double.parseDouble(txtNew.getText().trim()); }
-        catch(Exception e){ JOptionPane.showMessageDialog(this,"Chỉ số mới phải là số!"); return null; }
-    }
-
-    public void setResult(double total) { lblResult.setText("Tổng tiền: " + total + " VNĐ"); }
+    public void setSummary(String text) { lblSummary.setText("Tổng quan: " + text); }
 
     // Override listener
-    public void addCalculateListener(ActionListener listener) { btnCalculate.addActionListener(listener); }
-    public void addSaveListener(ActionListener listener) { btnSave.addActionListener(listener); }
-    public void addPrintListener(ActionListener listener) { btnPrint.addActionListener(listener); }
+    public void addGenerateListener(ActionListener listener) { btnGenerate.addActionListener(listener); }
+    public void addExportListener(ActionListener listener) { btnExport.addActionListener(listener); }
 }
+
