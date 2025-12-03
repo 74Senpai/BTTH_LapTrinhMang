@@ -1,13 +1,20 @@
 package homestay.Client.Views;
 
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.Panel;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -233,28 +240,6 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
 
         });
 
-        
-        // Nút Xóa
-        btnXoa.setEnabled(false);
-        btnXoa.addActionListener(e -> {
-            int selectedRow = tb.getSelectedRow();
-            if (selectedRow == -1) return;
-            
-            int confirm = JOptionPane.showConfirmDialog(
-                null,
-                "Bạn có chắc chắn muốn xóa dòng này không?",
-                "Xác nhận xóa",
-                JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    model.removeRow(selectedRow);
-                    isTableChanged = true;
-                    btnHuy.setEnabled(true);
-                    btnLuu.setEnabled(true);
-                    
-                }
-                
-            });
-            
         // Sự kiện chọn dòng để bật nút Xóa
         tb.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
