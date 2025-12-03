@@ -11,13 +11,13 @@ public class HoaDon {
     public HoaDon() {}
 
     public HoaDon(String maThanhToan, String maHopDong, String maChiPhiPhu,
-                  double tienPhong, double tienChiPhiPhu, double tongTien) {
+                  double tienPhong, double tienChiPhiPhu) {
         this.maThanhToan = maThanhToan;
         this.maHopDong = maHopDong;
         this.maChiPhiPhu = maChiPhiPhu;
         this.tienPhong = tienPhong;
         this.tienChiPhiPhu = tienChiPhiPhu;
-        this.tongTien = tongTien;
+        this.tongTien = tienPhong + tienChiPhiPhu;
     }
 
     // Getters & Setters
