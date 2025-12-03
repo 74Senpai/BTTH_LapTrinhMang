@@ -56,8 +56,8 @@ public class HopDongThue {
     }
 
     public int tinhSoNgayThue() {
-    if (ngayBatDau == null) return 0;
-    if (ngayKetThuc == null) return java.time.Period.between(ngayBatDau, LocalDate.now()).getDays() + 1;
-    return java.time.Period.between(ngayBatDau, ngayKetThuc).getDays() + 1;
+        if (ngayBatDau == null) return 0;
+        LocalDate end = ngayKetThuc != null ? ngayKetThuc : LocalDate.now();
+        return (int) java.time.temporal.ChronoUnit.DAYS.between(ngayBatDau, end) + 1;
     }
 }
