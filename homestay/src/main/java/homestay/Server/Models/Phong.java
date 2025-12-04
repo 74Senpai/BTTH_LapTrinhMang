@@ -3,14 +3,15 @@ package homestay.Server.Models;
 public class Phong {
     private String maPhong;
     private String tenPhong;
-    private int maTrangThai;        
-    private String tenTrangThai;    
-    private int soDienHienTai;      
-    private int soNuocHienTai;      
+    private int maTrangThai;
+    private String tenTrangThai;  
+    private int soDienHienTai;
+    private int soNuocHienTai;
     private double giaThueNgay;
     private double giaThueThang;
 
-    // Getter & Setter
+    public Phong() {}
+
     public String getMaPhong() { return maPhong; }
     public void setMaPhong(String maPhong) { this.maPhong = maPhong; }
 

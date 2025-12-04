@@ -1,6 +1,7 @@
 package homestay.Server.Models;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class HopDongThue {
     private String maHopDong;
@@ -10,23 +11,15 @@ public class HopDongThue {
     private String loaiHinhThue;
     private LocalDate ngayBatDau;
     private LocalDate ngayKetThuc;
-    private Integer tongSoNgay;
 
     public HopDongThue() {}
 
-    public HopDongThue(String maHopDong, String maKhachHang, String maPhong, Integer maNhanVien,
-                       String loaiHinhThue, LocalDate ngayBatDau, LocalDate ngayKetThuc, Integer tongSoNgay) {
-        this.maHopDong = maHopDong;
-        this.maKhachHang = maKhachHang;
-        this.maPhong = maPhong;
-        this.maNhanVien = maNhanVien;
-        this.loaiHinhThue = loaiHinhThue;
-        this.ngayBatDau = ngayBatDau;
-        this.ngayKetThuc = ngayKetThuc;
-        this.tongSoNgay = tongSoNgay;
+    public int tinhSoNgayThue() {
+        if (ngayBatDau == null) return 0;
+        LocalDate end = ngayKetThuc != null ? ngayKetThuc : LocalDate.now();
+        return (int) ChronoUnit.DAYS.between(ngayBatDau, end) + 1;
     }
 
-    // Getters & Setters
     public String getMaHopDong() { return maHopDong; }
     public void setMaHopDong(String maHopDong) { this.maHopDong = maHopDong; }
 
@@ -47,17 +40,4 @@ public class HopDongThue {
 
     public LocalDate getNgayKetThuc() { return ngayKetThuc; }
     public void setNgayKetThuc(LocalDate ngayKetThuc) { this.ngayKetThuc = ngayKetThuc; }
-
-    public Integer getTongSoNgay() { return tongSoNgay; }
-    public void setTongSoNgay(Integer tongSoNgay) { this.tongSoNgay = tongSoNgay; }
-
-    public boolean isDangHieuLuc() {
-        return ngayKetThuc == null || ngayKetThuc.isAfter(LocalDate.now());
-    }
-
-    public int tinhSoNgayThue() {
-        if (ngayBatDau == null) return 0;
-        LocalDate end = ngayKetThuc != null ? ngayKetThuc : LocalDate.now();
-        return (int) java.time.temporal.ChronoUnit.DAYS.between(ngayBatDau, end) + 1;
-    }
 }

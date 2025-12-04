@@ -1,47 +1,36 @@
 package homestay.Server.Models;
 
+import java.time.LocalDate;
+
 public class HoaDon {
-    private String maThanhToan;
+    private String maHoaDon;
     private String maHopDong;
-    private String maChiPhiPhu;
     private double tienPhong;
-    private double tienChiPhiPhu;
+    private double tienDichVu;
     private double tongTien;
+    private LocalDate ngayThanhToan;
 
     public HoaDon() {}
 
-    public HoaDon(String maThanhToan, String maHopDong, String maChiPhiPhu,
-                  double tienPhong, double tienChiPhiPhu) {
-        this.maThanhToan = maThanhToan;
-        this.maHopDong = maHopDong;
-        this.maChiPhiPhu = maChiPhiPhu;
-        this.tienPhong = tienPhong;
-        this.tienChiPhiPhu = tienChiPhiPhu;
-        this.tongTien = tienPhong + tienChiPhiPhu;
+    public double tinhTongTien() {
+        return tienPhong + tienDichVu;
     }
 
-    // Getters & Setters
-    public String getMaThanhToan() { return maThanhToan; }
-    public void setMaThanhToan(String maThanhToan) { this.maThanhToan = maThanhToan; }
+    public String getMaHoaDon() { return maHoaDon; }
+    public void setMaHoaDon(String maHoaDon) { this.maHoaDon = maHoaDon; }
 
     public String getMaHopDong() { return maHopDong; }
     public void setMaHopDong(String maHopDong) { this.maHopDong = maHopDong; }
 
-    public String getMaChiPhiPhu() { return maChiPhiPhu; }
-    public void setMaChiPhiPhu(String maChiPhiPhu) { this.maChiPhiPhu = maChiPhiPhu; }
-
     public double getTienPhong() { return tienPhong; }
     public void setTienPhong(double tienPhong) { this.tienPhong = tienPhong; }
 
-    public double getTienChiPhiPhu() { return tienChiPhiPhu; }
-    public void setTienChiPhiPhu(double tienChiPhiPhu) { this.tienChiPhiPhu = tienChiPhiPhu; }
+    public double getTienDichVu() { return tienDichVu; }
+    public void setTienDichVu(double tienDichVu) { this.tienDichVu = tienDichVu; }
 
     public double getTongTien() { return tongTien; }
     public void setTongTien(double tongTien) { this.tongTien = tongTien; }
 
-    public void tinhTongTien(double tienPhong, double tienChiPhiPhu) {
-    this.tienPhong = tienPhong;
-    this.tienChiPhiPhu = tienChiPhiPhu;
-    this.tongTien = tienPhong + tienChiPhiPhu;
-    }
+    public LocalDate getNgayThanhToan() { return ngayThanhToan; }
+    public void setNgayThanhToan(LocalDate ngayThanhToan) { this.ngayThanhToan = ngayThanhToan; }
 }
