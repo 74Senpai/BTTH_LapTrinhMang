@@ -2,6 +2,7 @@ package homestay.Server.Models;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class DatabaseManager {
         return DriverManager.getConnection(URL, USER, PASS);
     }
 
+    // TEST KẾT NỐI - CHẠY MAIN NÀY TRƯỚC
     public static void main(String[] args) {
         try (Connection c = new DatabaseManager().getConnection()) {
             System.out.println("KẾT NỐI SQL SERVER (Homestays) THÀNH CÔNG!!!");
@@ -22,9 +24,12 @@ public class DatabaseManager {
         }
     }
 
+    // LẤY DANH SÁCH PHÒNG TRỐNG (MaTrangThai = 1)
     public List<Phong> getPhongTrong() {
         List<Phong> list = new ArrayList<>();
-        String sql = "SELECT p.*, t.TenTrangThai FROM Phong p JOIN TrangThaiPhong t ON p.MaTrangThai = t.MaTrangThai WHERE p.MaTrangThai = 1";
+        String sql = "SELECT p.*, t.TenTrangThai " +
+                     "FROM Phong p JOIN TrangThaiPhong t ON p.MaTrangThai = t.MaTrangThai " +
+                     "WHERE p.MaTrangThai = 1";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -46,6 +51,7 @@ public class DatabaseManager {
         return list;
     }
 
+    // THÊM PHÒNG MỚI
     public boolean themPhong(Phong p) {
         String sql = "INSERT INTO Phong (MaPhong, TenPhong, GiaThueNgay, GiaThueThang, MaTrangThai, SoDienHienTai, SoNuocHienTai) VALUES (?, ?, ?, ?, 1, 0, 0)";
         try (Connection conn = getConnection();
@@ -61,6 +67,7 @@ public class DatabaseManager {
         }
     }
 
+    // THÊM KHÁCH HÀNG
     public boolean themKhachHang(KhachHang kh) {
         String sql = "INSERT INTO KhachHang (MaKH, HoTen, SoDienThoai, CCCD) VALUES (?, ?, ?, ?)";
         try (Connection conn = getConnection();
@@ -76,12 +83,13 @@ public class DatabaseManager {
         }
     }
 
+    // TẠO HỢP ĐỒNG (DÙNG TRANSACTION ĐỂ AN TOÀN)
     public boolean taoHopDong(HopDongThue hd) {
         String sqlInsert = "INSERT INTO HopDongThue (MaHopDong, MaKhachHang, MaPhong, MaNhanVien, LoaiHinhThue, NgayBatDau, NgayKetThuc) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        String sqlUpdate = "UPDATE Phong SET MaTrangThai = 2 WHERE MaPhong = ?";
+        String sqlUpdate = "UPDATE Phong SET MaTrangThai = 2 WHERE MaPhong = ?";  // 2 = Đang sử dụng
 
         try (Connection conn = getConnection()) {
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false);  // Bắt đầu transaction
             try (PreparedStatement ps1 = conn.prepareStatement(sqlInsert);
                  PreparedStatement ps2 = conn.prepareStatement(sqlUpdate)) {
 
@@ -97,14 +105,15 @@ public class DatabaseManager {
                 if (row > 0) {
                     ps2.setString(1, hd.getMaPhong());
                     ps2.executeUpdate();
-                    conn.commit();
+                    conn.commit();  // Commit nếu thành công
                     return true;
                 }
-                conn.rollback();
+                conn.rollback();  // Rollback nếu thất bại
                 return false;
             } catch (SQLException e) {
                 conn.rollback();
-                throw e;
+                e.printStackTrace();
+                return false;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -112,6 +121,20 @@ public class DatabaseManager {
         }
     }
 
+    // CẬP NHẬT TRẠNG THÁI PHÒNG
+    public void capNhatTrangThaiPhong(String maPhong, int maTrangThai) {
+        String sql = "UPDATE Phong SET MaTrangThai = ? WHERE MaPhong = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maTrangThai);
+            ps.setString(2, maPhong);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // DOANH THU THEO THÁNG (DÙNG COALESCE ĐỂ TRÁNH NULL)
     public double getDoanhThuThang(int thang, int nam) {
         String sql = "SELECT ISNULL(SUM(TongTien), 0) FROM HoaDon WHERE MONTH(NgayThanhToan) = ? AND YEAR(NgayThanhToan) = ?";
         try (Connection conn = getConnection();
@@ -126,16 +149,15 @@ public class DatabaseManager {
         return 0.0;
     }
 
+    // LẤY DANH SÁCH KHÁCH ĐANG THUÊ (DÙNG GETDATE() CHO SQL SERVER)
     public List<Object[]> getKhachDangThue() {
         List<Object[]> list = new ArrayList<>();
-        String sql = """
-            SELECT kh.HoTen, p.TenPhong, hdt.NgayBatDau, hdt.NgayKetThuc, t.TenTrangThai
-            FROM HopDongThue hdt
-            JOIN KhachHang kh ON hdt.MaKhachHang = kh.MaKH
-            JOIN Phong p ON hdt.MaPhong = p.MaPhong
-            JOIN TrangThaiPhong t ON p.MaTrangThai = t.MaTrangThai
-            WHERE hdt.NgayKetThuc IS NULL OR hdt.NgayKetThuc >= GETDATE()
-            """;
+        String sql = "SELECT kh.HoTen, p.TenPhong, hdt.NgayBatDau, hdt.NgayKetThuc, t.TenTrangThai " +
+                     "FROM HopDongThue hdt " +
+                     "JOIN KhachHang kh ON hdt.MaKhachHang = kh.MaKH " +
+                     "JOIN Phong p ON hdt.MaPhong = p.MaPhong " +
+                     "JOIN TrangThaiPhong t ON p.MaTrangThai = t.MaTrangThai " +
+                     "WHERE hdt.NgayKetThuc IS NULL OR hdt.NgayKetThuc >= GETDATE()";
         try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
