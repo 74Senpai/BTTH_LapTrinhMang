@@ -1,4 +1,4 @@
-**.env
+*.env
 **.class
 *.class
 **/target/**
