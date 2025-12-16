@@ -11,7 +11,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-public class RoomView extends Panel implements Components.IViewCheck {
+public class RoomView extends javax.swing.JPanel implements Components.IViewCheck {
     Panel pnlRoom = new Panel();
 
     JTable tb;
