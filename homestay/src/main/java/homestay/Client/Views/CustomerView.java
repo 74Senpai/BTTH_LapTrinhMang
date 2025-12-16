@@ -10,7 +10,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-public class CustomerView extends Panel implements Components.IViewCheck {
+public class CustomerView extends javax.swing.JPanel implements Components.IViewCheck {
     Panel pnlCustomer = new Panel();
 
     JTable tb;
