@@ -62,8 +62,8 @@ public class StatisticsReportView extends JFrame {
         JScrollPane scroll = new JScrollPane(tblReport);
 
         panelMain.add(pnlTop, BorderLayout.NORTH);
-        panelMain.add(lblSummary, BorderLayout.CENTER);
-        panelMain.add(scroll, BorderLayout.SOUTH);
+        panelMain.add(scroll, BorderLayout.CENTER);
+        panelMain.add(lblSummary, BorderLayout.SOUTH);
 
         add(panelMain);
     }
