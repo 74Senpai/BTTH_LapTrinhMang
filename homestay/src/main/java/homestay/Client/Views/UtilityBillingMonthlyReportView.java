@@ -35,7 +35,7 @@ public class UtilityBillingMonthlyReportView extends JFrame {
 
         pnlTop.add(new JLabel("Năm:"));
         cmbYear = new JComboBox<>();
-        for (int y = 2020; y <= 2035; y++) cmbYear.addItem(y + "");
+        for (int y = 2020; y <= java.time.Year.now().getValue() + 10; y++) cmbYear.addItem(String.valueOf(y));
         pnlTop.add(cmbYear);
 
         btnGenerate = new JButton("Tạo báo cáo");
