@@ -58,11 +58,15 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
                 "Nước (m³)"};
 
                 // Lưu dữ liệu vào bộ nhớ tạm
-        originalData = new String[data.length][data[0].length];
-        for (int i = 0; i < data.length; i++) {
-            for (int j = 0; j < data[i].length; j++) {
-                originalData[i][j] = data[i][j];
+        if (data.length > 0) {
+            originalData = new String[data.length][data[0].length];
+            for (int i = 0; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
+                    originalData[i][j] = data[i][j];
+                }
             }
+        } else {
+            originalData = new String[0][0];
         }
         
         // --- TẠO BẢNG ---
