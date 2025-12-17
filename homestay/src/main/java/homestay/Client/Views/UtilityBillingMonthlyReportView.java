@@ -1,9 +1,21 @@
 package homestay.Client.Views;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 public class UtilityBillingMonthlyReportView extends JFrame {
 
@@ -29,23 +41,23 @@ public class UtilityBillingMonthlyReportView extends JFrame {
         JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 8));
 
         pnlTop.add(new JLabel("Tháng:"));
-        cmbMonth = new JComboBox<>();
+        this.cmbMonth = new JComboBox<>();
         for (int i = 1; i <= 12; i++) cmbMonth.addItem(i + "");
-        pnlTop.add(cmbMonth);
+        pnlTop.add(this.cmbMonth);
 
         pnlTop.add(new JLabel("Năm:"));
-        cmbYear = new JComboBox<>();
+        this.cmbYear = new JComboBox<>();
         for (int y = 2020; y <= java.time.Year.now().getValue() + 10; y++) cmbYear.addItem(String.valueOf(y));
         pnlTop.add(cmbYear);
 
-        btnGenerate = new JButton("Tạo báo cáo");
-        btnExport = new JButton("Xuất Excel");
+        this.btnGenerate = new JButton("Tạo báo cáo");
+        this.btnExport = new JButton("Xuất Excel");
 
-        pnlTop.add(btnGenerate);
-        pnlTop.add(btnExport);
+        pnlTop.add(this.btnGenerate);
+        pnlTop.add(this.btnExport);
 
         // ===================== TABLE =====================
-        tblReport = new JTable(
+        this.tblReport = new JTable(
                 new DefaultTableModel(
                         new Object[]{"STT", "Phòng", "Số điện", "Số nước", "Tiền điện", "Tiền nước", "Tổng tiền"},
                         0
@@ -54,16 +66,16 @@ public class UtilityBillingMonthlyReportView extends JFrame {
         tblReport.setFont(new Font("Arial", Font.PLAIN, 13));
         tblReport.setRowHeight(25);
 
-        JScrollPane scroll = new JScrollPane(tblReport);
+        JScrollPane scroll = new JScrollPane(this.tblReport);
 
         // ===================== SUMMARY =====================
-        lblTotal = new JLabel("Tổng thu tháng: 0 VNĐ", SwingConstants.LEFT);
+        this.lblTotal = new JLabel("Tổng thu tháng: 0 VNĐ", SwingConstants.LEFT);
         lblTotal.setFont(new Font("Arial", Font.BOLD, 15));
         lblTotal.setForeground(new Color(0, 130, 0));
 
         panelMain.add(pnlTop, BorderLayout.NORTH);
         panelMain.add(scroll, BorderLayout.CENTER);
-        panelMain.add(lblTotal, BorderLayout.SOUTH);
+        panelMain.add(this.lblTotal, BorderLayout.SOUTH);
 
         add(panelMain);
     }
@@ -71,7 +83,7 @@ public class UtilityBillingMonthlyReportView extends JFrame {
     // ===================== GETTER =====================
     public String getMonth() { return cmbMonth.getSelectedItem().toString(); }
     public String getYear() { return cmbYear.getSelectedItem().toString(); }
-    public JTable getTable() { return tblReport; }
+    public JTable getTable() { return this.tblReport; }
 
     public void setTotal(String text) {
         lblTotal.setText("Tổng thu tháng: " + text + " VNĐ");
