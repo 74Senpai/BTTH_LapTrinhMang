@@ -15,7 +15,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
-
 public class HomeView extends Frame {
 
     // Màu sắc chủ đạo
@@ -32,8 +31,9 @@ public class HomeView extends Frame {
         setTitle("Homestay Dashboard");
         setSize(1100, 700);
         setLayout(new BorderLayout());
+        setBackground(COLOR_BG);
 
-        // 1.2. Khởi tạo Dashboard và các giao diện khác ở đây
+        // 1.2. Khởi tạo Dashboard & Main Content và room
         DashboardView dashboard = new DashboardView();
         dashboard.showDashboard();
         
@@ -56,6 +56,7 @@ public class HomeView extends Frame {
         // 1.3. Khởi tạo Sidebar (Cột trái)
         Panel pnlSidebar = new Panel();
         pnlSidebar.setLayout(new BorderLayout());
+        pnlSidebar.setBackground(COLOR_SIDEBAR);
         pnlSidebar.setPreferredSize(new Dimension(200, 700));
 
         // 1.4. Khởi tạo Logo & Menu Panel
@@ -80,7 +81,7 @@ public class HomeView extends Frame {
         // Gán sự kiện click, xử lý ẩn hiện, luồng dữ liệu
         // ====================================================================
 
-        // Logic các nút ở đây
+        // 2.1. Logic nút Home
         btnHome.addActionListener(e -> {
             Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, dashboard, "Dashboard");
             if (resultView == dashboard) {
@@ -135,12 +136,17 @@ public class HomeView extends Frame {
         pnlMenu.add(btnRoom);
         pnlMenu.add(btnCustomer);
         
+        pnlBottomMenu.add(btnLogout);
+
         pnlSidebar.add(pnlMenu, BorderLayout.NORTH);
         pnlSidebar.add(pnlBottomMenu, BorderLayout.SOUTH);
 
         // 3.2. Lắp ráp Main Content
+        scrollPane.add(pnlMain);
+
         // 3.3. Lắp ráp vào Frame chính
         add(pnlSidebar, BorderLayout.WEST);
+        add(scrollPane, BorderLayout.CENTER);
 
         // 3.4. Hiển thị Frame (Luôn để cuối cùng)
         setLocationRelativeTo(null); // Căn giữa màn hình
@@ -152,4 +158,3 @@ public class HomeView extends Frame {
         view.setVisible(true);
     }
 }
-
