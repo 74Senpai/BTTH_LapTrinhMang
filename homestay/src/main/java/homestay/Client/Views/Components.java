@@ -74,7 +74,7 @@ public class Components {
     }
 
     // Hàm căn giữa toàn bảng
-    public static void CenterTable (JTable table){
+    public static void centerTable (JTable table){
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 
