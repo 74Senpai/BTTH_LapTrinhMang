@@ -131,15 +131,15 @@ public class Components {
     }
 
     // Hàm cập nhật trạng thái của nút
-    public static void updateMenuState(Button activeBtn,Button... allButtons) {
-        // Reset tất cả nút về trạng thái bật (true)
-        for (Button btn : allButtons) {
-            if (btn == activeBtn) {
-                btn.setEnabled(false);
-            } 
-            else {
-                btn.setEnabled(true);
-            }
+    public static void updateMenuState(Button activeBtn, Button... otherButtons) {
+        // Tắt nút đang active
+        if (activeBtn != null) {
+            activeBtn.setEnabled(false);
+        }
+        
+        // Bật tất cả các nút khác
+        for (Button btn : otherButtons) {
+            btn.setEnabled(true);
         }
     }
 
