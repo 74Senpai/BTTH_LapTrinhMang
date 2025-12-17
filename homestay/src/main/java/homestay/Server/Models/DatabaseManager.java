@@ -163,8 +163,8 @@ public class DatabaseManager {
                 ps1.setString(3, hd.getMaPhong());
                 ps1.setObject(4, hd.getMaNhanVien());
                 ps1.setString(5, hd.getLoaiHinhThue());
-                ps1.setDate(6, Date.valueOf(hd.getNgayBatDau()));
-                ps1.setDate(7, Date.valueOf(hd.getNgayKetThuc()));
+                ps1.setDate(6, hd.getNgayBatDau() != null ? Date.valueOf(hd.getNgayBatDau()) : null);
+                ps1.setDate(7, hd.getNgayKetThuc() != null ? Date.valueOf(hd.getNgayKetThuc()) : null);
 
                 int row = ps1.executeUpdate();
 
