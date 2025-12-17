@@ -1,10 +1,19 @@
 package homestay.Client.Views;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Label;
 import java.awt.Panel;
 
 
 public class DashboardView extends Panel implements Components.IViewCheck{
 
+    final Color COLOR_CARD_BLUE = new Color(100, 120, 140);
+    final Color COLOR_TEXT_HEADER = new Color(50, 50, 50);
     Panel pnlMain = new Panel();
     public void showDashboard(){
         pnlMain.setLayout(new GridBagLayout());
@@ -47,12 +56,6 @@ public class DashboardView extends Panel implements Components.IViewCheck{
         pnlFiller.setBackground(new Color(248, 249, 250));
         pnlMain.add(pnlFiller, gbc);
 
-    }
-    
-    // Hàm check trước khi chuyển tab
-    @Override
-    public boolean confirmBeforeSwitch() {
-        return true; 
     }
     
     // Hàm check trước khi chuyển tab
