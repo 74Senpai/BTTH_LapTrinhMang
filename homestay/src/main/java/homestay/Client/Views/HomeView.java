@@ -29,8 +29,7 @@ public class HomeView extends Frame {
         
         CardLayout card = new CardLayout();
         Panel pnlMain = new Panel(card);
-        pnlMain.add(dashboard.pnlMain, "Dashboard");
-        
+        pnlMain.add(dashboard.pnlMain, "Dashboard");  
         ScrollPane scrollPane = new ScrollPane(); // Container cuộn cho nội dung chính
 
         // 1.3. Khởi tạo Sidebar (Cột trái)

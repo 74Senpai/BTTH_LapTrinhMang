@@ -1,9 +1,21 @@
 package homestay.Client.Views;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 // 2. **StatisticsReportView.java**  
 //    - Hiển thị **báo cáo thống kê** theo loại: Doanh thu, Phòng trống, Khách hàng.  
@@ -44,33 +56,33 @@ public class StatisticsReportView extends JFrame {
 
         // Panel trên: chọn loại báo cáo + button
         JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-        cmbType = new JComboBox<>(new String[]{"Doanh thu", "Phòng trống", "Khách hàng"});
-        btnGenerate = new JButton("Tạo báo cáo");
-        btnExport = new JButton("Xuất Excel");
-        pnlTop.add(new JLabel("Loại báo cáo:")); pnlTop.add(cmbType);
-        pnlTop.add(btnGenerate); pnlTop.add(btnExport);
+        this.cmbType = new JComboBox<>(new String[]{"Doanh thu", "Phòng trống", "Khách hàng"});
+        this.btnGenerate = new JButton("Tạo báo cáo");
+        this.btnExport = new JButton("Xuất Excel");
+        pnlTop.add(new JLabel("Loại báo cáo:")); pnlTop.add(this.cmbType);
+        pnlTop.add(btnGenerate); pnlTop.add(this.btnExport);
 
         // Label tổng quan
-        lblSummary = new JLabel("Tổng quan: ", SwingConstants.LEFT);
-        lblSummary.setFont(new Font("Arial", Font.BOLD, 14));
-        lblSummary.setForeground(new Color(0, 128, 0));
+        this.lblSummary = new JLabel("Tổng quan: ", SwingConstants.LEFT);
+        this.lblSummary.setFont(new Font("Arial", Font.BOLD, 14));
+        this.lblSummary.setForeground(new Color(0, 128, 0));
 
         // Table
-        tblReport = new JTable(new DefaultTableModel(new Object[]{"STT","Tên","Giá trị"},0));
-        tblReport.setRowHeight(25);
-        tblReport.setFont(new Font("Arial", Font.PLAIN, 13));
-        JScrollPane scroll = new JScrollPane(tblReport);
+        this.tblReport = new JTable(new DefaultTableModel(new Object[]{"STT","Tên","Giá trị"},0));
+        this.tblReport.setRowHeight(25);
+        this.tblReport.setFont(new Font("Arial", Font.PLAIN, 13));
+        JScrollPane scroll = new JScrollPane(this.tblReport);
 
         panelMain.add(pnlTop, BorderLayout.NORTH);
         panelMain.add(scroll, BorderLayout.CENTER);
-        panelMain.add(lblSummary, BorderLayout.SOUTH);
+        panelMain.add(this.lblSummary, BorderLayout.SOUTH);
 
         add(panelMain);
     }
 
     public String getSelectedReportType() { return cmbType.getSelectedItem().toString(); }
 
-    public JTable getTable() { return tblReport; }
+    public JTable getTable() { return this.tblReport; }
 
     public void setSummary(String text) { lblSummary.setText("Tổng quan: " + text); }
 
