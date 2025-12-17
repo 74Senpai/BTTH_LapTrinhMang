@@ -100,7 +100,7 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
         };
         tb = new JTable(model);
         tb.setRowHeight(36);
-        Components.CenterTable(tb); // Căn giữa toàn bảng
+        Components.centerTable(tb); // Căn giữa toàn bảng
         tb.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
         tb.setFont(new Font("Arial", Font.PLAIN, 14));
         

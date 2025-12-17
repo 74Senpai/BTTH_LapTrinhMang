@@ -1,6 +1,14 @@
 package homestay.Client.Views;
 
-import java.awt.*;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.Panel;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -82,7 +90,7 @@ public class CustomerView extends javax.swing.JPanel implements Components.IView
         };
         tb = new JTable(model);
         tb.setRowHeight(36);
-        Components.CenterTable(tb); // Căn giữa toàn bảng
+        Components.centerTable(tb); // Căn giữa toàn bảng
         tb.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
         tb.setFont(new Font("Arial", Font.PLAIN, 14));
         tb.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
