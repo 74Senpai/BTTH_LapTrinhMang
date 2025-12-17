@@ -240,7 +240,7 @@ public class DatabaseManager {
                 JOIN KhachHang kh ON hdt.MaKhachHang = kh.MaKH
                 JOIN Phong p ON hdt.MaPhong = p.MaPhong
                 JOIN TrangThaiPhong t ON p.MaTrangThai = t.MaTrangThai
-                WHERE hdt.NgayKetThuc >= CURDATE()
+                WHERE hdt.NgayKetThuc IS NULL OR hdt.NgayKetThuc >= CURDATE()
                 """;
 
         try (Connection conn = getConnection();
