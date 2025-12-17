@@ -53,7 +53,7 @@ public class DatabaseManager {
                     if (rs.next()) {
                         System.out.println("  (Số dòng: " + rs.getInt(1) + ")");
                     }
-                } catch (Exception ex) {
+                } catch (SQLException ex) {
                     System.out.println("  (Không thể đếm dòng)");
                 }
             }
