@@ -1,298 +1,194 @@
 package homestay.Client.Views;
 
+import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Label;
 import java.awt.Panel;
+import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
+/**
+ * View quản lý khách thuê
+ * CHỈ HIỂN THỊ + GỌI CONTROLLER
+ */
 public class CustomerView extends javax.swing.JPanel implements Components.IViewCheck {
-    Panel pnlCustomer = new Panel();
 
-    JTable tb;
-    Button btnHuy = new Button("Hủy thay đổi");
-    Button btnLuu = new Button("Lưu cập nhật");
-    Button btnXoa = new Button("Xóa khách");
-    Button btnThem = new Button("Thêm khách");
-    // Biến lưu trữ dữ liệu gốc
-    String originalData[][];
-    public boolean isTableChanged = false;
+    // ===== UI =====
+    private JTable tblCustomer;
+    private DefaultTableModel tableModel;
 
-    public void showCustomerView() {
-        pnlCustomer.setLayout(new GridBagLayout());
-        pnlCustomer.setBackground(new Color(248, 249, 250));
-        GridBagConstraints gbc = new GridBagConstraints();
-        // Setup Layout
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 20, 10, 20);
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
-        gbc.gridx = 0;
-        
-        // Tiêu đề
-        gbc.gridy = 0;
-        gbc.weighty = 0; 
+    private Button btnAdd;
+    private Button btnEdit;
+    private Button btnDelete;
+    private Button btnRentRoom;
+    private Button btnRefresh;
 
-        Label lblWelcome = new Label("welcome Quản lý Khách Thuê");
-        lblWelcome.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lblWelcome.setForeground(new Color(33, 37, 41));
-        pnlCustomer.add(lblWelcome, gbc);
+    private boolean isChanged = false;
 
-        
-        // Controller lấy dữ liệu từ server .....
-        String data[][] = { { "Quay vat dau tien", "0363636363", "049363636123" } };
-        String column[] = { "Họ Tên", "Số điện thoại", "CCCD" };
-        
-        // Sao lưu dữ liệu vào bộ nhớ tạm
-        if (data.length > 0) {
-            originalData = new String[data.length][data[0].length];
-            for (int i = 0; i < data.length; i++) {
-                for (int j = 0; j < data[i].length; j++) {
-                    originalData[i][j] = data[i][j];
-                }
-            }
-        } else {
-            originalData = new String[0][0];
-        }
+    public CustomerView() {
+        initUI();
+    }
 
-        // --- TẠO BẢNG ---
-        gbc.gridy = 1;
-        gbc.weighty = 0.1; 
-        gbc.fill = GridBagConstraints.BOTH; 
-        // Tạo bảng với model tùy chỉnh để bắt sự kiện chỉnh sửa ô dữ liệu
-        DefaultTableModel model = new DefaultTableModel(data, column) {
+    private void initUI() {
+        setLayout(new BorderLayout(15, 15));
+        setBackground(new Color(248, 249, 250));
+
+        // ================== TITLE ==================
+        Label lblTitle = new Label("QUẢN LÝ KHÁCH THUÊ", Label.LEFT);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitle.setForeground(new Color(33, 37, 41));
+        add(lblTitle, BorderLayout.NORTH);
+
+        // ================== TABLE ==================
+        String[] columns = {
+                "Mã KH",
+                "Họ tên",
+                "SĐT",
+                "CCCD",
+                "Phòng đang thuê",
+                "Ngày bắt đầu",
+                "Ngày kết thúc"
+        };
+
+        tableModel = new DefaultTableModel(columns, 0) {
             @Override
-            public void setValueAt(Object aValue, int row, int column) {
-                // Lấy giá trị cũ đang có trong ô
-                Object oldValue = getValueAt(row, column);
-
-                // So sánh giá trị cũ và mới
-                if (oldValue != null && oldValue.toString().equals(aValue.toString())) {
-                    // Nếu giống hệt nhau
-                    return;
-                }
-                // Nếu khác nhau -> Mới gọi hàm gốc để cập nhật và bắn sự kiện UPDATE
-                super.setValueAt(aValue, row, column);
+            public boolean isCellEditable(int row, int column) {
+                // Không cho sửa trực tiếp trên bảng
+                return false;
             }
         };
-        tb = new JTable(model);
-        tb.setRowHeight(36);
-        Components.centerTable(tb); // Căn giữa toàn bảng
-        tb.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-        tb.setFont(new Font("Arial", Font.PLAIN, 14));
-        tb.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane sp = new JScrollPane(tb);
 
-        // --- CẤU HÌNH VALIDATION ---
-        // Kiểm tra number
-        TableColumn colSDT = tb.getColumnModel().getColumn(1);
-        TableColumn colCCCD = tb.getColumnModel().getColumn(2);
+        this.tblCustomer = new JTable(this.tableModel);
+        this.tblCustomer.setRowHeight(32);
+        this.tblCustomer.setFont(new Font("Arial", Font.PLAIN, 14));
+        this.tblCustomer.getTableHeader().setFont(new Font("Arial", Font.BOLD, 15));
+        this.tblCustomer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        colSDT.setCellEditor(new Components.PhoneNumberCellEditor());
-        colCCCD.setCellEditor(new Components.CCCDCellEditor());
+        Components.centerTable(this.tblCustomer);
 
-        pnlCustomer.add(sp, gbc);
+        JScrollPane scrollPane = new JScrollPane(this.tblCustomer);
+        add(scrollPane, BorderLayout.CENTER);
 
-        // Panel nút bấm
-        gbc.gridy = 2;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        Panel pnlButtons = new Panel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        // ================== BUTTONS ==================
+        Panel pnlButtons = new Panel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
-        // --- XỬ LÝ SỰ KIỆN ---
+        this.btnAdd = new Button("Thêm khách");
+        this.btnEdit = new Button("Sửa thông tin");
+        this.btnDelete = new Button("Xóa khách");
+        this.btnRentRoom = new Button("Thuê / Trả phòng");
+        this.btnRefresh = new Button("Tải lại");
 
-        // Nút Thêm
-        btnThem.addActionListener(e -> {
-            if (model.getRowCount() > 0) {
-                int lastRowIndex = model.getRowCount() - 1;
-                Object lastRowName = tb.getValueAt(lastRowIndex, 0);
-                Object lastRowPhone = tb.getValueAt(lastRowIndex, 1);
-                Object lastRowCCCD = tb.getValueAt(lastRowIndex, 2);
-                if (lastRowName == null || lastRowName.toString().trim().isEmpty()
-                        || lastRowPhone == null || lastRowPhone.toString().trim().isEmpty()
-                        || lastRowCCCD == null || lastRowCCCD.toString().trim().isEmpty()) {
+        pnlButtons.add(this.btnAdd);
+        pnlButtons.add(this.btnEdit);
+        pnlButtons.add(this.btnDelete);
+        pnlButtons.add(this.btnRentRoom);
+        pnlButtons.add(this.btnRefresh);
 
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Vui lòng nhập đầy đủ thông tin ở dòng vừa thêm hoặc xóa dòng nếu không muốn thêm khách hàng.",
-                            "Nhắc nhở",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    tb.changeSelection(lastRowIndex, 1, false, false);
-                    tb.editCellAt(lastRowIndex, 0);
-                    tb.getEditorComponent().requestFocus();
-                    ;
-                    return;
-                }
+        add(pnlButtons, BorderLayout.SOUTH);
 
-            }
-            isTableChanged = true;
-            // Thêm dòng mới: Mã tự sinh hoặc để trống, các ô khác trống
-            String[] newRow = { "", "", "" };
-            model.addRow(newRow);
-            btnHuy.setEnabled(true);
-            btnLuu.setEnabled(true);
+        // ================== UI STATE ==================
+        btnEdit.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnRentRoom.setEnabled(false);
+
+        // Khi chọn dòng
+        tblCustomer.getSelectionModel().addListSelectionListener(e -> {
+            boolean selected = tblCustomer.getSelectedRow() != -1;
+            btnEdit.setEnabled(selected);
+            btnDelete.setEnabled(selected);
+            btnRentRoom.setEnabled(selected);
         });
-
-        // Nút Hủy (Reset về dữ liệu gốc)
-        btnHuy.setEnabled(false);
-        btnHuy.addActionListener(e -> {
-            isTableChanged = false;
-            model.setRowCount(0); // Xóa sạch bảng hiện tại
-            // Đổ lại dữ liệu từ backup
-            for (int i = 0; i < originalData.length; i++) {
-                model.addRow(originalData[i]);
-            }
-
-            btnHuy.setEnabled(false);
-            btnLuu.setEnabled(false);
-        });
-
-        // Nút Lưu
-        btnLuu.setEnabled(false);
-        btnLuu.addActionListener(e -> {
-            // Dừng việc edit nếu đang gõ dở
-            if (tb.isEditing())
-                tb.getCellEditor().stopCellEditing();
-
-            // Kiểm tra dữ liệu rỗng
-            for (int i = 0; i < model.getRowCount(); i++) {
-                Object name = model.getValueAt(i, 0);
-                Object phone = model.getValueAt(i, 1);
-                Object cccd = model.getValueAt(i, 2);
-                if (name == null || name.toString().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Dòng thứ " + (i + 1) + ": Họ tên không được để trống!");
-                    // Focus vào dòng lỗi
-                    tb.setRowSelectionInterval(i, i);
-                    return;
-                }
-                if (phone == null || phone.toString().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Dòng thứ " + (i + 1) + ": Số điện thoại không được để trống!");
-                    tb.setRowSelectionInterval(i, i);
-                    return;
-                }
-                if (cccd == null || cccd.toString().trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Dòng thứ " + (i + 1) + ": CCCD không được để trống!");
-                    tb.setRowSelectionInterval(i, i);
-                    return;
-                }
-            }
-            // Hộp thoại xác nhận
-            int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                    "Bạn có chắc chắn muốn lưu thay đổi không?",
-                    "Xác nhận",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE);
-
-            if (confirm != JOptionPane.YES_OPTION)
-                return;
-
-            // Cập nhật lại dữ liệu gốc (Backup lại cái mới)
-            originalData = new String[model.getRowCount()][model.getColumnCount()];
-            for (int i = 0; i < model.getRowCount(); i++) {
-                for (int j = 0; j < model.getColumnCount(); j++) {
-                    Object val = model.getValueAt(i, j);
-                    originalData[i][j] = (val != null) ? val.toString() : "";
-                }
-            }
-
-            isTableChanged = false;
-            btnHuy.setEnabled(false);
-            btnLuu.setEnabled(false);
-            // Gọi Controller gửi về Server
-
-            JOptionPane.showMessageDialog(null, "Đã lưu thành công!");
-        });
-
-        // Nút Xóa
-        btnXoa.setEnabled(false);
-        btnXoa.addActionListener(e -> {
-            int selectedRow = tb.getSelectedRow();
-            if (selectedRow == -1)
-                return;
-
-            int confirm = JOptionPane.showConfirmDialog(
-                    null,
-                    "Bạn có chắc muốn xóa khách hàng này?",
-                    "Xác nhận xóa",
-                    JOptionPane.YES_NO_OPTION);
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                model.removeRow(selectedRow);
-                isTableChanged = true;
-                btnHuy.setEnabled(true);
-                btnLuu.setEnabled(true);
-            }
-        });
-
-        // Sự kiện chọn dòng để bật nút Xóa
-        tb.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                btnXoa.setEnabled(tb.getSelectedRow() != -1);
-            }
-        });
-
-        // Sự kiện khi đang chỉnh sửa ô dữ liệu
-        tb.addPropertyChangeListener("tableCellEditor", evt -> {
-            if (tb.isEditing()) {
-                btnLuu.setEnabled(false);
-                btnHuy.setEnabled(false);
-                btnXoa.setEnabled(false);
-                btnThem.setEnabled(false);
-            }
-            else {
-                if (isTableChanged) {
-                    btnLuu.setEnabled(true);
-                    btnHuy.setEnabled(true);
-                    btnXoa.setEnabled(true);
-                    btnThem.setEnabled(true);
-                }
-            }
-        });
-
-        // Lắng nghe thay đổi trên ô dữ liệu
-        tb.getModel().addTableModelListener(e -> {
-            if (e.getType() == TableModelEvent.UPDATE) {
-                isTableChanged = true;
-                btnHuy.setEnabled(true);
-                btnLuu.setEnabled(true);
-            }
-        });
-
-        // Thêm nút vào panel
-        pnlButtons.add(btnThem);
-        pnlButtons.add(btnXoa);
-        pnlButtons.add(btnHuy);
-        pnlButtons.add(btnLuu);
-        pnlCustomer.add(pnlButtons, gbc);
-
-        
     }
 
-    // Hàm check trước khi chuyển tab
+    // =====================================================
+    // ================== PUBLIC METHODS ===================
+    // =====================================================
+
+    /**
+     * Load dữ liệu khách từ Controller
+     */
+    public void setCustomerData(Object[][] data) {
+        tableModel.setRowCount(0);
+        for (Object[] row : data) {
+            tableModel.addRow(row);
+        }
+        this.isChanged = false;
+    }
+
+    /**
+     * Lấy khách đang chọn
+     */
+    public String getSelectedCustomerId() {
+        int row = tblCustomer.getSelectedRow();
+        if (row == -1) return null;
+        return tableModel.getValueAt(row, 0).toString();
+    }
+
+    /**
+     * Hiển thị thông báo
+     */
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
+
+    /**
+     * Xác nhận hành động
+     */
+    public boolean confirm(String msg) {
+        return JOptionPane.showConfirmDialog(
+                this,
+                msg,
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION
+        ) == JOptionPane.YES_OPTION;
+    }
+
+    // =====================================================
+    // ================== CONTROLLER HOOK ==================
+    // =====================================================
+
+    public void addAddCustomerListener(ActionListener l) {
+        btnAdd.addActionListener(l);
+    }
+
+    public void addEditCustomerListener(ActionListener l) {
+        btnEdit.addActionListener(l);
+    }
+
+    public void addDeleteCustomerListener(ActionListener l) {
+        btnDelete.addActionListener(l);
+    }
+
+    public void addRentRoomListener(ActionListener l) {
+        btnRentRoom.addActionListener(l);
+    }
+
+    public void addRefreshListener(ActionListener l) {
+        btnRefresh.addActionListener(l);
+    }
+
+    // =====================================================
+    // ================== TAB CHECK ========================
+    // =====================================================
+
     @Override
     public boolean confirmBeforeSwitch() {
-        if (!isTableChanged)
-            return true;
+        if (!this.isChanged) return true;
+
         JOptionPane.showMessageDialog(
-                null,
-                "Dữ liệu trong bảng đã thay đổi! Hãy cập nhật hoặc hủy thay đổi trước khi rời khỏi.",
+                this,
+                "Có thay đổi chưa được lưu!",
                 "Cảnh báo",
-                JOptionPane.WARNING_MESSAGE);
+                JOptionPane.WARNING_MESSAGE
+        );
         return false;
     }
-
 }

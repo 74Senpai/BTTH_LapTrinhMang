@@ -38,18 +38,21 @@ public class HomeView extends Frame {
         dashboard.showDashboard();
         
         RoomView room = new RoomView();
-        room.showRoomView();
 
         CustomerView customer = new CustomerView();
-        customer.showCustomerView();
+
+        StatisticsReportView statisticsReport = new StatisticsReportView();
         
+        UtilityBillingMonthlyReportView utilityBilling = new UtilityBillingMonthlyReportView();
+
         CardLayout card = new CardLayout();
         Panel pnlMain = new Panel(card);
-        pnlMain.add(dashboard.pnlMain, "Dashboard");
-        pnlMain.add(room.pnlRoom, "Room");
-        pnlMain.add(customer.pnlCustomer, "Customer");
-        
 
+        pnlMain.add(dashboard.pnlMain, "Dashboard");
+        pnlMain.add(room, "Room");
+        pnlMain.add(customer, "Customer");
+        pnlMain.add(statisticsReport, "StatisticsReport");
+        pnlMain.add(utilityBilling, "UtilityBillingMonthlyReport");
         
         ScrollPane scrollPane = new ScrollPane(); // Container cuộn cho nội dung chính
 
@@ -72,6 +75,8 @@ public class HomeView extends Frame {
         Button btnRoom = Components.createMenuItem("Quản lý Phòng");
         Button btnCustomer = Components.createMenuItem("Quản lý Khách Hàng");
         Button btnLogout = Components.createMenuItem("Log Out");
+        Button btnStatistics = Components.createMenuItem("Báo cáo Thống kê");
+        Button btnUtilityBilling = Components.createMenuItem("Báo cáo Điện Nước");
 
         // 1.6. Thiết lập trạng thái ban đầu
         btnHome.setEnabled(false); // Mặc định đang ở Home nên disable nút Home
@@ -86,7 +91,10 @@ public class HomeView extends Frame {
             Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, dashboard, "Dashboard");
             if (resultView == dashboard) {
                 currentView = resultView;
-                Components.updateMenuState(btnHome, btnHome, btnRoom, btnCustomer);
+                Components.updateMenuState(
+                    btnHome, 
+                    btnRoom, btnCustomer, btnStatistics, btnUtilityBilling
+                );
                 // validate để cập nhật lại giao diện
                 validate();
             }
@@ -97,7 +105,10 @@ public class HomeView extends Frame {
             Components.IViewCheck resultView  = Components.switchView(card, pnlMain, currentView, room, "Room");
             if(resultView == room){
                 currentView = resultView;
-                Components.updateMenuState(btnRoom, btnHome, btnRoom, btnCustomer);
+                Components.updateMenuState(
+                    btnRoom, 
+                    btnHome, btnCustomer, btnStatistics, btnUtilityBilling
+                );
                 validate();
             }
         });
@@ -107,7 +118,10 @@ public class HomeView extends Frame {
             Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, customer, "Customer");
             if(resultView == customer){
                 currentView = resultView;
-                Components.updateMenuState(btnCustomer, btnHome, btnRoom, btnCustomer);
+                Components.updateMenuState(
+                    btnCustomer, 
+                    btnHome, btnRoom, btnStatistics, btnUtilityBilling
+                );
                 validate();
             }
         });
@@ -125,6 +139,32 @@ public class HomeView extends Frame {
             }
         });
 
+        // 2.6. Logic nút Statistics Report
+        btnStatistics.addActionListener(e -> {
+            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, statisticsReport, "StatisticsReport");
+            if (resultView == statisticsReport) {
+                currentView = resultView;
+                Components.updateMenuState(
+                    btnStatistics, 
+                    btnHome, btnRoom, btnCustomer, btnUtilityBilling
+                );
+                validate();
+            }
+        });
+
+        // 2.7. Logic nút Utility Billing Report
+        btnUtilityBilling.addActionListener(e -> {
+            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, utilityBilling, "UtilityBillingMonthlyReport");
+            if (resultView == utilityBilling) {
+                currentView = resultView;
+                Components.updateMenuState(
+                    btnUtilityBilling, 
+                    btnHome, btnRoom, btnCustomer, btnStatistics
+                );
+                validate();
+            }
+        });
+
         // ====================================================================
         // PHẦN 3: THÊM VÀO VIEW (ADD TO VIEW)
         // Lắp ráp các thành phần vào nhau để hiển thị lên màn hình
@@ -135,6 +175,8 @@ public class HomeView extends Frame {
         pnlMenu.add(btnHome);
         pnlMenu.add(btnRoom);
         pnlMenu.add(btnCustomer);
+        pnlMenu.add(btnStatistics);
+        pnlMenu.add(btnUtilityBilling);
         
         pnlBottomMenu.add(btnLogout);
 
@@ -152,7 +194,6 @@ public class HomeView extends Frame {
         setLocationRelativeTo(null); // Căn giữa màn hình
     }
     
-
     public static void main(String[] args) {
         HomeView view = new HomeView();
         view.setVisible(true);

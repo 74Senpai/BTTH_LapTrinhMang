@@ -4,7 +4,7 @@ public class Phong {
     private String maPhong;
     private String tenPhong;
     private int maTrangThai;
-    private String tenTrangThai;  
+    private String tenTrangThai;
     private int soDienHienTai;
     private int soNuocHienTai;
     private double giaThueNgay;

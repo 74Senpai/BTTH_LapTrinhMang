@@ -1,100 +1,187 @@
 package homestay.Client.Views;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Label;
+import java.awt.Panel;
 import java.awt.event.ActionListener;
+import java.time.Year;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-public class UtilityBillingMonthlyReportView extends JFrame {
+/**
+ * View báo cáo điện nước theo tháng
+ * CHỈ HIỂN THỊ + GỌI CONTROLLER
+ */
+public class UtilityBillingMonthlyReportView extends javax.swing.JPanel
+        implements Components.IViewCheck {
 
-    private JComboBox<String> cmbMonth, cmbYear;
+    // ================= UI =================
     private JTable tblReport;
-    private JLabel lblTotal;
-    private JButton btnGenerate, btnExport;
+    private DefaultTableModel tableModel;
+
+    private JComboBox<String> cmbMonth;
+    private JComboBox<String> cmbYear;
+
+    private Label lblTotal;
+
+    private Button btnGenerate;
+    private Button btnExport;
+    private Button btnRefresh;
 
     public UtilityBillingMonthlyReportView() {
-        setTitle("Báo cáo điện nước theo tháng");
-        setSize(900, 600);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        initComponents();
+        initUI();
     }
 
-    private void initComponents() {
+    private void initUI() {
+        setLayout(new BorderLayout(15, 15));
+        setBackground(new Color(248, 249, 250));
 
-        JPanel panelMain = new JPanel(new BorderLayout(20, 20));
-        panelMain.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        // ================= TITLE =================
+        Label lblTitle = new Label("BÁO CÁO ĐIỆN NƯỚC THEO THÁNG", Label.LEFT);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitle.setForeground(new Color(33, 37, 41));
+        add(lblTitle, BorderLayout.NORTH);
 
-        // ===================== PANEL TRÊN =====================
-        JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 8));
+        // ================= TOP FILTER =================
+        Panel pnlTop = new Panel(new FlowLayout(FlowLayout.LEFT, 15, 5));
 
-        pnlTop.add(new JLabel("Tháng:"));
-        this.cmbMonth = new JComboBox<>();
-        for (int i = 1; i <= 12; i++) cmbMonth.addItem(i + "");
-        pnlTop.add(this.cmbMonth);
+        pnlTop.add(new Label("Tháng:"));
+        cmbMonth = new JComboBox<>();
+        for (int i = 1; i <= 12; i++) {
+            cmbMonth.addItem(String.valueOf(i));
+        }
+        pnlTop.add(cmbMonth);
 
-        pnlTop.add(new JLabel("Năm:"));
-        this.cmbYear = new JComboBox<>();
-        for (int y = 2020; y <= java.time.Year.now().getValue() + 10; y++) cmbYear.addItem(String.valueOf(y));
+        pnlTop.add(new Label("Năm:"));
+        cmbYear = new JComboBox<>();
+        int currentYear = Year.now().getValue();
+        for (int y = currentYear - 5; y <= currentYear + 1; y++) {
+            cmbYear.addItem(String.valueOf(y));
+        }
         pnlTop.add(cmbYear);
 
-        this.btnGenerate = new JButton("Tạo báo cáo");
-        this.btnExport = new JButton("Xuất Excel");
+        btnGenerate = new Button("Tạo báo cáo");
+        btnExport   = new Button("Xuất Excel");
+        btnRefresh  = new Button("Tải lại");
 
-        pnlTop.add(this.btnGenerate);
-        pnlTop.add(this.btnExport);
+        pnlTop.add(btnGenerate);
+        pnlTop.add(btnExport);
+        pnlTop.add(btnRefresh);
 
-        // ===================== TABLE =====================
-        this.tblReport = new JTable(
-                new DefaultTableModel(
-                        new Object[]{"STT", "Phòng", "Số điện", "Số nước", "Tiền điện", "Tiền nước", "Tổng tiền"},
-                        0
-                )
-        );
-        tblReport.setFont(new Font("Arial", Font.PLAIN, 13));
-        tblReport.setRowHeight(25);
+        add(pnlTop, BorderLayout.BEFORE_FIRST_LINE);
 
-        JScrollPane scroll = new JScrollPane(this.tblReport);
+        // ================= TABLE =================
+        String[] columns = {
+                "STT",
+                "Phòng",
+                "Điện (kWh)",
+                "Nước (m³)",
+                "Tiền điện (₫)",
+                "Tiền nước (₫)",
+                "Tổng (₫)"
+        };
 
-        // ===================== SUMMARY =====================
-        this.lblTotal = new JLabel("Tổng thu tháng: 0 VNĐ", SwingConstants.LEFT);
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Không cho sửa
+            }
+        };
+
+        tblReport = new JTable(tableModel);
+        tblReport.setRowHeight(32);
+        tblReport.setFont(new Font("Arial", Font.PLAIN, 14));
+        tblReport.getTableHeader().setFont(new Font("Arial", Font.BOLD, 15));
+        tblReport.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        Components.centerTable(tblReport);
+
+        JScrollPane scrollPane = new JScrollPane(tblReport);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // ================= FOOTER =================
+        Panel pnlBottom = new Panel(new FlowLayout(FlowLayout.RIGHT, 10, 5));
+
+        lblTotal = new Label("Tổng thu tháng: 0 ₫");
         lblTotal.setFont(new Font("Arial", Font.BOLD, 15));
         lblTotal.setForeground(new Color(0, 130, 0));
 
-        panelMain.add(pnlTop, BorderLayout.NORTH);
-        panelMain.add(scroll, BorderLayout.CENTER);
-        panelMain.add(this.lblTotal, BorderLayout.SOUTH);
-
-        add(panelMain);
+        pnlBottom.add(lblTotal);
+        add(pnlBottom, BorderLayout.SOUTH);
     }
 
-    // ===================== GETTER =====================
-    public String getMonth() { return cmbMonth.getSelectedItem().toString(); }
-    public String getYear() { return cmbYear.getSelectedItem().toString(); }
-    public JTable getTable() { return this.tblReport; }
+    // =====================================================
+    // ================= PUBLIC METHODS ===================
+    // =====================================================
 
-    public void setTotal(String text) {
-        lblTotal.setText("Tổng thu tháng: " + text + " VNĐ");
+    /**
+     * Controller đổ dữ liệu báo cáo
+     */
+    public void setReportData(Object[][] data) {
+        tableModel.setRowCount(0);
+        for (Object[] row : data) {
+            tableModel.addRow(row);
+        }
     }
 
-    // ===================== LISTENER OVERRIDE =====================
-    public void addGenerateListener(ActionListener listener) {
-        btnGenerate.addActionListener(listener);
+    /**
+     * Set tổng tiền
+     */
+    public void setTotalAmount(String total) {
+        lblTotal.setText("Tổng thu tháng: " + total + " ₫");
     }
 
-    public void addExportListener(ActionListener listener) {
-        btnExport.addActionListener(listener);
+    /**
+     * Clear bảng
+     */
+    public void clear() {
+        tableModel.setRowCount(0);
+        lblTotal.setText("Tổng thu tháng: 0 ₫");
+    }
+
+    public String getSelectedMonth() {
+        return cmbMonth.getSelectedItem().toString();
+    }
+
+    public String getSelectedYear() {
+        return cmbYear.getSelectedItem().toString();
+    }
+
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
+
+    // =====================================================
+    // ================= CONTROLLER HOOK ===================
+    // =====================================================
+
+    public void addGenerateListener(ActionListener l) {
+        btnGenerate.addActionListener(l);
+    }
+
+    public void addExportListener(ActionListener l) {
+        btnExport.addActionListener(l);
+    }
+
+    public void addRefreshListener(ActionListener l) {
+        btnRefresh.addActionListener(l);
+    }
+
+    // =====================================================
+    // ================= TAB CHECK =========================
+    // =====================================================
+
+    @Override
+    public boolean confirmBeforeSwitch() {
+        return true;
     }
 }

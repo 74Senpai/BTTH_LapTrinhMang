@@ -1,7 +1,6 @@
 package homestay.Server.Models;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 public class HopDongThue {
     private String maHopDong;
@@ -11,14 +10,9 @@ public class HopDongThue {
     private String loaiHinhThue;
     private LocalDate ngayBatDau;
     private LocalDate ngayKetThuc;
+    private String trangThaiHopDong;
 
     public HopDongThue() {}
-
-    public int tinhSoNgayThue() {
-        if (ngayBatDau == null) return 0;
-        LocalDate end = ngayKetThuc != null ? ngayKetThuc : LocalDate.now();
-        return (int) ChronoUnit.DAYS.between(ngayBatDau, end) + 1;
-    }
 
     public String getMaHopDong() { return maHopDong; }
     public void setMaHopDong(String maHopDong) { this.maHopDong = maHopDong; }
@@ -40,4 +34,9 @@ public class HopDongThue {
 
     public LocalDate getNgayKetThuc() { return ngayKetThuc; }
     public void setNgayKetThuc(LocalDate ngayKetThuc) { this.ngayKetThuc = ngayKetThuc; }
+
+    public String getTrangThaiHopDong() { return trangThaiHopDong; }
+    public void setTrangThaiHopDong(String trangThaiHopDong) {
+        this.trangThaiHopDong = trangThaiHopDong;
+    }
 }
