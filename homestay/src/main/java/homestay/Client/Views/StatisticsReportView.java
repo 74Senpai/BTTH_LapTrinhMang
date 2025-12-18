@@ -1,93 +1,163 @@
 package homestay.Client.Views;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Label;
+import java.awt.Panel;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-// 2. **StatisticsReportView.java**  
-//    - Hiển thị **báo cáo thống kê** theo loại: Doanh thu, Phòng trống, Khách hàng.  
-//    - Table thống kê dữ liệu chi tiết.  
-//    - Hiển thị **tổng quan ngắn gọn**.  
-//    - Các nút thao tác: **Tạo báo cáo**, **Xuất Excel**.
+/**
+ * View báo cáo thống kê
+ * CHỈ HIỂN THỊ + GỌI CONTROLLER
+ */
+public class StatisticsReportView extends javax.swing.JPanel implements Components.IViewCheck {
 
-// ### StatisticsReportView.java
-
-// - **UI Components**
-//   - `JComboBox<String> cmbType` : chọn loại báo cáo
-//   - `JLabel lblSummary` : hiển thị tổng quan
-//   - `JTable tblReport` : hiển thị dữ liệu chi tiết
-//   - `JButton btnGenerate, btnExport` : thao tác tạo và xuất báo cáo
-// - **Hàm override trống**
-//   - `addGenerateListener(ActionListener listener)`
-//   - `addExportListener(ActionListener listener)`
-
-
-public class StatisticsReportView extends JFrame {
-
-    private JComboBox<String> cmbType;
-    private JButton btnGenerate, btnExport;
+    // ================== UI ==================
+    private JComboBox<String> cmbReportType;
     private JTable tblReport;
-    private JLabel lblSummary;
+    private DefaultTableModel tableModel;
+
+    private Label lblSummary;
+
+    private Button btnGenerate;
+    private Button btnExport;
 
     public StatisticsReportView() {
-        setTitle("Báo cáo thống kê");
-        setSize(900, 600);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        initComponents();
+        initUI();
     }
 
-    private void initComponents() {
-        JPanel panelMain = new JPanel(new BorderLayout(15,15));
-        panelMain.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
+    private void initUI() {
+        setLayout(new BorderLayout(15, 15));
+        setBackground(new Color(248, 249, 250));
 
-        // Panel trên: chọn loại báo cáo + button
-        JPanel pnlTop = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 5));
-        this.cmbType = new JComboBox<>(new String[]{"Doanh thu", "Phòng trống", "Khách hàng"});
-        this.btnGenerate = new JButton("Tạo báo cáo");
-        this.btnExport = new JButton("Xuất Excel");
-        pnlTop.add(new JLabel("Loại báo cáo:")); pnlTop.add(this.cmbType);
-        pnlTop.add(btnGenerate); pnlTop.add(this.btnExport);
+        // ================== TITLE ==================
+        Label lblTitle = new Label("BÁO CÁO THỐNG KÊ", Label.LEFT);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitle.setForeground(new Color(33, 37, 41));
+        add(lblTitle, BorderLayout.NORTH);
 
-        // Label tổng quan
-        this.lblSummary = new JLabel("Tổng quan: ", SwingConstants.LEFT);
-        this.lblSummary.setFont(new Font("Arial", Font.BOLD, 14));
-        this.lblSummary.setForeground(new Color(0, 128, 0));
+        // ================== TOP FILTER ==================
+        Panel pnlTop = new Panel(new FlowLayout(FlowLayout.LEFT, 15, 5));
 
-        // Table
-        this.tblReport = new JTable(new DefaultTableModel(new Object[]{"STT","Tên","Giá trị"},0));
-        this.tblReport.setRowHeight(25);
-        this.tblReport.setFont(new Font("Arial", Font.PLAIN, 13));
-        JScrollPane scroll = new JScrollPane(this.tblReport);
+        Label lblType = new Label("Loại báo cáo:");
+        lblType.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        panelMain.add(pnlTop, BorderLayout.NORTH);
-        panelMain.add(scroll, BorderLayout.CENTER);
-        panelMain.add(this.lblSummary, BorderLayout.SOUTH);
+        cmbReportType = new JComboBox<>(new String[] {
+                "Doanh thu theo tháng",
+                "Phòng theo trạng thái",
+                "Khách đang thuê"
+        });
 
-        add(panelMain);
+        btnGenerate = new Button("Tạo báo cáo");
+        btnExport   = new Button("Xuất Excel");
+
+        pnlTop.add(lblType);
+        pnlTop.add(cmbReportType);
+        pnlTop.add(btnGenerate);
+        pnlTop.add(btnExport);
+
+        add(pnlTop, BorderLayout.BEFORE_FIRST_LINE);
+
+        // ================== TABLE ==================
+        tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // View chỉ đọc
+            }
+        };
+
+        tblReport = new JTable(tableModel);
+        tblReport.setRowHeight(32);
+        tblReport.setFont(new Font("Arial", Font.PLAIN, 14));
+        tblReport.getTableHeader().setFont(new Font("Arial", Font.BOLD, 15));
+        tblReport.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        Components.centerTable(tblReport);
+
+        JScrollPane scrollPane = new JScrollPane(tblReport);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // ================== SUMMARY ==================
+        lblSummary = new Label("Tổng quan: ---");
+        lblSummary.setFont(new Font("Arial", Font.BOLD, 14));
+        lblSummary.setForeground(new Color(0, 128, 0));
+
+        Panel pnlBottom = new Panel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        pnlBottom.add(lblSummary);
+
+        add(pnlBottom, BorderLayout.SOUTH);
     }
 
-    public String getSelectedReportType() { return cmbType.getSelectedItem().toString(); }
+    // =====================================================
+    // ================== PUBLIC METHODS ===================
+    // =====================================================
 
-    public JTable getTable() { return this.tblReport; }
+    /**
+     * Lấy loại báo cáo đang chọn
+     */
+    public String getSelectedReportType() {
+        return cmbReportType.getSelectedItem().toString();
+    }
 
-    public void setSummary(String text) { lblSummary.setText("Tổng quan: " + text); }
+    /**
+     * Set cột cho bảng (Controller quyết định)
+     */
+    public void setTableColumns(String[] columns) {
+        tableModel.setColumnIdentifiers(columns);
+    }
 
-    // Override listener
-    public void addGenerateListener(ActionListener listener) { btnGenerate.addActionListener(listener); }
-    public void addExportListener(ActionListener listener) { btnExport.addActionListener(listener); }
+    /**
+     * Load dữ liệu cho bảng
+     */
+    public void setReportData(Object[][] data) {
+        tableModel.setRowCount(0);
+        for (Object[] row : data) {
+            tableModel.addRow(row);
+        }
+    }
+
+    /**
+     * Set text tổng quan
+     */
+    public void setSummary(String text) {
+        lblSummary.setText("Tổng quan: " + text);
+    }
+
+    /**
+     * Hiển thị thông báo
+     */
+    public void showMessage(String msg) {
+        JOptionPane.showMessageDialog(this, msg);
+    }
+
+    // =====================================================
+    // ================== CONTROLLER HOOK ==================
+    // =====================================================
+
+    public void addGenerateListener(ActionListener l) {
+        btnGenerate.addActionListener(l);
+    }
+
+    public void addExportListener(ActionListener l) {
+        btnExport.addActionListener(l);
+    }
+
+    // =====================================================
+    // ================== TAB CHECK ========================
+    // =====================================================
+
+    @Override
+    public boolean confirmBeforeSwitch() {
+        return true; // Không có chỉnh sửa
+    }
 }
-

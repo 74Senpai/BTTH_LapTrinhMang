@@ -180,6 +180,4 @@ public class Components {
         
         return targetView;
     }
-    
-    
 }

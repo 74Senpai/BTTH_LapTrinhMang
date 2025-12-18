@@ -1,7 +1,7 @@
 package homestay.Server.Models;
 
 public class DienNuocHangThang {
-    private String maDienNuoc;
+    private int maDienNuoc;
     private String maPhong;
     private int thang;
     private int nam;
@@ -12,16 +12,8 @@ public class DienNuocHangThang {
 
     public DienNuocHangThang() {}
 
-    public double tinhTienDien(double giaDien) {
-        return (chiSoDienMoi - chiSoDienCu) * giaDien;
-    }
-
-    public double tinhTienNuoc(double giaNuoc) {
-        return (chiSoNuocMoi - chiSoNuocCu) * giaNuoc;
-    }
-
-    public String getMaDienNuoc() { return maDienNuoc; }
-    public void setMaDienNuoc(String maDienNuoc) { this.maDienNuoc = maDienNuoc; }
+    public int getMaDienNuoc() { return maDienNuoc; }
+    public void setMaDienNuoc(int maDienNuoc) { this.maDienNuoc = maDienNuoc; }
 
     public String getMaPhong() { return maPhong; }
     public void setMaPhong(String maPhong) { this.maPhong = maPhong; }
