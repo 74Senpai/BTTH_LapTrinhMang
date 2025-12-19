@@ -1,4 +1,4 @@
-package homestay.Server.Models;
+package homestay.Server.DAO;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -11,6 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import homestay.Server.Models.HopDongThue;
+import homestay.Server.Models.KhachHang;
+import homestay.Server.Models.Phong;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class DatabaseManager {
