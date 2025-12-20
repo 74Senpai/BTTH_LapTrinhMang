@@ -8,7 +8,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class DBConnection {
 
-    private static final Dotenv dotenv = Dotenv.load();
+    private static final Dotenv dotenv = 
+        Dotenv.configure().directory("./homestay").load();
 
     private static final String URL =
             "jdbc:mysql://" + dotenv.get("DB_HOST") + ":" +

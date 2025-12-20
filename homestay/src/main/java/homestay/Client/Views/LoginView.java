@@ -131,13 +131,4 @@ public class LoginView extends Frame {
     public void addLoginListener(ActionListener l) {
         btnLogin.addActionListener(l);
     }
-
-    // =====================================================
-    // ================= TEST MAIN =========================
-    // =====================================================
-
-    public static void main(String[] args) {
-        LoginView view = new LoginView();
-        view.setVisible(true);
-    }
 }
