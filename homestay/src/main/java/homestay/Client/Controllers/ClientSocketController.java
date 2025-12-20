@@ -5,9 +5,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
+import homestay.Client.DTOs.BaseDTO;
+import homestay.Client.Helper.SessionManager;
 
 public class ClientSocketController {
 
@@ -16,7 +19,7 @@ public class ClientSocketController {
     private final int port;
     private final Gson gson = new Gson();
     private DataInputStream inputStream = null;
-    private final int SO_TIMEOUT = 10000;
+    private final int SO_TIMEOUT = 30000;
 
     public ClientSocketController(String domain, int port) {
         this.domain = domain;
@@ -60,10 +63,9 @@ public class ClientSocketController {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             String jsonMess = this.buildMessage(action, mess);
             outputStream.writeUTF(jsonMess);
-            System.out.println("Gửi yêu cầu thành công!");
+            System.out.println("Gửi tin tới server thành công");
         } catch (IOException e) {
             System.err.println("Không thể gửi yêu cầu tới server: " + e.getMessage());
-        } finally {
             if (fallback) {
                 System.out.println("Tiến hành thử lại.");
                 sendMessage(action, mess, false);
@@ -91,7 +93,7 @@ public class ClientSocketController {
         return this.inputStream.readUTF();
     }
 
-    public Object sendRequest(String action, Object data, boolean fallback) {
+    public BaseDTO.Response sendRequest(String action, Object data, boolean fallback) {
         if (!ensureConnected()) {
             System.err.println("Không có kết nối tới server. Gửi request thất bại!");
             return null;
@@ -103,9 +105,14 @@ public class ClientSocketController {
 
         try {
             this.sendMessage(action, data, fallback);
+            System.out.println("Đợi phản hồi từ server...");
             String responseJson = this.listenMessage();
-            return gson.fromJson(responseJson, Object.class);
-        } catch (Exception e) {
+            System.out.println("Đã nhận phản hồi từ server");
+            return gson.fromJson(responseJson, BaseDTO.Response.class);
+        } catch (JsonSyntaxException e) {
+            System.err.println("Lỗi khi parser dữ liệu từ server: " + e.getMessage());
+            return null;
+        } catch (Exception e){
             System.err.println("Lỗi khi gửi request: " + e.getMessage());
             return null;
         }
@@ -129,15 +136,16 @@ public class ClientSocketController {
     }
 
     private String buildMessage(String action, Object data) {
-        HashMap<String, Object> mess = new HashMap<>();
-        mess.put("action", action);
-        mess.put("data", data);
-
-        return this.gson.toJson(mess);
+        BaseDTO.Request request = new BaseDTO.Request(
+            action,
+            this.gson.toJsonTree(data),
+            SessionManager.getSession()
+        );
+        return this.gson.toJson(request);
     }
 
-    private boolean ensureConnected() {
-        if (!this.socket.isConnected()) {
+    public boolean ensureConnected() {
+        if (this.socket == null || !this.socket.isConnected()) {
             System.err.println("Không có kết nối tới server");
             System.out.println("Thử kết nối lại");
             try {
@@ -148,5 +156,9 @@ public class ClientSocketController {
             }
         }
         return true;
+    }
+
+    public boolean isConnected(){
+        return this.socket == null || this.socket.isConnected();
     }
 }

@@ -1,4 +1,4 @@
-package homestay.Client.Views;
+package homestay.Client.Views.Room;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
@@ -14,6 +14,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+
+import homestay.Client.Views.Components;
+import homestay.Client.Views.Room.Dialog.AddRoomDialog;
 
 /**
  * View quản lý phòng
@@ -31,9 +34,13 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
     private Button btnRefresh;
 
     private boolean isChanged = false;
+    private Runnable onOpenCallback;
 
     public RoomView() {
         initUI();
+        if (this.onOpenCallback != null) {
+            this.onOpenCallback.run();
+        }
     }
 
     private void initUI() {
@@ -89,6 +96,14 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
         pnlButtons.add(this.btnDelete);
         pnlButtons.add(this.btnRefresh);
 
+        btnAdd.addActionListener(e -> {
+            AddRoomDialog dialog = new AddRoomDialog(null);
+            dialog.setVisible(true);
+            if (dialog.isConfirmed()) {
+                tableModel.addRow(dialog.getRoomData());
+            }
+        });
+
         add(pnlButtons, BorderLayout.SOUTH);
 
         // ================== UI STATE ==================
@@ -117,6 +132,16 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
         this.isChanged = false;
     }
 
+    public void onOpen(Runnable callback) {
+        this.onOpenCallback = callback;
+    }
+
+    public void onOpen() {
+        if (this.onOpenCallback != null) {
+            this.onOpenCallback.run();
+        }
+    }
+    
     /**
      * Lấy mã phòng đang chọn
      */
@@ -148,10 +173,6 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
     // =====================================================
     // ================== CONTROLLER HOOK ==================
     // =====================================================
-
-    public void addAddRoomListener(ActionListener l) {
-        btnAdd.addActionListener(l);
-    }
 
     public void addEditRoomListener(ActionListener l) {
         btnEdit.addActionListener(l);

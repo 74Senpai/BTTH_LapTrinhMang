@@ -6,26 +6,34 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import homestay.Server.DTOs.BaseDTO;
+import homestay.Server.DTOs.NhanVienDTO;
+import homestay.Server.Services.NhanVienService;
+import homestay.Server.Services.PhongService;
+import homestay.Server.Services.TrangThaiPhongService;
 
-public class ServerSocketController {
+public class ServerController {
 
     private ServerSocket serverSocket;
     private final int port;
-    private final int SO_TIMEOUT = 30000;
     private final Gson gson = new Gson();
+    private volatile boolean isActivate = false;
+    private Map<String, String> sessionMap = new ConcurrentHashMap<>();;
 
-    public ServerSocketController(int port) {
+    public ServerController(int port) {
         this.port = port;
     }
 
     public void startServer() {
         try {
             this.serverSocket = new ServerSocket(this.port);
-            this.serverSocket.setSoTimeout(this.SO_TIMEOUT);
+            this.isActivate = true;
             System.out.println("Khởi tạo server socket thành công");
         } catch (IOException e) {
             System.err.println("Không thể khởi động socket server: " + e.getMessage());
@@ -34,6 +42,7 @@ public class ServerSocketController {
 
     public void stopServer() {
         try {
+            this.isActivate = false;
             this.serverSocket.close();
             System.out.println("Đóng kết nối thành công");
         } catch (IOException e) {
@@ -42,7 +51,7 @@ public class ServerSocketController {
     }
 
     public void startListening() {
-        while (true) {
+        while (this.isActivate) {
             listenClient();
         }
     }
@@ -83,23 +92,63 @@ public class ServerSocketController {
     }
 
     private String switchRequest(String request) {
-        BaseDTO.Request req = gson.fromJson(request, BaseDTO.Request.class); 
-        switch (req.getAction()) {
-            case "LOGIN" -> {
-                return "You are login";
+
+        BaseDTO.Request req = gson.fromJson(request, BaseDTO.Request.class);
+
+        if (req.getAction().equals("LOGIN")) {
+            NhanVienDTO.Login loginInfor = gson.fromJson(req.getData(), NhanVienDTO.Login.class);
+            NhanVienDTO.LoginStatus status = new NhanVienService().checkLogin(loginInfor);
+            if(status.isLogin()){
+                sessionMap.put(status.getSession(), loginInfor.getUsername());
+                System.out.println("User "+loginInfor.getUsername()+" đăng nhập thành công!");
             }
-            case "GET_ROOM" -> {
-                return "Room";
+            return this.buildResponse(
+                    req.getAction(),
+                    200,
+                    "OKE",
+                    gson.toJsonTree(status)
+            );
+        }
+
+        if (!sessionMap.containsKey(req.getSession())) {
+            return this.buildResponse(req.getAction(), 403, "Unauthorized", null);
+        }
+
+        switch (req.getAction()) {
+            case "GET_ROOM_STATES" -> {
+                return this.buildResponse(
+                    req.getAction(),
+                    200,
+                    "OKE",
+                    gson.toJsonTree(new TrangThaiPhongService().getAllTrangThai())  
+                );
+            }
+            case "GET_ROOMS" -> {
+                return this.buildResponse(
+                    req.getAction(),
+                    200,
+                    "OKE",
+                    gson.toJsonTree(new PhongService().getAllPhong()) 
+                );
             }
             default -> {
-                BaseDTO.Response res = new BaseDTO.Response(
-                    400, 
-                    "Invalid request", 
-                    null
-                ); 
-                return gson.toJson(res);
+                return this.buildResponse(
+                        req.getAction(),
+                        400,
+                        "Invalid request",
+                        null
+                );
             }
         }
     }
 
+    private String buildResponse(String action, int statusCode, String message, JsonElement data) {
+        BaseDTO.Response res = new BaseDTO.Response(
+                action,
+                statusCode,
+                message,
+                data
+        );
+        return gson.toJson(res);
+    }
 }

@@ -14,6 +14,11 @@ import java.awt.ScrollPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import homestay.Client.Controllers.RoomController;
+import homestay.Client.Helper.SessionManager;
+import homestay.Client.Helper.TableMapper;
+import homestay.Client.Views.Room.RoomView;
+
 
 public class HomeView extends Frame {
 
@@ -21,6 +26,25 @@ public class HomeView extends Frame {
     final Color COLOR_SIDEBAR = new Color(220, 222, 225); 
     final Color COLOR_BG = Color.WHITE;
     private Components.IViewCheck currentView; 
+
+    private void roomSetup(RoomView view){
+        RoomController ctrl = new RoomController();
+        view.addRefreshListener((actionEvent) -> {
+            try {
+                view.setRoomData(TableMapper.mapRoomListToTableData(ctrl.getRooms()));
+            } catch (Exception e) {
+                Components.showError(view, e.getMessage());
+            }
+        });
+
+        view.onOpen(()->{
+            try {
+                view.setRoomData(TableMapper.mapRoomListToTableData(ctrl.getRooms()));
+            } catch (Exception e) {
+                Components.showError(view, e.getMessage());
+            }
+        });
+    }
 
     public HomeView() {
         // ====================================================================
@@ -38,7 +62,7 @@ public class HomeView extends Frame {
         dashboard.showDashboard();
         
         RoomView room = new RoomView();
-
+        this.roomSetup(room);
         CustomerView customer = new CustomerView();
 
         StatisticsReportView statisticsReport = new StatisticsReportView();
@@ -109,6 +133,7 @@ public class HomeView extends Frame {
                     btnRoom, 
                     btnHome, btnCustomer, btnStatistics, btnUtilityBilling
                 );
+                room.onOpen();
                 validate();
             }
         });
@@ -129,7 +154,8 @@ public class HomeView extends Frame {
 
         // 2.4. Logic nút Logout
         btnLogout.addActionListener(e -> {
-            
+            SessionManager.clearSession();
+            System.exit(0);
         });
 
         // 2.5. Logic đóng cửa sổ
@@ -192,10 +218,5 @@ public class HomeView extends Frame {
 
         // 3.4. Hiển thị Frame (Luôn để cuối cùng)
         setLocationRelativeTo(null); // Căn giữa màn hình
-    }
-    
-    public static void main(String[] args) {
-        HomeView view = new HomeView();
-        view.setVisible(true);
     }
 }
