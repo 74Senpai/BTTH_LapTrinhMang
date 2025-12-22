@@ -28,7 +28,8 @@ public class LoginController {
 
         NhanVienDTO.NhanVienLoginDTO data = new NhanVienDTO.NhanVienLoginDTO(username, password);
 
-        BaseDTO.Response response = this.clientSocketController.sendRequest(action, data, true);
+        BaseDTO.Response response = 
+            this.clientSocketController.sendRequest("AUTH", action, data, true);
         if (response.getAction().equals(action)) {
             NhanVienDTO.LoginResult res = new Gson().fromJson(response.getData(), NhanVienDTO.LoginResult.class);
             if (res.getMaNV() != -1 && res.getHoTen() != null) {

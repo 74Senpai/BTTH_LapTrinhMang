@@ -6,16 +6,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Date;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import homestay.Server.DTOs.BaseDTO;
-import homestay.Server.DTOs.NhanVienDTO;
-import homestay.Server.Services.NhanVienService;
-import homestay.Server.Services.PhongService;
+import homestay.Server.Helper.DataBuilder;
+import homestay.Server.Services.LogService;
 import homestay.Server.Services.TrangThaiPhongService;
 
 public class ServerController {
@@ -24,7 +21,6 @@ public class ServerController {
     private final int port;
     private final Gson gson = new Gson();
     private volatile boolean isActivate = false;
-    private Map<String, String> sessionMap = new ConcurrentHashMap<>();;
 
     public ServerController(int port) {
         this.port = port;
@@ -65,6 +61,7 @@ public class ServerController {
 
         } catch (IOException e) {
             System.err.println("Lỗi khi lắng nghe Client: " + e.getMessage());
+            LogService.writeLog("Listen Client ERROR: " + e.getMessage(), "Unknown", new Date());
         }
     }
 
@@ -92,63 +89,33 @@ public class ServerController {
     }
 
     private String switchRequest(String request) {
-
         BaseDTO.Request req = gson.fromJson(request, BaseDTO.Request.class);
 
-        if (req.getAction().equals("LOGIN")) {
-            NhanVienDTO.Login loginInfor = gson.fromJson(req.getData(), NhanVienDTO.Login.class);
-            NhanVienDTO.LoginStatus status = new NhanVienService().checkLogin(loginInfor);
-            if(status.isLogin()){
-                sessionMap.put(status.getSession(), loginInfor.getUsername());
-                System.out.println("User "+loginInfor.getUsername()+" đăng nhập thành công!");
+        boolean isLogin = AuthController.isAuthenticated(req.getSession());
+        String userName = AuthController.getUsername(req.getSession());
+        LogService.writeLog(request, userName, new Date());
+
+        System.out.println("New request: " + request);
+        if (isLogin) {
+            return DataBuilder.buildResponse(req, 403, "Unauthorized", null);
+        }
+
+        switch (req.getDir()) {
+            case "AUTH" -> {
+                return NhanVienController.login(req);
             }
-            return this.buildResponse(
-                    req.getAction(),
-                    200,
-                    "OKE",
-                    gson.toJsonTree(status)
-            );
-        }
-
-        if (!sessionMap.containsKey(req.getSession())) {
-            return this.buildResponse(req.getAction(), 403, "Unauthorized", null);
-        }
-
-        switch (req.getAction()) {
             case "GET_ROOM_STATES" -> {
-                return this.buildResponse(
-                    req.getAction(),
-                    200,
-                    "OKE",
-                    gson.toJsonTree(new TrangThaiPhongService().getAllTrangThai())  
-                );
+                return DataBuilder.successRes(req, new TrangThaiPhongService().getAllTrangThai());
             }
-            case "GET_ROOMS" -> {
-                return this.buildResponse(
-                    req.getAction(),
-                    200,
-                    "OKE",
-                    gson.toJsonTree(new PhongService().getAllPhong()) 
-                );
+            case "ROOM" -> {
+                return PhongController.phongController(req);
+            }
+            case "HOP_DONG" -> {
+                return HopDongController.hopDongController(req);
             }
             default -> {
-                return this.buildResponse(
-                        req.getAction(),
-                        400,
-                        "Invalid request",
-                        null
-                );
+                return DataBuilder.notFoundRes(req);
             }
         }
-    }
-
-    private String buildResponse(String action, int statusCode, String message, JsonElement data) {
-        BaseDTO.Response res = new BaseDTO.Response(
-                action,
-                statusCode,
-                message,
-                data
-        );
-        return gson.toJson(res);
     }
 }

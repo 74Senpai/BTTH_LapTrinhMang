@@ -7,7 +7,6 @@ import homestay.Server.ServerMain;
 public class Main {
     public static void main(String[] args) {
         
-        //Khi restart cả 2 phía, clear sesion
         SessionManager.clearSession();
 
         Thread serverThread = new Thread(() -> {

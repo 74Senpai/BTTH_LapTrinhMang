@@ -54,21 +54,21 @@ public class ClientSocketController {
         }
     }
 
-    public void sendMessage(String action, Object mess, boolean fallback) {
+    public void sendMessage(String dir, String action, Object mess, boolean fallback) {
         if (!this.ensureConnected()) {
             System.err.println("Gửi message không thành công! \n Message:" + action + ":" + mess);
             return;
         }
         try {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            String jsonMess = this.buildMessage(action, mess);
+            String jsonMess = this.buildMessage(dir, action, mess);
             outputStream.writeUTF(jsonMess);
             System.out.println("Gửi tin tới server thành công");
         } catch (IOException e) {
             System.err.println("Không thể gửi yêu cầu tới server: " + e.getMessage());
             if (fallback) {
                 System.out.println("Tiến hành thử lại.");
-                sendMessage(action, mess, false);
+                sendMessage(dir, action, mess, false);
             }
         }
     }
@@ -93,7 +93,7 @@ public class ClientSocketController {
         return this.inputStream.readUTF();
     }
 
-    public BaseDTO.Response sendRequest(String action, Object data, boolean fallback) {
+    public BaseDTO.Response sendRequest(String dir, String action, Object data, boolean fallback) {
         if (!ensureConnected()) {
             System.err.println("Không có kết nối tới server. Gửi request thất bại!");
             return null;
@@ -104,7 +104,7 @@ public class ClientSocketController {
         }
 
         try {
-            this.sendMessage(action, data, fallback);
+            this.sendMessage(dir, action, data, fallback);
             System.out.println("Đợi phản hồi từ server...");
             String responseJson = this.listenMessage();
             System.out.println("Đã nhận phản hồi từ server");
@@ -135,12 +135,9 @@ public class ClientSocketController {
         }
     }
 
-    private String buildMessage(String action, Object data) {
+    private String buildMessage(String dir, String action, Object data) {
         BaseDTO.Request request = new BaseDTO.Request(
-            action,
-            this.gson.toJsonTree(data),
-            SessionManager.getSession()
-        );
+            dir, action, this.gson.toJsonTree(data), SessionManager.getSession());
         return this.gson.toJson(request);
     }
 
