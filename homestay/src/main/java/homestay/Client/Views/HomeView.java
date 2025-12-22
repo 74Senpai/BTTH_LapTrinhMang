@@ -16,10 +16,12 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
+import homestay.Client.Controllers.ClientSocketController;
 import homestay.Client.Controllers.ContractController;
 import homestay.Client.Controllers.RoomController;
 import homestay.Client.DTOs.RoomDTO;
 import homestay.Client.Helper.SessionManager;
+import homestay.Client.Helper.TableMapper;
 
 public class HomeView extends Frame {
 
@@ -75,11 +77,24 @@ public class HomeView extends Frame {
 
     private void contractSetup(ContractView view) {
         ContractController controller = new ContractController();
+        RoomController roomCtrl = new RoomController();
 
+        Runnable loadMetaData = () -> {
+            try {
+                // Lấy danh sách phòng trống từ server
+                var emptyRooms = roomCtrl.getEmptyRooms().getRooms();
+                // Map sang String[] dùng Helper
+                String[] roomDisplay = TableMapper.mapRoomsToComboList(emptyRooms);
+                // Bơm vào View
+                view.setRoomList(roomDisplay);
+            } catch (Exception e) {
+                System.err.println("Lỗi load metadata phòng: " + e.getMessage());
+            }
+        };
         // 1. Logic làm mới dữ liệu
         Runnable refresh = () -> {
             try {
-                // Lấy danh sách hợp đồng từ server thông qua controller
+                loadMetaData.run();
                 homestay.Client.DTOs.HopDongDTO.ListHopDong list = controller.getContracts();
 
                 // Sử dụng TableMapper để chuyển đổi List DTO sang Object[][] cho JTable
@@ -87,7 +102,7 @@ public class HomeView extends Frame {
 
                 view.setContractData(data);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(view, "Lỗi tải dữ liệu hợp đồng: " + e.getMessage());
+                Components.showError(view, "Lỗi tải dữ liệu hợp đồng: " + e.getMessage());
             }
         };
 
@@ -95,6 +110,7 @@ public class HomeView extends Frame {
         view.setOnRefresh(refresh);
         refresh.run(); // Chạy ngay lần đầu để load dữ liệu
 
+        view.setOnAddContract(data -> { if(controller.handleAddContract(data)) refresh.run(); });
         // 2. Logic thêm hợp đồng
         view.setOnAddContract(rowData -> {
             boolean success = controller.handleAddContract(rowData);
@@ -103,7 +119,7 @@ public class HomeView extends Frame {
                 // nên refresh lại toàn bộ để lấy mã mới nhất và thông tin đồng bộ
                 refresh.run();
             } else {
-                JOptionPane.showMessageDialog(view, "Thêm hợp đồng thất bại! Vui lòng kiểm tra lại thông tin.");
+                Components.showError(view, "Thêm hợp đồng thất bại! Vui lòng kiểm tra lại thông tin.");
             }
         });
 
@@ -111,7 +127,15 @@ public class HomeView extends Frame {
         view.setOnUpdateContract((id, rowData) -> {
             boolean success = controller.handleUpdateContract(id, rowData);
             if (!success) {
-                JOptionPane.showMessageDialog(view, "Cập nhật hợp đồng thất bại!");
+                Components.showError(view, "Cập nhật hợp đồng thất bại!");
+            }
+        });
+
+        view.setOnDeleteContract((id)-> {
+            try {
+                controller.handleDeleteContract(id);
+            } catch (Exception e) {
+                Components.showError(view, "Xóa hợp đồng thất bại!");
             }
         });
     }
@@ -223,12 +247,14 @@ public class HomeView extends Frame {
         // 2.4. Logic nút Logout
         btnLogout.addActionListener(e -> {
             SessionManager.clearSession();
+            ClientSocketController.kill();
             System.exit(0);
         });
 
         // 2.5. Logic đóng cửa sổ
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
+                ClientSocketController.kill();
                 System.exit(0);
             }
         });

@@ -1,62 +1,180 @@
-[2025-12-21 23:43:04] | action={"action":"LOGIN","statusCode":200,"message":"OKE","data":{"maNV":1,"hoTen":"Quản Trị Viên","isLogin":true,"message":"Login success","session":"admin_1"}} | user=Unknown
-[2025-12-21 23:43:04] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=admin
-[2025-12-21 23:43:06] | action={"action":"GET_ROOM_STATES","statusCode":200,"message":"OKE","data":{"lstRoomState":{"Đã đặt":3,"Trống":1,"Bảo trì":4,"Đã xóa":6,"Đang sử dụng":2,"Ngừng sử dụng":5}}} | user=admin
-[2025-12-21 23:43:06] | action={"action":"GET_ROOMS","session":"admin_1"} | user=admin
-[2025-12-21 23:43:08] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0}]}} | user=admin
-[2025-12-21 23:44:38] | action={"action":"DELETE_ROOM","data":{"maPhong":6},"session":"admin_1"} | user=admin
-[2025-12-21 23:44:40] | action={"action":"DELETE_ROOM","statusCode":500,"message":"Không thể xóa phòng ở trạng thái hiện tại"} | user=admin
-[2025-12-21 23:47:02] | action={"action":"CREATE_ROOM","data":{"tenPhong":"Phòng 222","maTrangThai":1,"giaThueNgay":70000.0,"giaThueThang":9000000.0},"session":"admin_1"} | user=admin
-[2025-12-21 23:47:04] | action={"action":"CREATE_ROOM","statusCode":200,"message":"OKE","data":{"maPhong":10,"tenPhong":"Phòng 222","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0}} | user=admin
-[2025-12-21 23:47:17] | action={"action":"GET_ROOMS","session":"admin_1"} | user=admin
-[2025-12-21 23:47:19] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":10,"tenPhong":"Phòng 222","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0},{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0}]}} | user=admin
-[2025-12-22 00:01:48] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=Unknown
-[2025-12-22 00:01:48] | action={"action":"GET_ROOM_STATES","statusCode":403,"message":"Unauthorized"} | user=null
-[2025-12-22 00:01:50] | action={"action":"GET_ROOMS","session":"admin_1"} | user=Unknown
-[2025-12-22 00:01:50] | action={"action":"GET_ROOMS","statusCode":403,"message":"Unauthorized"} | user=null
-[2025-12-22 00:03:07] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=Unknown
-[2025-12-22 00:03:07] | action={"action":"GET_ROOM_STATES","statusCode":403,"message":"Unauthorized"} | user=null
-[2025-12-22 16:22:51] | action={"action":"LOGIN","statusCode":200,"message":"OKE","data":{"maNV":1,"hoTen":"Quản Trị Viên","isLogin":true,"message":"Login success","session":"admin_1"}} | user=Unknown
-[2025-12-22 16:22:51] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=admin
-[2025-12-22 16:22:53] | action={"action":"GET_ROOM_STATES","statusCode":200,"message":"OKE","data":{"lstRoomState":{"Đã đặt":3,"Trống":1,"Bảo trì":4,"Đã xóa":6,"Đang sử dụng":2,"Ngừng sử dụng":5}}} | user=admin
-[2025-12-22 16:22:53] | action={"action":"GET_ROOMS","session":"admin_1"} | user=admin
-[2025-12-22 16:22:55] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":10,"tenPhong":"Phòng 222","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0}]}} | user=admin
-[2025-12-22 16:31:29] | action={"action":"LOGIN","statusCode":200,"message":"OKE","data":{"maNV":1,"hoTen":"Quản Trị Viên","isLogin":true,"message":"Login success","session":"admin_1"}} | user=Unknown
-[2025-12-22 16:31:29] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=admin
-[2025-12-22 16:31:31] | action={"action":"GET_ROOM_STATES","statusCode":200,"message":"OKE","data":{"lstRoomState":{"Đã đặt":3,"Trống":1,"Bảo trì":4,"Đã xóa":6,"Đang sử dụng":2,"Ngừng sử dụng":5}}} | user=admin
-[2025-12-22 16:31:31] | action={"action":"GET_ROOMS","session":"admin_1"} | user=admin
-[2025-12-22 16:31:33] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":10,"tenPhong":"Phòng 222","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0}]}} | user=admin
-[2025-12-22 17:32:56] | action={"action":"LOGIN","statusCode":200,"message":"OKE","data":{"maNV":1,"hoTen":"Quản Trị Viên","isLogin":true,"message":"Login success","session":"admin_1"}} | user=Unknown
-[2025-12-22 17:32:56] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=admin
-[2025-12-22 17:32:58] | action={"action":"GET_ROOM_STATES","statusCode":200,"message":"OKE","data":{"lstRoomState":{"Đã đặt":3,"Trống":1,"Bảo trì":4,"Đã xóa":6,"Đang sử dụng":2,"Ngừng sử dụng":5}}} | user=admin
-[2025-12-22 17:32:58] | action={"action":"GET_ROOMS","session":"admin_1"} | user=admin
-[2025-12-22 17:33:00] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":10,"tenPhong":"Phòng 222","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0}]}} | user=admin
-[2025-12-22 17:33:00] | action={"action":"GET_CONTRACTS","session":"admin_1"} | user=admin
-[2025-12-22 17:33:02] | action={"action":"GET_CONTRACTS","statusCode":500,"message":"Failed making field \u0027java.time.LocalDate#year\u0027 accessible; either increase its visibility or write a custom TypeAdapter for its declaring type.\nSee https://github.com/google/gson/blob/main/Troubleshooting.md#reflection-inaccessible"} | user=admin
-[2025-12-22 17:49:32] | action={"action":"LOGIN","statusCode":200,"message":"OKE","data":{"maNV":1,"hoTen":"Quản Trị Viên","isLogin":true,"message":"Login success","session":"admin_1"}} | user=Unknown
-[2025-12-22 17:49:33] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 17:49:35] | action={"action":"GET_ROOM_STATES","statusCode":200,"message":"OKE","data":{"lstRoomState":{"Đã đặt":3,"Trống":1,"Bảo trì":4,"Đã xóa":6,"Đang sử dụng":2,"Ngừng sử dụng":5}}} | user=Quản Trị Viên
-[2025-12-22 17:49:35] | action={"action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 17:49:36] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":10,"tenPhong":"Phòng 222","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0}]}} | user=Quản Trị Viên
-[2025-12-22 17:49:37] | action={"action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 17:49:39] | action={"action":"GET_CONTRACTS","statusCode":200,"message":"OKE","data":{"contracts":[{"maHopDong":2,"tenKhachHang":"Phạm Thị B","soDienThoai":"0909333444","cccd":"00109000002","phongDangThue":"Phòng 102","ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-25","loaiHinhThue":"Ngày"},{"maHopDong":1,"tenKhachHang":"Lê Văn A","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 101","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-31","loaiHinhThue":"Tháng"}]}} | user=Quản Trị Viên
-[2025-12-22 17:50:18] | action={"action":"UPDATE_CONTRACT","data":{"maHopDong":1,"tenKhachHang":"Lê Văn A","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 301","ngayBatDau":"2025-11-01","loaiHinhThue":"Dài hạn"},"session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 17:50:20] | action={"action":"UPDATE_CONTRACT","statusCode":500,"message":"Cannot invoke \"java.lang.Integer.intValue()\" because the return value of \"homestay.Server.Models.HopDongThue.getMaPhong()\" is null"} | user=Quản Trị Viên
-[2025-12-22 17:50:50] | action={"action":"UPDATE_CONTRACT","data":{"maHopDong":1,"tenKhachHang":"Lê Văn Vở","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 301","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-01","loaiHinhThue":"Theo tháng"},"session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 17:50:52] | action={"action":"UPDATE_CONTRACT","statusCode":500,"message":"Cannot invoke \"java.lang.Integer.intValue()\" because the return value of \"homestay.Server.Models.HopDongThue.getMaPhong()\" is null"} | user=Quản Trị Viên
-[2025-12-22 20:17:48] | action={"action":"LOGIN","statusCode":200,"message":"OKE","data":{"maNV":1,"hoTen":"Quản Trị Viên","isLogin":true,"message":"Login success","session":"admin_1"}} | user=Unknown
-[2025-12-22 20:17:48] | action={"action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:17:50] | action={"action":"GET_ROOM_STATES","statusCode":200,"message":"OKE","data":{"lstRoomState":{"Đã đặt":3,"Trống":1,"Bảo trì":4,"Đã xóa":6,"Đang sử dụng":2,"Ngừng sử dụng":5}}} | user=Quản Trị Viên
-[2025-12-22 20:17:50] | action={"action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:17:52] | action={"action":"GET_ROOMS","statusCode":200,"message":"OKE","data":{"rooms":[{"maPhong":2,"tenPhong":"Phòng 102","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":300000.0,"giaThueThang":5000000.0},{"maPhong":3,"tenPhong":"Phòng 201","tenTrangThai":"Đang sử dụng","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":8000000.0},{"maPhong":4,"tenPhong":"Phòng mới","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":500000.0,"giaThueThang":500000.0},{"maPhong":5,"tenPhong":"Phòng 202","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":5000000.0,"giaThueThang":8000000.0},{"maPhong":6,"tenPhong":"Phòng 203","tenTrangThai":"Bảo trì","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":360000.0,"giaThueThang":5000000.0},{"maPhong":8,"tenPhong":"Phòng 306","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":200000.0,"giaThueThang":2000000.0},{"maPhong":10,"tenPhong":"Phòng 222","tenTrangThai":"Trống","soDienHienTai":0,"soNuocHienTai":0,"giaThueNgay":70000.0,"giaThueThang":9000000.0}]}} | user=Quản Trị Viên
-[2025-12-22 20:17:52] | action={"action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:17:54] | action={"action":"GET_CONTRACTS","statusCode":200,"message":"OKE","data":{"contracts":[{"maHopDong":2,"tenKhachHang":"Phạm Thị B","soDienThoai":"0909333444","cccd":"00109000002","phongDangThue":"Phòng 102","ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-25","loaiHinhThue":"Ngày"},{"maHopDong":1,"tenKhachHang":"Lê Văn Vở","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 101","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-31","loaiHinhThue":"Tháng"}]}} | user=Quản Trị Viên
-[2025-12-22 20:18:58] | action={"action":"CREATE_CONTRACT","data":{"tenKhachHang":"Hello world","soDienThoai":"0123456789","cccd":"001122334455","phongDangThue":"Phòng 201","ngayBatDau":"2025-12-22","ngayKetThuc":"2026-01-21","loaiHinhThue":"Theo tháng"},"session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:19:02] | action={"action":"CREATE_CONTRACT","statusCode":500,"message":"Cannot invoke \"java.lang.Integer.intValue()\" because the return value of \"homestay.Server.Models.HopDongThue.getMaPhong()\" is null"} | user=Quản Trị Viên
-[2025-12-22 20:19:12] | action={"action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:19:14] | action={"action":"GET_CONTRACTS","statusCode":200,"message":"OKE","data":{"contracts":[{"maHopDong":2,"tenKhachHang":"Phạm Thị B","soDienThoai":"0909333444","cccd":"00109000002","phongDangThue":"Phòng 102","ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-25","loaiHinhThue":"Ngày"},{"maHopDong":1,"tenKhachHang":"Lê Văn Vở","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 101","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-31","loaiHinhThue":"Tháng"}]}} | user=Quản Trị Viên
-[2025-12-22 20:19:47] | action={"action":"UPDATE_CONTRACT","data":{"maHopDong":2,"tenKhachHang":"Hello toi la Thong","soDienThoai":"0909333444","cccd":"00109000002","phongDangThue":"Phòng 102","ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-21","loaiHinhThue":"Theo ngày"},"session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:19:50] | action={"action":"UPDATE_CONTRACT","statusCode":500,"message":"Cannot invoke \"java.lang.Integer.intValue()\" because the return value of \"homestay.Server.Models.HopDongThue.getMaPhong()\" is null"} | user=Quản Trị Viên
-[2025-12-22 20:19:55] | action={"action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:19:57] | action={"action":"GET_CONTRACTS","statusCode":200,"message":"OKE","data":{"contracts":[{"maHopDong":2,"tenKhachHang":"Hello toi la Thong","soDienThoai":"0909333444","cccd":"00109000002","phongDangThue":"Phòng 102","ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-25","loaiHinhThue":"Ngày"},{"maHopDong":1,"tenKhachHang":"Lê Văn Vở","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 101","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-31","loaiHinhThue":"Tháng"}]}} | user=Quản Trị Viên
-[2025-12-22 20:26:39] | action={"action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
-[2025-12-22 20:26:41] | action={"action":"GET_CONTRACTS","statusCode":200,"message":"OKE","data":{"contracts":[{"maHopDong":2,"tenKhachHang":"Hello toi la Thong","soDienThoai":"0909333444","cccd":"00109000002","phongDangThue":"Phòng 102","ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-25","loaiHinhThue":"Ngày"},{"maHopDong":1,"tenKhachHang":"Lê Văn Vở","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"Phòng 101","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-31","loaiHinhThue":"Tháng"}]}} | user=Quản Trị Viên
+[2025-12-22 23:01:48] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:01:50] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:01:50] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:01:52] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:01:52] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:01:54] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:20:06] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:20:08] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:20:08] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:20:10] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:20:10] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:20:12] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:20:12] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:20:14] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:20:58] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:21:00] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:53:19] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:53:21] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:53:21] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:53:22] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:53:23] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:53:24] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:53:24] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:53:26] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:53:57] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:53:59] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-22 23:53:59] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-22 23:54:01] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:02:24] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:02:26] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:02:26] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:02:28] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:02:28] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:02:30] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:02:30] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:02:32] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:02:51] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:02:53] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:02:53] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:02:55] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:04:14] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:04:16] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:04:16] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:04:18] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:11:19] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:11:21] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:11:21] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:11:23] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:11:23] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:11:25] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:11:25] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:11:27] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:11:48] | action={"dir":"HOP_DONG","action":"UPDATE_CONTRACT","data":{"maHopDong":1,"tenKhachHang":"Hehe","soDienThoai":"0909111222","cccd":"00109000001","phongDangThue":"1","ngayBatDau":"2025-11-01","ngayKetThuc":"2025-12-31","loaiHinhThue":"Tháng"},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:11:51] | action=Response: HOP_DONG/UPDATE_CONTRACT| Status : 500| Message: Cannot invoke "java.lang.Integer.intValue()" because the return value of "homestay.Server.Models.HopDongThue.getMaPhong()" is null | user=Quản Trị Viên
+[2025-12-23 00:11:57] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:11:59] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:11:59] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:12:01] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:21:17] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:21:19] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:21:19] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:21:22] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:21:22] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:21:24] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:21:24] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:21:26] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:21:46] | action={"dir":"HOP_DONG","action":"UPDATE_CONTRACT","data":{"maHopDong":2,"tenKhachHang":"Hello toi la Thong","soDienThoai":"0909333444","cccd":"00109000002","maPhong":4,"ngayBatDau":"2025-11-20","ngayKetThuc":"2025-11-25","loaiHinhThue":"Ngày"},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:21:49] | action=Response: HOP_DONG/UPDATE_CONTRACT| Status : 200| Message: Cập nhật thành công | user=Quản Trị Viên
+[2025-12-23 00:23:00] | action={"dir":"HOP_DONG","action":"CREATE_CONTRACT","data":{"tenKhachHang":"Toi la Senpai","soDienThoai":"0245678923","cccd":"0123456879515","maPhong":5,"ngayBatDau":"2025-12-23","ngayKetThuc":"2026-01-22","loaiHinhThue":"Theo tháng"},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:23:04] | action=Response: HOP_DONG/CREATE_CONTRACT| Status : 500| Message: Lỗi hệ thống khi tạo hợp đồng: Data truncated for column 'LoaiHinhThue' at row 1 | user=Quản Trị Viên
+[2025-12-23 00:23:11] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:23:13] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:23:13] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:23:15] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:41:53] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:41:55] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:41:55] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:41:57] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:41:57] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:41:59] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:41:59] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:42:01] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:42:41] | action={"dir":"HOP_DONG","action":"CREATE_CONTRACT","data":{"tenKhachHang":"Toi day ","soDienThoai":"0123456789","cccd":"12345678950","maPhong":4,"ngayBatDau":"2025-12-23","ngayKetThuc":"2025-12-24","loaiHinhThue":"Ngày"},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:42:45] | action=Response: HOP_DONG/CREATE_CONTRACT| Status : 200| Message: Thêm hợp đồng thành công | user=Quản Trị Viên
+[2025-12-23 00:42:45] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:42:47] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 00:42:47] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 00:42:49] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:04:39] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:04:41] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:04:41] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:04:43] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:04:43] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:04:44] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:04:44] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:04:46] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:05:02] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":8,"tenPhong":"Phòng 306","maTrangThai":5,"giaThueNgay":200000.0,"giaThueThang":2000000.0},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:05:04] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:05:43] | action={"dir":"HOP_DONG","action":"CREATE_CONTRACT","data":{"tenKhachHang":"Toi lai ai","soDienThoai":"0123456788","cccd":"0114644848","maPhong":8,"ngayBatDau":"2025-12-23","ngayKetThuc":"2026-01-22","loaiHinhThue":"Tháng"},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:05:46] | action=Response: HOP_DONG/CREATE_CONTRACT| Status : 200| Message: Thêm hợp đồng thành công | user=Quản Trị Viên
+[2025-12-23 01:05:46] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:05:48] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:05:48] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:05:50] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:06:18] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:06:20] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:07:20] | action={"dir":"HOP_DONG","action":"UPDATE_CONTRACT","data":{"maHopDong":4,"tenKhachHang":"Toi lai ai","soDienThoai":"0123456788","cccd":"0114644848","maPhong":5,"ngayBatDau":"2025-12-23","ngayKetThuc":"2026-01-22","loaiHinhThue":"Tháng"},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:07:23] | action=Response: HOP_DONG/UPDATE_CONTRACT| Status : 200| Message: Cập nhật thành công | user=Quản Trị Viên
+[2025-12-23 01:07:37] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:07:39] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:08:07] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":4,"tenPhong":"Phòng mới","maTrangThai":2,"giaThueNgay":500000.0,"giaThueThang":500000.0},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:08:08] | action=Response: ROOM/UPDATE_ROOM| Status : 500| Message: Lỗi database khi cập nhật phòng | user=Quản Trị Viên
+[2025-12-23 01:08:16] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:08:16] | action=Response: ROOM/GET_ROOMS| Status : 500| Message: Không thể lấy danh sách phòng: User 'ufd0vmn9hd247ekb' has exceeded the 'max_user_connections' resource (current value: 5) | user=Quản Trị Viên
+[2025-12-23 01:19:03] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:05] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:19:05] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:07] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:19:07] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:08] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:19:08] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:10] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:19:26] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":2},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:28] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Quản Trị Viên
+[2025-12-23 01:19:39] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:41] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:19:41] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:19:43] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:23:36] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:23:38] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:23:38] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:23:40] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:23:40] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:23:42] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:23:42] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:23:44] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:46:50] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:46:52] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:46:52] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:46:54] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:46:54] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:46:56] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:46:56] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:46:58] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:47:12] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":6,"tenPhong":"Phòng 203","maTrangThai":1,"giaThueNgay":360000.0,"giaThueThang":5000000.0},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:47:14] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:47:28] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":6,"tenPhong":"Phòng 203","maTrangThai":5,"giaThueNgay":360000.0,"giaThueThang":5000000.0},"session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:47:29] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:56:19] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:56:21] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:56:21] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:56:23] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:56:23] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:56:25] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:56:25] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:56:27] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:59:34] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:59:36] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:59:36] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:59:38] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:59:38] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:59:40] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 01:59:40] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 01:59:42] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:02:30] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:02:32] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:02:32] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:02:33] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:02:33] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:02:35] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:02:35] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:02:37] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:03:14] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:03:17] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:03:17] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:03:19] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:03:19] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:03:21] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 02:03:21] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
+[2025-12-23 02:03:22] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên

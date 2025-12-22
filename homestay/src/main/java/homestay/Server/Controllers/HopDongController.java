@@ -10,7 +10,9 @@ import homestay.Server.Services.HopDongThueService;
 public class HopDongController {
 
     private static final Gson gson = new Gson();
+    private static final HopDongThueService hopDongThueService = new HopDongThueService();
 
+    @SuppressWarnings("UseSpecificCatch")
     public static String hopDongController(BaseDTO.Request req) {
         try {
             switch (req.getAction()) {
@@ -20,17 +22,17 @@ public class HopDongController {
                 case "CREATE_CONTRACT" -> {
                     HopDongDTO.Create contractDto = gson.fromJson(req.getData(), HopDongDTO.Create.class);
                     int maNV = AuthController.getUserId(req.getSession());
-                    new HopDongThueService().createHopDong(maNV, contractDto);
+                    hopDongThueService.createHopDong(maNV, contractDto);
                     return DataBuilder.buildResponse(req, 200, "Thêm hợp đồng thành công", null);
                 }
                 case "UPDATE_CONTRACT" -> {
                     HopDongDTO.Update updateDto = gson.fromJson(req.getData(), HopDongDTO.Update.class);
-                    new HopDongThueService().updateHopDong(updateDto);
+                    hopDongThueService.updateHopDong(updateDto);
                     return DataBuilder.buildResponse(req, 200, "Cập nhật thành công", null);
                 }
                 case "DELETE_CONTRACT" -> {
                     HopDongDTO.Delete deleteDto = gson.fromJson(req.getData(), HopDongDTO.Delete.class);
-                    new HopDongThueService().deleteHopDong(deleteDto.getMaHopDong());
+                    hopDongThueService.deleteHopDong(deleteDto.getMaHopDong());
                     return DataBuilder.buildResponse(req, 200, "Hủy hợp đồng thành công", null);
                 }
                 default -> {

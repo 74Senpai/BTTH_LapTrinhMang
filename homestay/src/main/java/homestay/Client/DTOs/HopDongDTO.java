@@ -34,7 +34,7 @@ public class HopDongDTO {
         public String tenKhachHang;
         public String soDienThoai;
         public String cccd;
-        public String phongDangThue;
+        public Integer maPhong;
         public String ngayBatDau;
         public String ngayKetThuc;
         public String loaiHinhThue;
@@ -45,7 +45,7 @@ public class HopDongDTO {
         public String tenKhachHang;
         public String soDienThoai;
         public String cccd;
-        public String phongDangThue;
+        public Integer maPhong;
         public String ngayBatDau;
         public String ngayKetThuc;
         public String loaiHinhThue;

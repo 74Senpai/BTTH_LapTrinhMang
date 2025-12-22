@@ -8,11 +8,7 @@ import homestay.Client.Helper.SessionManager;
 
 public class LoginController {
 
-    private final ClientSocketController clientSocketController;
-
-    public LoginController() {
-        this.clientSocketController = new ClientSocketController("localhost", 8000);
-    }
+    public LoginController() {}
 
     /**
      * Xử lý đăng nhập
@@ -24,12 +20,12 @@ public class LoginController {
     public boolean login(String username, String password) {
         boolean isLogin = false;
         final String action = "LOGIN";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
 
         NhanVienDTO.NhanVienLoginDTO data = new NhanVienDTO.NhanVienLoginDTO(username, password);
 
-        BaseDTO.Response response = 
-            this.clientSocketController.sendRequest("AUTH", action, data, true);
+        BaseDTO.Response response
+                = ClientSocketController.sendRequest("AUTH", action, data, true);
         if (response.getAction().equals(action)) {
             NhanVienDTO.LoginResult res = new Gson().fromJson(response.getData(), NhanVienDTO.LoginResult.class);
             if (res.getMaNV() != -1 && res.getHoTen() != null) {
@@ -38,7 +34,6 @@ public class LoginController {
             }
             System.out.println("User login: " + res.getHoTen());
         }
-        this.clientSocketController.kill();
         return isLogin;
     }
 }

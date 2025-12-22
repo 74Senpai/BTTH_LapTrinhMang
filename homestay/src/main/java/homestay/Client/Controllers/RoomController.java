@@ -7,13 +7,10 @@ import homestay.Client.DTOs.RoomDTO;
 
 public class RoomController {
 
-    private final ClientSocketController clientSocketController;
     private final Gson gson = new Gson();
     private final String dir = "ROOM";
 
-    public RoomController() {
-        this.clientSocketController = new ClientSocketController("localhost", 8000);
-    }
+    public RoomController() {}
 
     // ================== HELPER PARSING AN TOÀN ==================
     private double parseDoubleSafe(Object value) {
@@ -21,26 +18,12 @@ public class RoomController {
             return 0.0;
         }
         try {
-            if (value instanceof Number) {
-                return ((Number) value).doubleValue();
+            if (value instanceof Number number) {
+                return number.doubleValue();
             }
             return Double.parseDouble(value.toString().replace(",", ""));
         } catch (NumberFormatException e) {
             return 0.0;
-        }
-    }
-
-    private int parseIntSafe(Object value) {
-        if (value == null || value.toString().trim().isEmpty()) {
-            return 0;
-        }
-        try {
-            if (value instanceof Number) {
-                return ((Number) value).intValue();
-            }
-            return Integer.parseInt(value.toString());
-        } catch (NumberFormatException e) {
-            return 0;
         }
     }
 
@@ -103,9 +86,9 @@ public class RoomController {
         }
 
         final String action = "CREATE_ROOM";
-        this.clientSocketController.ensureConnected();
-        BaseDTO.Response response = 
-            this.clientSocketController.sendRequest(dir, action, dto, true);
+        ClientSocketController.ensureConnected();
+        BaseDTO.Response response
+                = ClientSocketController.sendRequest(dir, action, dto, true);
 
         if (response != null && response.getStatusCode() == 200) {
             return gson.fromJson(response.getData(), RoomDTO.ViewRoomDTO.class);
@@ -120,42 +103,54 @@ public class RoomController {
         }
 
         final String action = "UPDATE_ROOM";
-        this.clientSocketController.ensureConnected();
-        BaseDTO.Response response = 
-            this.clientSocketController.sendRequest(dir, action, dto, true);
+        ClientSocketController.ensureConnected();
+        BaseDTO.Response response
+                = ClientSocketController.sendRequest(dir, action, dto, true);
 
         return response != null && response.getStatusCode() == 200;
     }
 
-    public boolean handleDeleteRoom(int roomId) throws Exception{
+    public boolean handleDeleteRoom(int roomId) throws Exception {
 
         RoomDTO.DeleteRoomDTO room = new RoomDTO.DeleteRoomDTO();
         room.setMaPhong(roomId);
 
         final String action = "DELETE_ROOM";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
 
-        BaseDTO.Response response = 
-            this.clientSocketController.sendRequest(dir, action, room, true);
+        BaseDTO.Response response
+                = ClientSocketController.sendRequest(dir, action, room, true);
 
         int statusCode = response.getStatusCode();
-        if (statusCode == 200){
+        if (statusCode == 200) {
             return true;
-        }else {
+        } else {
             throw new Exception(response.getMessage());
         }
     }
 
     public RoomDTO.ListRoomDTO getRooms() throws Exception {
         final String action = "GET_ROOMS";
-        this.clientSocketController.ensureConnected();
-        BaseDTO.Response response = 
-            this.clientSocketController.sendRequest(dir, action, null, true);
+        ClientSocketController.ensureConnected();
+        BaseDTO.Response response
+                = ClientSocketController.sendRequest(dir, action, null, true);
 
         if (response != null && response.getStatusCode() == 200 && response.getData() != null) {
             return gson.fromJson(response.getData(), RoomDTO.ListRoomDTO.class);
         }
         throw new Exception("Không thể lấy danh sách phòng: " + (response != null ? response.getMessage() : "No response"));
+    }
+
+    public RoomDTO.ListRoomDTO getEmptyRooms() throws Exception {
+        final String action = "GET_EMPTY_ROOMS";
+        ClientSocketController.ensureConnected();
+        BaseDTO.Response response
+                = ClientSocketController.sendRequest(dir, action, null, true);
+
+        if (response != null && response.getStatusCode() == 200 && response.getData() != null) {
+            return gson.fromJson(response.getData(), RoomDTO.ListRoomDTO.class);
+        }
+        throw new Exception("Không thể lấy danh sách phòng trống: " + (response != null ? response.getMessage() : "No response"));
     }
 
     public void validateRoom(RoomDTO.CreateRoomDTO room) throws IllegalArgumentException {

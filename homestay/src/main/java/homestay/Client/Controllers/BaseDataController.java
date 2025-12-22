@@ -7,13 +7,9 @@ import homestay.Client.DTOs.ListRoomStateDTO;
 
 public class BaseDataController {
 
-    private final ClientSocketController clientSocketController;
-
     private static ListRoomStateDTO cachedRoomStates = null;
 
-    public BaseDataController() {
-        this.clientSocketController = new ClientSocketController("localhost", 8000);
-    }
+    public BaseDataController() {}
 
     public ListRoomStateDTO getRoomStates() throws Exception{
         if (cachedRoomStates != null) {
@@ -24,9 +20,9 @@ public class BaseDataController {
 
     private ListRoomStateDTO loadRoomStatesFromServer() throws Exception{
         final String action = "GET_ROOM_STATES";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
         BaseDTO.Response response = 
-            this.clientSocketController.sendRequest("BASE", action, null, true);
+            ClientSocketController.sendRequest("BASE", action, null, true);
 
         if (response.getAction().equals(action) && response.getStatusCode() == 200) {
             cachedRoomStates = new Gson().fromJson(response.getData(), ListRoomStateDTO.class);

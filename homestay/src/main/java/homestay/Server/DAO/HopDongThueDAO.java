@@ -61,26 +61,27 @@ public class HopDongThueDAO {
     public List<HopDongThue> findAll(Connection conn) throws SQLException {
 
         String sql = """
-        SELECT 
-            hd.MaHopDong,
-            hd.MaKhachHang,
-            hd.MaPhong,
-            hd.MaNhanVien,
-            hd.LoaiHinhThue,
-            hd.NgayBatDau,
-            hd.NgayKetThuc,
-            hd.TrangThaiHopDong,
+            SELECT 
+                hd.MaHopDong,
+                hd.MaKhachHang,
+                hd.MaPhong,
+                hd.MaNhanVien,
+                hd.LoaiHinhThue,
+                hd.NgayBatDau,
+                hd.NgayKetThuc,
+                hd.TrangThaiHopDong,
 
-            kh.HoTen        AS TenKhachHang,
-            kh.SoDienThoai  AS SoDienThoai,
-            kh.CCCD         AS CCCD,
+                kh.HoTen        AS TenKhachHang,
+                kh.SoDienThoai  AS SoDienThoai,
+                kh.CCCD         AS CCCD,
 
-            p.TenPhong      AS TenPhong
-        FROM HopDongThue hd
-        JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKH
-        JOIN Phong p ON hd.MaPhong = p.MaPhong
-        ORDER BY hd.MaHopDong DESC
-    """;
+                p.TenPhong      AS TenPhong
+            FROM HopDongThue hd
+            JOIN KhachHang kh ON hd.MaKhachHang = kh.MaKH
+            JOIN Phong p ON hd.MaPhong = p.MaPhong
+            WHERE hd.TrangThaiHopDong <> 'Cancelled'
+            ORDER BY hd.MaHopDong DESC
+        """;
 
         List<HopDongThue> list = new ArrayList<>();
 

@@ -14,6 +14,7 @@ public class PhongDAO {
 
     public static final int TRANG_THAI_DA_XOA = 6;
     public static final int TRANG_THAI_TRONG = 1;
+    public static final int TRANG_THAI_SU_DUNG = 2;
 
     public List<Phong> getAllPhong(Connection conn) throws SQLException {
         String query = """
@@ -56,7 +57,7 @@ public class PhongDAO {
         return lstPhong;
     }
 
-     public List<Phong> getPhongTrong(Connection conn) throws SQLException {
+    public List<Phong> getPhongTrong(Connection conn) throws SQLException {
         String query = """
         SELECT 
             p.MaPhong,
@@ -182,6 +183,20 @@ public class PhongDAO {
                     throw new SQLException("Không tìm thấy phòng với mã: " + maPhong);
                 }
             }
+        }
+    }
+
+    public boolean updateTrangThaiPhong(
+            Connection conn, int maPhong, int maTrangThai
+    ) throws SQLException {
+
+        String sql = "UPDATE Phong SET MaTrangThai = ? WHERE MaPhong = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maTrangThai);
+            ps.setInt(2, maPhong);
+
+            return ps.executeUpdate() > 0;
         }
     }
 }
