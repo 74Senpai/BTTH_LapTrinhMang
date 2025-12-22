@@ -1,0 +1,31 @@
+package homestay.Server.Controllers;
+
+import com.google.gson.Gson;
+
+import homestay.Server.DTOs.BaseDTO;
+import homestay.Server.DTOs.NhanVienDTO;
+import homestay.Server.Helper.DataBuilder;
+import homestay.Server.Services.NhanVienService;
+
+public class NhanVienController {
+
+    public static final Gson gson = new Gson();
+
+    public static String login(BaseDTO.Request req) {
+        try {
+            if (req.getAction().equals("LOGIN")) {
+                NhanVienDTO.Login loginInfor = gson.fromJson(req.getData(), NhanVienDTO.Login.class);
+                NhanVienDTO.LoginStatus status = new NhanVienService().checkLogin(loginInfor);
+                if (status.isLogin()) {
+                    AuthController.registerSession(status.getSession(), status);
+                    System.out.println("User " + loginInfor.getUsername() + " đăng nhập thành công!");
+                }
+                return DataBuilder.successRes(req, status);
+            } else {
+                return DataBuilder.notFoundRes(req);
+            }
+        } catch (Exception e) {
+            return DataBuilder.serverErrorRes(req, e.getMessage());
+        }
+    }
+}

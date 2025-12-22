@@ -1,7 +1,9 @@
 package homestay.Server.Services;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
+import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.NhanVienDAO;
 import homestay.Server.DTOs.NhanVienDTO;
 import homestay.Server.Models.NhanVien;
@@ -12,7 +14,8 @@ public class NhanVienService {
 
     public NhanVienDTO.LoginStatus checkLogin(NhanVienDTO.Login login) {
         try {
-            NhanVien nv = this.dao.findByUserName(login.getUsername());
+            Connection conn = DBConnection.getConnection();
+            NhanVien nv = this.dao.findByUserName(conn, login.getUsername());
             if (nv == null) {
                 return new NhanVienDTO.LoginStatus(
                         -1,

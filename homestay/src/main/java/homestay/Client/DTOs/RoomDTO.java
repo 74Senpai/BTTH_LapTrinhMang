@@ -1,9 +1,6 @@
 package homestay.Client.DTOs;
 
-import java.lang.reflect.Type;
 import java.util.List;
-
-import com.google.gson.reflect.TypeToken;
 
 public class RoomDTO {
 
@@ -14,9 +11,17 @@ public class RoomDTO {
         double giaThueThang
     ) {}
 
+    public record UpdateRoomDTO(
+        int maPhong,
+        String tenPhong,
+        int maTrangThai,
+        double giaThueNgay,
+        double giaThueThang
+    ) {}
+
     public static class ViewRoomDTO {
 
-        private String maPhong;
+        private int maPhong;
         private String tenPhong;
         private String tenTrangThai;
         private int soDienHienTai;
@@ -24,7 +29,7 @@ public class RoomDTO {
         private double giaThueNgay;
         private double giaThueThang;
 
-        public String getMaPhong() {
+        public int getMaPhong() {
             return this.maPhong;
         }
 
@@ -53,5 +58,20 @@ public class RoomDTO {
         }
     }
 
-    public static final Type LIST_VIEW_TYPE = new TypeToken<List<ViewRoomDTO>>(){}.getType();
+    public static class ListRoomDTO {
+        private List<RoomDTO.ViewRoomDTO> rooms;
+
+        public List<RoomDTO.ViewRoomDTO> getRooms() {
+            return rooms;
+        }
+    }
+
+    public static class DeleteRoomDTO {
+
+        private Integer maPhong;
+
+        public void setMaPhong(int maPhong) {
+            this.maPhong = maPhong;
+        }
+    }
 }

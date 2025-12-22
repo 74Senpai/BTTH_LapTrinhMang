@@ -14,34 +14,104 @@ import java.awt.ScrollPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import homestay.Client.Controllers.RoomController;
-import homestay.Client.Helper.SessionManager;
-import homestay.Client.Helper.TableMapper;
-import homestay.Client.Views.Room.RoomView;
+import javax.swing.JOptionPane;
 
+import homestay.Client.Controllers.ContractController;
+import homestay.Client.Controllers.RoomController;
+import homestay.Client.DTOs.RoomDTO;
+import homestay.Client.Helper.SessionManager;
 
 public class HomeView extends Frame {
 
     // Màu sắc chủ đạo
-    final Color COLOR_SIDEBAR = new Color(220, 222, 225); 
+    final Color COLOR_SIDEBAR = new Color(220, 222, 225);
     final Color COLOR_BG = Color.WHITE;
-    private Components.IViewCheck currentView; 
+    private Components.IViewCheck currentView;
 
-    private void roomSetup(RoomView view){
-        RoomController ctrl = new RoomController();
-        view.addRefreshListener((actionEvent) -> {
+    private void roomSetup(RoomView view) {
+
+        RoomController controller = new RoomController();
+        Runnable refresh = (() -> {
             try {
-                view.setRoomData(TableMapper.mapRoomListToTableData(ctrl.getRooms()));
+                RoomDTO.ListRoomDTO list = controller.getRooms();
+                Object[][] data = list.getRooms().stream().map(r -> new Object[]{
+                    r.getMaPhong(), r.getTenPhong(), r.getTenTrangThai(),
+                    r.getGiaThueNgay(), r.getGiaThueThang(), r.getSoDienHienTai(), r.getSoNuocHienTai()
+                }).toArray(Object[][]::new);
+
+                view.setRoomData(data);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(view, "Lỗi tải dữ liệu: " + e.getMessage());
+            }
+        });
+        view.setOnRefresh(refresh);
+        refresh.run();
+
+        view.setOnAddRoom(rowData -> {
+            RoomDTO.ViewRoomDTO result = controller.handleAddRoom(rowData);
+            if (result.getMaPhong() != -1) {
+                view.updateRoomIdAtSelectedRow(result.getMaPhong());
+            } else {
+                JOptionPane.showMessageDialog(view, "Thêm thất bại!");
+            }
+        });
+
+        view.setOnUpdateRoom((id, rowData) -> {
+            boolean success = controller.handleUpdateRoom(id, rowData);
+            if (!success) {
+                JOptionPane.showMessageDialog(view, "Cập nhật thất bại!");
+            }
+        });
+
+        view.setOnDeleteRoom(id -> {
+            try {
+                boolean success = controller.handleDeleteRoom(id);
             } catch (Exception e) {
                 Components.showError(view, e.getMessage());
             }
         });
 
-        view.onOpen(()->{
+    }
+
+    private void contractSetup(ContractView view) {
+        ContractController controller = new ContractController();
+
+        // 1. Logic làm mới dữ liệu
+        Runnable refresh = () -> {
             try {
-                view.setRoomData(TableMapper.mapRoomListToTableData(ctrl.getRooms()));
+                // Lấy danh sách hợp đồng từ server thông qua controller
+                homestay.Client.DTOs.HopDongDTO.ListHopDong list = controller.getContracts();
+
+                // Sử dụng TableMapper để chuyển đổi List DTO sang Object[][] cho JTable
+                Object[][] data = homestay.Client.Helper.TableMapper.mapContractListToTableData(list.getContracts());
+
+                view.setContractData(data);
             } catch (Exception e) {
-                Components.showError(view, e.getMessage());
+                JOptionPane.showMessageDialog(view, "Lỗi tải dữ liệu hợp đồng: " + e.getMessage());
+            }
+        };
+
+        // Gán sự kiện Refresh cho nút Tải lại
+        view.setOnRefresh(refresh);
+        refresh.run(); // Chạy ngay lần đầu để load dữ liệu
+
+        // 2. Logic thêm hợp đồng
+        view.setOnAddContract(rowData -> {
+            boolean success = controller.handleAddContract(rowData);
+            if (success) {
+                // Vì tạo hợp đồng thường sinh mã ID tự động từ DB, 
+                // nên refresh lại toàn bộ để lấy mã mới nhất và thông tin đồng bộ
+                refresh.run();
+            } else {
+                JOptionPane.showMessageDialog(view, "Thêm hợp đồng thất bại! Vui lòng kiểm tra lại thông tin.");
+            }
+        });
+
+        // 3. Logic cập nhật hợp đồng
+        view.setOnUpdateContract((id, rowData) -> {
+            boolean success = controller.handleUpdateContract(id, rowData);
+            if (!success) {
+                JOptionPane.showMessageDialog(view, "Cập nhật hợp đồng thất bại!");
             }
         });
     }
@@ -60,13 +130,14 @@ public class HomeView extends Frame {
         // 1.2. Khởi tạo Dashboard & Main Content và room
         DashboardView dashboard = new DashboardView();
         dashboard.showDashboard();
-        
+
         RoomView room = new RoomView();
         this.roomSetup(room);
-        CustomerView customer = new CustomerView();
+        ContractView customer = new ContractView();
+        this.contractSetup(customer);
 
         StatisticsReportView statisticsReport = new StatisticsReportView();
-        
+
         UtilityBillingMonthlyReportView utilityBilling = new UtilityBillingMonthlyReportView();
 
         CardLayout card = new CardLayout();
@@ -77,7 +148,7 @@ public class HomeView extends Frame {
         pnlMain.add(customer, "Customer");
         pnlMain.add(statisticsReport, "StatisticsReport");
         pnlMain.add(utilityBilling, "UtilityBillingMonthlyReport");
-        
+
         ScrollPane scrollPane = new ScrollPane(); // Container cuộn cho nội dung chính
 
         // 1.3. Khởi tạo Sidebar (Cột trái)
@@ -89,7 +160,7 @@ public class HomeView extends Frame {
         // 1.4. Khởi tạo Logo & Menu Panel
         Label lblLogo = new Label("Home", Label.CENTER);
         lblLogo.setFont(new Font("Arial", Font.BOLD, 24));
-        
+
         Panel pnlMenu = new Panel(new GridLayout(10, 1, 0, 10));
         Panel pnlBottomMenu = new Panel(new GridLayout(2, 1));
 
@@ -109,15 +180,14 @@ public class HomeView extends Frame {
         // PHẦN 2: XỬ LÝ LOGIC (LOGIC & EVENTS)
         // Gán sự kiện click, xử lý ẩn hiện, luồng dữ liệu
         // ====================================================================
-
         // 2.1. Logic nút Home
         btnHome.addActionListener(e -> {
             Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, dashboard, "Dashboard");
             if (resultView == dashboard) {
                 currentView = resultView;
                 Components.updateMenuState(
-                    btnHome, 
-                    btnRoom, btnCustomer, btnStatistics, btnUtilityBilling
+                        btnHome,
+                        btnRoom, btnCustomer, btnStatistics, btnUtilityBilling
                 );
                 // validate để cập nhật lại giao diện
                 validate();
@@ -126,31 +196,29 @@ public class HomeView extends Frame {
 
         // 2.2. Logic nút Menu
         btnRoom.addActionListener(e -> {
-            Components.IViewCheck resultView  = Components.switchView(card, pnlMain, currentView, room, "Room");
-            if(resultView == room){
+            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, room, "Room");
+            if (resultView == room) {
                 currentView = resultView;
                 Components.updateMenuState(
-                    btnRoom, 
-                    btnHome, btnCustomer, btnStatistics, btnUtilityBilling
-                );
-                room.onOpen();
-                validate();
-            }
-        });
-        
-        // 2.3. Logic nút Customer
-        btnCustomer.addActionListener(e -> {
-            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, customer, "Customer");
-            if(resultView == customer){
-                currentView = resultView;
-                Components.updateMenuState(
-                    btnCustomer, 
-                    btnHome, btnRoom, btnStatistics, btnUtilityBilling
+                        btnRoom,
+                        btnHome, btnCustomer, btnStatistics, btnUtilityBilling
                 );
                 validate();
             }
         });
 
+        // 2.3. Logic nút Customer
+        btnCustomer.addActionListener(e -> {
+            Components.IViewCheck resultView = Components.switchView(card, pnlMain, currentView, customer, "Customer");
+            if (resultView == customer) {
+                currentView = resultView;
+                Components.updateMenuState(
+                        btnCustomer,
+                        btnHome, btnRoom, btnStatistics, btnUtilityBilling
+                );
+                validate();
+            }
+        });
 
         // 2.4. Logic nút Logout
         btnLogout.addActionListener(e -> {
@@ -171,8 +239,8 @@ public class HomeView extends Frame {
             if (resultView == statisticsReport) {
                 currentView = resultView;
                 Components.updateMenuState(
-                    btnStatistics, 
-                    btnHome, btnRoom, btnCustomer, btnUtilityBilling
+                        btnStatistics,
+                        btnHome, btnRoom, btnCustomer, btnUtilityBilling
                 );
                 validate();
             }
@@ -184,8 +252,8 @@ public class HomeView extends Frame {
             if (resultView == utilityBilling) {
                 currentView = resultView;
                 Components.updateMenuState(
-                    btnUtilityBilling, 
-                    btnHome, btnRoom, btnCustomer, btnStatistics
+                        btnUtilityBilling,
+                        btnHome, btnRoom, btnCustomer, btnStatistics
                 );
                 validate();
             }
@@ -195,7 +263,6 @@ public class HomeView extends Frame {
         // PHẦN 3: THÊM VÀO VIEW (ADD TO VIEW)
         // Lắp ráp các thành phần vào nhau để hiển thị lên màn hình
         // ====================================================================
-
         // 3.1. Lắp ráp Menu (Sidebar)
         pnlMenu.add(lblLogo);
         pnlMenu.add(btnHome);
@@ -203,7 +270,7 @@ public class HomeView extends Frame {
         pnlMenu.add(btnCustomer);
         pnlMenu.add(btnStatistics);
         pnlMenu.add(btnUtilityBilling);
-        
+
         pnlBottomMenu.add(btnLogout);
 
         pnlSidebar.add(pnlMenu, BorderLayout.NORTH);

@@ -8,7 +8,6 @@ import homestay.Client.Views.LoginView;
 public class ClientMain {
 
     public static void main(String[] args) {
-
         if (SessionManager.getSession() == null) {
             LoginView loginView = new LoginView();
             LoginController controller = new LoginController();

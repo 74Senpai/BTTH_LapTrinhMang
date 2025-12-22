@@ -1,10 +1,13 @@
 package homestay.Server.DTOs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PhongDTO {
 
     public static class PhongViewDTO {
 
-        private String maPhong;
+        private int maPhong;
         private String tenPhong;
         private String tenTrangThai;
         private int soDienHienTai;
@@ -12,7 +15,7 @@ public class PhongDTO {
         private double giaThueNgay;
         private double giaThueThang;
 
-        public void setMaPhong(String maPhong) {
+        public void setMaPhong(int maPhong) {
             this.maPhong = maPhong;
         }
 
@@ -67,13 +70,13 @@ public class PhongDTO {
 
     public static class PhongUpdateDTO {
 
-        private String maPhong;
+        private int maPhong;
         private String tenPhong;
         private int maTrangThai;
         private double giaThueNgay;
         private double giaThueThang;
 
-        public String getMaPhong() {
+        public int getMaPhong() {
             return maPhong;
         }
 
@@ -91,6 +94,25 @@ public class PhongDTO {
 
         public double getGiaThueThang() {
             return giaThueThang;
+        }
+    }
+    public static class DeletePhongDTO {
+
+        private Integer maPhong;
+
+        public Integer getMaPhong() {
+            return maPhong;
+        }
+    }
+
+    public static class ListRoomDTO {
+        private List<PhongViewDTO> rooms;
+        public ListRoomDTO() {
+            this.rooms = new ArrayList<>();
+        }
+
+        public void addRoom(PhongViewDTO room){
+            this.rooms.add(room);
         }
     }
 }

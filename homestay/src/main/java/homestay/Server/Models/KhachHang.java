@@ -1,22 +1,42 @@
 package homestay.Server.Models;
 
 public class KhachHang {
-    private String maKH;
+    private int maKH;
     private String hoTen;
     private String soDienThoai;
     private String cccd;
 
     public KhachHang() {}
 
-    public String getMaKH() { return maKH; }
-    public void setMaKH(String maKH) { this.maKH = maKH; }
+    public int getMaKH() {
+        return maKH;
+    }
 
-    public String getHoTen() { return hoTen; }
-    public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+    public void setMaKH(int maKH) {
+        this.maKH = maKH;
+    }
 
-    public String getSoDienThoai() { return soDienThoai; }
-    public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
+    public String getHoTen() {
+        return hoTen;
+    }
 
-    public String getCccd() { return cccd; }
-    public void setCccd(String cccd) { this.cccd = cccd; }
+    public void setHoTen(String hoTen) {
+        this.hoTen = hoTen;
+    }
+
+    public String getSoDienThoai() {
+        return soDienThoai;
+    }
+
+    public void setSoDienThoai(String soDienThoai) {
+        this.soDienThoai = soDienThoai;
+    }
+
+    public String getCccd() {
+        return cccd;
+    }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
 }

@@ -15,21 +15,25 @@ public class BaseDataController {
         this.clientSocketController = new ClientSocketController("localhost", 8000);
     }
 
-    public ListRoomStateDTO getRoomStates() {
+    public ListRoomStateDTO getRoomStates() throws Exception{
         if (cachedRoomStates != null) {
             return cachedRoomStates;
         }
         return loadRoomStatesFromServer();
     }
 
-    public ListRoomStateDTO loadRoomStatesFromServer() {
+    private ListRoomStateDTO loadRoomStatesFromServer() throws Exception{
         final String action = "GET_ROOM_STATES";
         this.clientSocketController.ensureConnected();
-        BaseDTO.Response response = this.clientSocketController.sendRequest(action, null, true);
+        BaseDTO.Response response = 
+            this.clientSocketController.sendRequest("BASE", action, null, true);
 
         if (response.getAction().equals(action) && response.getStatusCode() == 200) {
             cachedRoomStates = new Gson().fromJson(response.getData(), ListRoomStateDTO.class);
         } else {
+            if(response.getStatusCode() == 403){
+                throw new Exception("Không có quyền truy cập! Vui lòng đăng nhập.");
+            }
             if (cachedRoomStates == null) {
                 cachedRoomStates = new ListRoomStateDTO();
             }
@@ -38,11 +42,13 @@ public class BaseDataController {
         return cachedRoomStates;
     }
 
-    public void refreshRoomStates() {
+    public void refreshRoomStates() throws Exception{
         loadRoomStatesFromServer();
     }
 
     public static ListRoomStateDTO getCachedRoomStates() {
         return cachedRoomStates;
     }
+
+    // public static 
 }

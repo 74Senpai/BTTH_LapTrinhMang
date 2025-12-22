@@ -9,10 +9,10 @@ import homestay.Server.Models.NhanVien;
 
 public class NhanVienDAO {
 
-    public NhanVien findByUserName(String userName) throws SQLException {
+    public NhanVien findByUserName(Connection conn, String userName) throws SQLException {
         String query = "SELECT * FROM NhanVien WHERE Username = ?";
         System.out.println("Find user: "+userName);
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
 
             ps.setString(1, userName);
 
