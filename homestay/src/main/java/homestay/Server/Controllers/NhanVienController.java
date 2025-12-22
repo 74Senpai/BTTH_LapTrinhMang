@@ -9,21 +9,22 @@ import homestay.Server.Services.NhanVienService;
 
 public class NhanVienController {
 
-    public static final Gson gson = new Gson();
+    private static final Gson gson = new Gson();
+    private static final NhanVienService nhanVienService = new NhanVienService(); 
 
+    @SuppressWarnings("UseSpecificCatch")
     public static String login(BaseDTO.Request req) {
         try {
             if (req.getAction().equals("LOGIN")) {
                 NhanVienDTO.Login loginInfor = gson.fromJson(req.getData(), NhanVienDTO.Login.class);
-                NhanVienDTO.LoginStatus status = new NhanVienService().checkLogin(loginInfor);
+                NhanVienDTO.LoginStatus status = nhanVienService.checkLogin(loginInfor);
                 if (status.isLogin()) {
                     AuthController.registerSession(status.getSession(), status);
                     System.out.println("User " + loginInfor.getUsername() + " đăng nhập thành công!");
                 }
                 return DataBuilder.successRes(req, status);
-            } else {
-                return DataBuilder.notFoundRes(req);
             }
+            return DataBuilder.notFoundRes(req);
         } catch (Exception e) {
             return DataBuilder.serverErrorRes(req, e.getMessage());
         }

@@ -14,22 +14,24 @@ import homestay.Client.Helper.SessionManager;
 
 public class ClientSocketController {
 
-    private Socket socket;
-    private final String domain;
-    private final int port;
-    private final Gson gson = new Gson();
-    private DataInputStream inputStream = null;
-    private final int SO_TIMEOUT = 30000;
+    private static Socket socket;
+    private static String domain;
+    private static int port;
+    private static final Gson gson = new Gson();
+    private static DataInputStream inputStream = null;
+    private static final int SO_TIMEOUT = 10000;
 
-    public ClientSocketController(String domain, int port) {
-        this.domain = domain;
-        this.port = port;
+    private ClientSocketController() {}
+
+    public static void serverURL(String address, int p){
+        domain = address;
+        port = p;
     }
 
-    public void openConnection() throws Exception {
+    public static void openConnection() throws Exception {
         try {
-            this.socket = new Socket(this.domain, this.port);
-            this.socket.setSoTimeout(this.SO_TIMEOUT);
+            socket = new Socket(domain, port);
+            socket.setSoTimeout(SO_TIMEOUT);
         } catch (UnknownHostException e) {
             System.err.println("Địa chỉ hoặc cổng không hợp lệ: " + e.getMessage());
             throw new Exception("Địa chỉ hoặc cổng không hợp lệ: " + e.getMessage());
@@ -37,7 +39,7 @@ public class ClientSocketController {
             System.err.println("Lỗi khi kết nối tới server: " + e.getMessage());
             throw new Exception("Lỗi khi kết nối tới server: " + e.getMessage());
         } finally {
-            if (!this.socket.isConnected()) {
+            if (!isConnected()) {
                 System.err.println("Kết nối tới server thất bại!!!");
             } else {
                 System.out.println("Kết nối tới server thành công!");
@@ -45,23 +47,23 @@ public class ClientSocketController {
         }
     }
 
-    public void closeConnection() throws Exception {
-        if (this.socket.isConnected()) {
-            this.socket.close();
+    public static void closeConnection() throws Exception {
+        if (isConnected()) {
+            socket.close();
             System.out.println("Đã ngắt kết nối tới server");
         } else {
             System.out.println(" Không có kết nối nào tới server");
         }
     }
 
-    public void sendMessage(String dir, String action, Object mess, boolean fallback) {
-        if (!this.ensureConnected()) {
+    public static void sendMessage(String dir, String action, Object mess, boolean fallback) {
+        if (!ensureConnected()) {
             System.err.println("Gửi message không thành công! \n Message:" + action + ":" + mess);
             return;
         }
         try {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            String jsonMess = this.buildMessage(dir, action, mess);
+            String jsonMess = buildMessage(dir, action, mess);
             outputStream.writeUTF(jsonMess);
             System.out.println("Gửi tin tới server thành công");
         } catch (IOException e) {
@@ -73,40 +75,40 @@ public class ClientSocketController {
         }
     }
 
-    public void initListener() {
-        if (!this.ensureConnected()) {
+    public static void initListener() {
+        if (!ensureConnected()) {
             System.err.println("Không thể khởi tạo Listener");
             return;
         }
         try {
-            this.inputStream = new DataInputStream(this.socket.getInputStream());
+            inputStream = new DataInputStream(socket.getInputStream());
             System.out.println("Khởi tạo listener thành công!");
         } catch (IOException e) {
             System.err.println("Không thể khởi tạo Listener: " + e.getMessage());
         }
     }
 
-    public String listenMessage() throws Exception {
-        if (this.inputStream == null) {
+    public static String listenMessage() throws Exception {
+        if (inputStream == null) {
             throw new IllegalStateException("Listener chưa được khởi tạo. Gọi initListener() trước.");
         }
-        return this.inputStream.readUTF();
+        return inputStream.readUTF();
     }
 
-    public BaseDTO.Response sendRequest(String dir, String action, Object data, boolean fallback) {
+    public static BaseDTO.Response sendRequest(String dir, String action, Object data, boolean fallback) {
         if (!ensureConnected()) {
             System.err.println("Không có kết nối tới server. Gửi request thất bại!");
             return null;
         }
 
-        if (this.inputStream == null) {
+        if (inputStream == null) {
             initListener();
         }
 
         try {
-            this.sendMessage(dir, action, data, fallback);
+            sendMessage(dir, action, data, fallback);
             System.out.println("Đợi phản hồi từ server...");
-            String responseJson = this.listenMessage();
+            String responseJson = listenMessage();
             System.out.println("Đã nhận phản hồi từ server");
             return gson.fromJson(responseJson, BaseDTO.Response.class);
         } catch (JsonSyntaxException e) {
@@ -118,44 +120,48 @@ public class ClientSocketController {
         }
     }
 
-    public void closeListener() throws Exception {
-        if (this.inputStream != null) {
-            this.inputStream.close();
+    public static void closeListener() throws Exception {
+        if (inputStream != null) {
+            inputStream.close();
             System.out.println("Đóng listenner");
         }
     }
 
-    public void kill() {
+    public static void kill() {
         try {
-            this.closeListener();
-            this.closeConnection();
+            closeListener();
+            closeConnection();
             System.out.println("Đã dừng Socket");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
-    private String buildMessage(String dir, String action, Object data) {
+    private static String buildMessage(String dir, String action, Object data) {
         BaseDTO.Request request = new BaseDTO.Request(
-            dir, action, this.gson.toJsonTree(data), SessionManager.getSession());
-        return this.gson.toJson(request);
+            dir, action, gson.toJsonTree(data), SessionManager.getSession());
+        return gson.toJson(request);
     }
 
-    public boolean ensureConnected() {
-        if (this.socket == null || !this.socket.isConnected()) {
-            System.err.println("Không có kết nối tới server");
-            System.out.println("Thử kết nối lại");
-            try {
-                this.openConnection();
-            } catch (Exception e) {
-                System.err.println("Lỗi khi thử kết nối lại: " + e.getMessage());
-                return false;
+    public static boolean ensureConnected() {
+        if(socket != null){
+            if (socket.isConnected()) {
+                return true;
             }
+        }
+        
+        System.err.println("Không có kết nối tới server");
+        System.out.println("Thử kết nối lại");
+        try {
+            openConnection();
+        } catch (Exception e) {
+            System.err.println("Lỗi khi thử kết nối lại: " + e.getMessage());
+            return false;
         }
         return true;
     }
 
-    public boolean isConnected(){
-        return this.socket == null || this.socket.isConnected();
+    public static boolean isConnected(){
+        return socket != null ? socket.isConnected() : false;
     }
 }

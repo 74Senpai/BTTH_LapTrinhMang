@@ -1,5 +1,6 @@
 package homestay.Client;
 
+import homestay.Client.Controllers.ClientSocketController;
 import homestay.Client.Controllers.LoginController;
 import homestay.Client.Helper.SessionManager;
 import homestay.Client.Views.HomeView;
@@ -8,6 +9,7 @@ import homestay.Client.Views.LoginView;
 public class ClientMain {
 
     public static void main(String[] args) {
+        ClientSocketController.serverURL("localhost", 8000);
         if (SessionManager.getSession() == null) {
             LoginView loginView = new LoginView();
             LoginController controller = new LoginController();

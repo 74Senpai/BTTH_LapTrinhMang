@@ -56,6 +56,11 @@ public class RoomDTO {
         public double getGiaThueThang() {
             return this.giaThueThang;
         }
+
+        @Override
+        public String toString(){
+            return this.tenPhong;
+        }
     }
 
     public static class ListRoomDTO {

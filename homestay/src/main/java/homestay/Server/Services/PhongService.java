@@ -46,6 +46,32 @@ public class PhongService {
         return result;
     }
 
+    public PhongDTO.ListRoomDTO getPhongTrong() throws Exception{
+        PhongDTO.ListRoomDTO result = new PhongDTO.ListRoomDTO();
+        try {
+            Connection conn = DBConnection.getConnection();
+            List<Phong> lstPhong = dao.getPhongTrong(conn);
+
+            for (Phong p : lstPhong) {
+                PhongDTO.PhongViewDTO dto = new PhongDTO.PhongViewDTO();
+                dto.setMaPhong(p.getMaPhong());
+                dto.setTenPhong(p.getTenPhong());
+                dto.setTenTrangThai(p.getTenTrangThai());
+                dto.setSoDienHienTai(p.getSoDienHienTai());
+                dto.setSoNuocHienTai(p.getSoNuocHienTai());
+                dto.setGiaThueNgay(p.getGiaThueNgay());
+                dto.setGiaThueThang(p.getGiaThueThang());
+
+                result.addRoom(dto);
+            }
+
+        } catch (SQLException e) {
+            throw new SQLException("Không thể lấy danh sách phòng: " + e.getMessage());
+        }
+
+        return result;
+    }
+
     public PhongDTO.PhongViewDTO createPhong(PhongDTO.PhongCreateDTO dto) {
 
         if (dto == null) {

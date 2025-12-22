@@ -1,9 +1,13 @@
 package homestay.Server.Helper;
 
+import java.util.Date;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import homestay.Server.Controllers.AuthController;
 import homestay.Server.DTOs.BaseDTO;
+import homestay.Server.Services.LogService;
 
 public class DataBuilder {
 
@@ -13,6 +17,13 @@ public class DataBuilder {
         BaseDTO.Response res
                 = new BaseDTO.Response(req.getDir(), req.getAction(), statusCode, message, data);
         String strRep = gson.toJson(res);
+        if (!req.getDir().equals("AUTH")) {
+            String action
+                    = "Response: " + req.getDir() + "/" + req.getAction()
+                    + "| Status : " + statusCode
+                    + "| Message: " + message;
+            LogService.writeLog(action, AuthController.getUsername(req.getSession()), new Date());
+        }
         return strRep;
     }
 

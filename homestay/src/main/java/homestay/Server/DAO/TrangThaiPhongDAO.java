@@ -13,12 +13,11 @@ public class TrangThaiPhongDAO {
 
     public List<TrangThaiPhong> getAllTrangThai() throws SQLException {
         List<TrangThaiPhong> lstTrangThai = new ArrayList<>();
-        String query = "SELECT * FROM TrangThaiPhong";
+        String query = "SELECT * FROM TrangThaiPhong WHERE MaTrangThai <> ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(query);) {
+            ps.setInt(1, PhongDAO.TRANG_THAI_DA_XOA);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 TrangThaiPhong ttp = new TrangThaiPhong();
                 ttp.setMaTrangThai(rs.getInt("MaTrangThai"));
@@ -35,8 +34,7 @@ public class TrangThaiPhongDAO {
      */
     public String getTenTrangThaiByMa(int maTrangThai) throws SQLException {
         String query = "SELECT TenTrangThai FROM TrangThaiPhong WHERE MaTrangThai = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
 
             ps.setInt(1, maTrangThai);
             try (ResultSet rs = ps.executeQuery()) {

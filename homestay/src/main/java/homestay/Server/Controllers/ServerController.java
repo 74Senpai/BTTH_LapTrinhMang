@@ -13,7 +13,6 @@ import com.google.gson.Gson;
 import homestay.Server.DTOs.BaseDTO;
 import homestay.Server.Helper.DataBuilder;
 import homestay.Server.Services.LogService;
-import homestay.Server.Services.TrangThaiPhongService;
 
 public class ServerController {
 
@@ -90,22 +89,21 @@ public class ServerController {
 
     private String switchRequest(String request) {
         BaseDTO.Request req = gson.fromJson(request, BaseDTO.Request.class);
-
+        if(req.getDir().equals("AUTH") && req.getAction().equals("LOGIN")){
+            return NhanVienController.login(req);
+        }
         boolean isLogin = AuthController.isAuthenticated(req.getSession());
-        String userName = AuthController.getUsername(req.getSession());
-        LogService.writeLog(request, userName, new Date());
-
-        System.out.println("New request: " + request);
-        if (isLogin) {
+        if (!isLogin) {
             return DataBuilder.buildResponse(req, 403, "Unauthorized", null);
         }
 
+        System.out.println("Request: " + request);
+        String userName = AuthController.getUsername(req.getSession());
+        LogService.writeLog(request, userName, new Date());
+        
         switch (req.getDir()) {
-            case "AUTH" -> {
-                return NhanVienController.login(req);
-            }
-            case "GET_ROOM_STATES" -> {
-                return DataBuilder.successRes(req, new TrangThaiPhongService().getAllTrangThai());
+            case "BASE" -> {
+                return BaseDataController.baseDataController(req);
             }
             case "ROOM" -> {
                 return PhongController.phongController(req);

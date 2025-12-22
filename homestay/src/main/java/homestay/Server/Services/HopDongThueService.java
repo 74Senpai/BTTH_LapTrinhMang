@@ -8,6 +8,7 @@ import java.util.List;
 import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.HopDongThueDAO;
 import homestay.Server.DAO.KhachHangDAO;
+import homestay.Server.DAO.PhongDAO;
 import homestay.Server.DTOs.HopDongDTO;
 import homestay.Server.Models.HopDongThue;
 import homestay.Server.Models.KhachHang;
@@ -16,6 +17,7 @@ public class HopDongThueService {
 
     private final HopDongThueDAO hopDongThueDAO = new HopDongThueDAO();
     private final KhachHangDAO khachHangDAO = new KhachHangDAO();
+    private final PhongDAO phongDAO = new PhongDAO();
 
     /**
      * LẤY DANH SÁCH HỢP ĐỒNG (Trả về ListHopDongThue DTO)
@@ -28,14 +30,14 @@ public class HopDongThueService {
             for (HopDongThue hd : list) {
                 // Map từ Model sang DTO View
                 HopDongDTO.View view = new HopDongDTO.View(
-                    hd.getMaHopDong(),
-                    hd.getTenKhachHang(),
-                    hd.getSoDienThoai(),
-                    hd.getCccd(),
-                    hd.getTenPhong(),
-                    hd.getNgayBatDau().toString(),
-                    hd.getNgayKetThuc().toString(),
-                    hd.getLoaiHinhThue()
+                        hd.getMaHopDong(),
+                        hd.getTenKhachHang(),
+                        hd.getSoDienThoai(),
+                        hd.getCccd(),
+                        hd.getTenPhong(),
+                        hd.getNgayBatDau().toString(),
+                        hd.getNgayKetThuc().toString(),
+                        hd.getLoaiHinhThue()
                 );
                 result.addHopDong(view);
             }
@@ -49,7 +51,9 @@ public class HopDongThueService {
      * TẠO MỚI HỢP ĐỒNG (Xử lý 2 bảng KhachHang và HopDongThue)
      */
     public void createHopDong(int MaNhanVien, HopDongDTO.Create dto) {
-        if (dto == null) throw new IllegalArgumentException("Dữ liệu không được null");
+        if (dto == null) {
+            throw new IllegalArgumentException("Dữ liệu không được null");
+        }
 
         Connection conn = null;
         try {
@@ -64,7 +68,7 @@ public class HopDongThueService {
                 kh.setSoDienThoai(dto.getSoDienThoai());
                 kh.setCccd(dto.getCccd());
                 khachHangDAO.insert(conn, kh);
-                
+
                 kh = khachHangDAO.findByCCCD(conn, dto.getCccd());
             } else {
                 // Cập nhật thông tin nếu có thay đổi
@@ -86,12 +90,21 @@ public class HopDongThueService {
 
             hopDongThueDAO.create(conn, hd);
 
+            phongDAO.updateTrangThaiPhong(conn, dto.getMaPhongDangThue(), PhongDAO.TRANG_THAI_SU_DUNG);
+
             conn.commit();
         } catch (SQLException e) {
-            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            if (conn != null) try {
+                conn.rollback();
+            } catch (SQLException ex) {
+            }
             throw new RuntimeException("Lỗi hệ thống khi tạo hợp đồng: " + e.getMessage());
         } finally {
-            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) {}
+            if (conn != null) try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (SQLException e) {
+            }
         }
     }
 
@@ -106,7 +119,12 @@ public class HopDongThueService {
 
             // 1. Tìm hợp đồng cũ để lấy MaKH
             HopDongThue hdOld = hopDongThueDAO.findById(conn, dto.getMaHopDong());
-            if (hdOld == null) throw new RuntimeException("Không tìm thấy hợp đồng");
+            if (hdOld == null) {
+                throw new RuntimeException("Không tìm thấy hợp đồng");
+            }
+
+            int maPhongCu = hdOld.getMaPhong();
+            int maPhongMoi = dto.getMaPhongDangThue();
 
             // 2. Cập nhật thông tin khách hàng
             KhachHang kh = new KhachHang();
@@ -117,16 +135,32 @@ public class HopDongThueService {
             khachHangDAO.update(conn, kh);
 
             // 3. Cập nhật thông tin hợp đồng
-            hdOld.setMaPhong(dto.getMaPhongDangThue());
+            hdOld.setMaPhong(maPhongMoi);
             hdOld.setLoaiHinhThue(dto.getLoaiHinhThue());
             hopDongThueDAO.update(conn, hdOld);
 
+            // 4. Nếu đổi phòng → cập nhật trạng thái phòng
+            if (maPhongCu != maPhongMoi) {
+                // phòng cũ → trống
+                phongDAO.updateTrangThaiPhong(conn, maPhongCu, 1);
+
+                // phòng mới → đang sử dụng
+                phongDAO.updateTrangThaiPhong(conn, maPhongMoi, 2);
+            }
+
             conn.commit();
         } catch (SQLException e) {
-            if (conn != null) try { conn.rollback(); } catch (SQLException ex) {}
+            if (conn != null) try {
+                conn.rollback();
+            } catch (SQLException ex) {
+            }
             throw new RuntimeException("Lỗi khi cập nhật hợp đồng: " + e.getMessage());
         } finally {
-            if (conn != null) try { conn.setAutoCommit(true); conn.close(); } catch (SQLException e) {}
+            if (conn != null) try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (SQLException e) {
+            }
         }
     }
 

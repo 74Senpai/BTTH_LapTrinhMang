@@ -8,12 +8,10 @@ import homestay.Client.Helper.TableMapper;
 
 public class ContractController {
 
-    private final ClientSocketController clientSocketController;
     private final Gson gson = new Gson();
     private final String dir = "HOP_DONG";
 
     public ContractController() {
-        this.clientSocketController = new ClientSocketController("localhost", 8000);
     }
 
     public boolean handleAddContract(Object[] rowData) {
@@ -31,9 +29,9 @@ public class ContractController {
         }
 
         final String action = "CREATE_CONTRACT";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
         BaseDTO.Response response
-                = this.clientSocketController.sendRequest(dir, action, dto, true);
+                = ClientSocketController.sendRequest(dir, action, dto, true);
 
         return response != null && response.getStatusCode() == 200;
     }
@@ -46,9 +44,9 @@ public class ContractController {
         }
 
         final String action = "UPDATE_CONTRACT";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
         BaseDTO.Response response
-                = this.clientSocketController.sendRequest(dir, action, dto, true);
+                = ClientSocketController.sendRequest(dir, action, dto, true);
 
         return response != null && response.getStatusCode() == 200;
     }
@@ -57,9 +55,9 @@ public class ContractController {
         HopDongDTO.Delete deleteDto = new HopDongDTO.Delete(contractId);
 
         final String action = "DELETE_CONTRACT";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
         BaseDTO.Response response
-                = this.clientSocketController.sendRequest(dir, action, deleteDto, true);
+                = ClientSocketController.sendRequest(dir, action, deleteDto, true);
 
         if (response != null && response.getStatusCode() == 200) {
             return true;
@@ -70,9 +68,9 @@ public class ContractController {
 
     public HopDongDTO.ListHopDong getContracts() throws Exception {
         final String action = "GET_CONTRACTS";
-        this.clientSocketController.ensureConnected();
+        ClientSocketController.ensureConnected();
         BaseDTO.Response response
-                = this.clientSocketController.sendRequest(dir, action, null, true);
+                = ClientSocketController.sendRequest(dir, action, null, true);
 
         if (response != null && response.getStatusCode() == 200 && response.getData() != null) {
             return gson.fromJson(response.getData(), HopDongDTO.ListHopDong.class);
