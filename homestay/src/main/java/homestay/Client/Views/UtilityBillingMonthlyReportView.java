@@ -69,8 +69,6 @@ public class UtilityBillingMonthlyReportView extends javax.swing.JPanel
         }
         pnlTop.add(cmbYear);
 
-        btnGenerate = new Button("Tạo báo cáo");
-        btnExport   = new Button("Xuất Excel");
         btnRefresh  = new Button("Tải lại");
 
         pnlTop.add(btnGenerate);
