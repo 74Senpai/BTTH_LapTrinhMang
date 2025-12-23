@@ -153,7 +153,6 @@ public class HomeView extends Frame {
 
         // 1.2. Khởi tạo Dashboard & Main Content và room
         DashboardView dashboard = new DashboardView();
-        dashboard.showDashboard();
 
         RoomView room = new RoomView();
         this.roomSetup(room);

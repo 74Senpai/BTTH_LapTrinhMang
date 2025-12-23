@@ -3,9 +3,9 @@ package homestay.Server.Services;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import homestay.DTOs.ThongKeDTO;
 import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.ThongKeDAO;
-import homestay.Server.DTOs.ThongKeDTO;
 
 public class ThongKeService {
 

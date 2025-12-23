@@ -2,8 +2,8 @@ package homestay.Server.Controllers;
 
 import com.google.gson.Gson;
 
-import homestay.Server.DTOs.BaseDTO;
-import homestay.Server.DTOs.PhongDTO;
+import homestay.DTOs.BaseDTO;
+import homestay.DTOs.PhongDTO;
 import homestay.Server.Helper.DataBuilder;
 import homestay.Server.Services.PhongService;
 
@@ -14,7 +14,7 @@ public class PhongController {
 
     public static String phongController(BaseDTO.Request req) {
         try {
-            switch (req.getAction()) {
+            switch (req.action()) {
                 case "GET_ROOMS" -> {
                     return DataBuilder.successRes(req, phongService.getAllPhong());
                 }
@@ -22,18 +22,18 @@ public class PhongController {
                     return DataBuilder.successRes(req, phongService.getPhongTrong());
                 }
                 case "CREATE_ROOM" -> {
-                    PhongDTO.PhongCreateDTO room = gson.fromJson(req.getData(), PhongDTO.PhongCreateDTO.class);
-                    PhongDTO.PhongViewDTO newRoom = phongService.createPhong(room);
+                    PhongDTO.Create room = gson.fromJson(req.data(), PhongDTO.Create.class);
+                    PhongDTO.View newRoom = phongService.createPhong(room);
                     return DataBuilder.successRes(req, newRoom);
                 }
                 case "UPDATE_ROOM" -> {
-                    PhongDTO.PhongUpdateDTO room = gson.fromJson(req.getData(), PhongDTO.PhongUpdateDTO.class);
+                    PhongDTO.Update room = gson.fromJson(req.data(), PhongDTO.Update.class);
                     phongService.updatePhong(room);
                     return DataBuilder.successRes(req, null);
                 }
                 case "DELETE_ROOM" -> {
-                    PhongDTO.DeletePhongDTO maPhong = gson.fromJson(req.getData(), PhongDTO.DeletePhongDTO.class);
-                    phongService.deletePhong(maPhong.getMaPhong());
+                    PhongDTO.Delete maPhong = gson.fromJson(req.data(), PhongDTO.Delete.class);
+                    phongService.deletePhong(maPhong.maPhong());
                     return DataBuilder.successRes(req, null);
                 }
                 default -> {

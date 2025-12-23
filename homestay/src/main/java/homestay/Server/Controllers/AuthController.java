@@ -3,7 +3,7 @@ package homestay.Server.Controllers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import homestay.Server.DTOs.NhanVienDTO;
+import homestay.DTOs.NhanVienDTO;
 
 public class AuthController {
 
@@ -21,12 +21,12 @@ public class AuthController {
 
     public static String getUsername(String session) {
         NhanVienDTO.LoginStatus status = sessionMap.get(session);
-        return (status != null) ? status.getHoTen() : "Unknown";
+        return (status != null) ? status.hoTen() : "Unknown";
     }
 
     public static int getUserId(String session) {
         NhanVienDTO.LoginStatus status = sessionMap.get(session);
-        return (status != null) ? status.getMaNV() : null;
+        return (status != null) ? status.maNV() : null;
     }
 
     public static void registerSession(String session, NhanVienDTO.LoginStatus status) {

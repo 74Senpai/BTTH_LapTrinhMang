@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 
-import homestay.Server.DTOs.BaseDTO;
-import homestay.Server.DTOs.DienNuocDTO;
+import homestay.DTOs.BaseDTO;
+import homestay.DTOs.DienNuocDTO;
 import homestay.Server.Helper.DataBuilder;
 import homestay.Server.Services.DienNuocService;
 
@@ -17,20 +17,20 @@ public class DienNuocController {
     @SuppressWarnings("UseSpecificCatch")
     public static String dienNuocController(BaseDTO.Request req) {
         try {
-            switch (req.getAction()) {
+            switch (req.action()) {
                 case "GET_ALL_DIEN_NUOC" -> {
                     List<DienNuocDTO.View> list = dienNuocService.getAll();
                     return DataBuilder.successRes(req, list);
                 }
 
                 case "CREATE_DIEN_NUOC" -> {
-                    DienNuocDTO.Create createDto = gson.fromJson(req.getData(), DienNuocDTO.Create.class);
+                    DienNuocDTO.Create createDto = gson.fromJson(req.data(), DienNuocDTO.Create.class);
                     dienNuocService.createPhieuThuDienNuoc(createDto);
                     return DataBuilder.successRes(req, "Khởi tạo phiếu điện nước thành công");
                 }
 
                 case "UPDATE_DIEN_NUOC" -> {
-                    DienNuocDTO.Update updateDto = gson.fromJson(req.getData(), DienNuocDTO.Update.class);
+                    DienNuocDTO.Update updateDto = gson.fromJson(req.data(), DienNuocDTO.Update.class);
                     dienNuocService.updateChiSoCuoiKy(updateDto);
                     return DataBuilder.successRes(req, "Cập nhật chỉ số điện nước thành công");
                 }

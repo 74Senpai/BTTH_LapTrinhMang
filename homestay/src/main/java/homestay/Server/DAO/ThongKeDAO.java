@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import homestay.Server.DTOs.ThongKeDTO;
+import homestay.DTOs.ThongKeDTO;
 
 public class ThongKeDAO {
 

@@ -10,7 +10,7 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 
-import homestay.Server.DTOs.BaseDTO;
+import homestay.DTOs.BaseDTO;
 import homestay.Server.Helper.DataBuilder;
 import homestay.Server.Services.LogService;
 
@@ -89,19 +89,19 @@ public class ServerController {
 
     private String switchRequest(String request) {
         BaseDTO.Request req = gson.fromJson(request, BaseDTO.Request.class);
-        if (req.getDir().equals("AUTH") && req.getAction().equals("LOGIN")) {
+        if (req.dir().equals("AUTH") && req.action().equals("LOGIN")) {
             return NhanVienController.login(req);
         }
-        boolean isLogin = AuthController.isAuthenticated(req.getSession());
+        boolean isLogin = AuthController.isAuthenticated(req.session());
         if (!isLogin) {
             return DataBuilder.unAuthRes(req);
         }
 
         System.out.println("Request: " + request);
-        String userName = AuthController.getUsername(req.getSession());
+        String userName = AuthController.getUsername(req.session());
         LogService.writeLog(request, userName, new Date());
 
-        switch (req.getDir()) {
+        switch (req.dir()) {
             case "BASE" -> {
                 return BaseDataController.baseDataController(req);
             }
