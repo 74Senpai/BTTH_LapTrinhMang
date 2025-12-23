@@ -2,7 +2,7 @@ package homestay.Server.Controllers;
 
 import java.time.LocalDate;
 
-import homestay.Server.DTOs.BaseDTO;
+import homestay.DTOs.BaseDTO;
 import homestay.Server.Helper.DataBuilder;
 import homestay.Server.Services.ThongKeService;
 import homestay.Server.Services.TrangThaiPhongService;
@@ -16,7 +16,7 @@ public class BaseDataController {
 
     public static String baseDataController(BaseDTO.Request req) {
         try {
-            switch (req.getAction()) {
+            switch (req.action()) {
                 case "GET_ROOM_STATES" -> {
                     return DataBuilder.successRes(req, trangThaiPhongService.getAllTrangThai());
                 }

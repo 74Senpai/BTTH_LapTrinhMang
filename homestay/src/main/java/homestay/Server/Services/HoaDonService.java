@@ -2,11 +2,12 @@ package homestay.Server.Services;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import homestay.DTOs.HoaDonDTO;
 import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.HoaDonDAO;
-import homestay.Server.DTOs.HoaDonDTO;
 import homestay.Server.Models.HoaDon;
 
 public class HoaDonService {
@@ -18,7 +19,7 @@ public class HoaDonService {
      * Chuyển đổi từ Model (chứa dữ liệu JOIN) sang DTO View
      */
     public HoaDonDTO.ListHoaDon getAllHoaDon() {
-        HoaDonDTO.ListHoaDon result = new HoaDonDTO.ListHoaDon();
+        List<HoaDonDTO.View> res = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             List<HoaDon> list = hoaDonDAO.getAllHoaDon(conn);
 
@@ -34,9 +35,9 @@ public class HoaDonService {
                         hd.getTenKhachHang(),
                         hd.getTenPhong()
                 );
-                result.addHoaDon(view);
+                res.add(view);
             }
-            return result;
+            return new HoaDonDTO.ListHoaDon(res);
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi lấy danh sách hóa đơn: " + e.getMessage());
         }
@@ -73,11 +74,11 @@ public class HoaDonService {
     public void createHoaDon(HoaDonDTO.Create dto) {
         try (Connection conn = DBConnection.getConnection()) {
             HoaDon hd = new HoaDon();
-            hd.setMaHopDong(String.valueOf(dto.getMaHopDong()));
-            hd.setMaDienNuoc(dto.getMaDienNuoc());
-            hd.setTienPhong(dto.getTienPhong());
-            hd.setTienChiPhiPhu(dto.getTienChiPhiPhu());
-            hd.setTongTien(dto.getTongTien());
+            hd.setMaHopDong(String.valueOf(dto.maHopDong()));
+            hd.setMaDienNuoc(dto.maDienNuoc());
+            hd.setTienPhong(dto.tienPhong());
+            hd.setTienChiPhiPhu(dto.tienChiPhiPhu());
+            hd.setTongTien(dto.tongTien());
 
             int idMoi = hoaDonDAO.insertHoaDon(conn, hd);
             if (idMoi == -1) {
@@ -94,12 +95,12 @@ public class HoaDonService {
     public void updateHoaDon(HoaDonDTO.Update dto) {
         try (Connection conn = DBConnection.getConnection()) {
             // Lấy dữ liệu cũ lên trước
-            HoaDon hd = hoaDonDAO.getHoaDonById(conn, dto.getMaThanhToan());
+            HoaDon hd = hoaDonDAO.getHoaDonById(conn, dto.maThanhToan());
             if (hd == null) throw new RuntimeException("Hóa đơn không tồn tại");
 
             // Cập nhật các trường cho phép sửa
-            hd.setTienChiPhiPhu(dto.getTienChiPhiPhu());
-            hd.setTongTien(dto.getTongTien());
+            hd.setTienChiPhiPhu(dto.tienChiPhiPhu());
+            hd.setTongTien(dto.tongTien());
 
             boolean success = hoaDonDAO.updateHoaDon(conn, hd);
             if (!success) throw new RuntimeException("Cập nhật hóa đơn thất bại");

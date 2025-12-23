@@ -6,10 +6,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import homestay.DTOs.DienNuocDTO;
 import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.DienNuocDAO;
 import homestay.Server.DAO.PhongDAO;
-import homestay.Server.DTOs.DienNuocDTO;
 import homestay.Server.Models.DienNuoc;
 import homestay.Server.Models.Phong;
 
@@ -60,7 +60,7 @@ public class DienNuocService {
         try (Connection conn = DBConnection.getConnection()) {
             // 1. Lấy thông tin phòng để lấy chỉ số hiện tại
             // Giả định bạn có hàm findById trong PhongDAO
-            Phong phong = phongDAO.getPhongById(conn, dto.getMaPhong()); 
+            Phong phong = phongDAO.getPhongById(conn, dto.maPhong()); 
             if (phong == null) {
                 throw new RuntimeException("Không tìm thấy phòng tương ứng");
             }
@@ -68,7 +68,7 @@ public class DienNuocService {
             // 2. Chuẩn bị dữ liệu cho tháng hiện tại
             LocalDate now = LocalDate.now();
             DienNuoc dn = new DienNuoc();
-            dn.setMaPhong(dto.getMaPhong());
+            dn.setMaPhong(dto.maPhong());
             dn.setThang(now.getMonthValue());
             dn.setNam(now.getYear());
             
@@ -98,23 +98,23 @@ public class DienNuocService {
             conn.setAutoCommit(false); // Bắt đầu Transaction
 
             // 1. Tìm bản ghi điện nước để lấy MaPhong
-            DienNuoc dnOld = dienNuocDAO.getDienNuocById(conn, dto.getMaDienNuoc());
+            DienNuoc dnOld = dienNuocDAO.getDienNuocById(conn, dto.maDienNuoc());
             if (dnOld == null) {
                 throw new RuntimeException("Không tìm thấy bản ghi điện nước cần cập nhật");
             }
 
             // 2. Cập nhật chỉ số mới vào bảng DienNuocHangThang
             dienNuocDAO.updateChiSoDienNuoc(conn, 
-                dto.getMaDienNuoc(), 
-                dto.getChiSoDienMoi(), 
-                dto.getChiSoNuocMoi()
+                dto.maDienNuoc(), 
+                dto.chiSoDienMoi(), 
+                dto.chiSoNuocMoi()
             );
 
             // 3. Cập nhật số điện/nước hiện tại vào bảng Phong để đồng bộ
             dienNuocDAO.updateChiSoHienTaiCuaPhong(conn, 
                 dnOld.getMaPhong(), 
-                dto.getChiSoDienMoi(), 
-                dto.getChiSoNuocMoi()
+                dto.chiSoDienMoi(), 
+                dto.chiSoNuocMoi()
             );
 
             conn.commit(); // Thành công thì lưu tất cả

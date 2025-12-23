@@ -1,4 +1,4 @@
-package homestay.Server.DTOs;
+package homestay.DTOs;
 
 import java.util.ArrayList;
 import java.util.List;

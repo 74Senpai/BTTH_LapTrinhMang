@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+import homestay.DTOs.HopDongDTO;
 import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.HopDongThueDAO;
 import homestay.Server.DAO.KhachHangDAO;
 import homestay.Server.DAO.PhongDAO;
-import homestay.Server.DTOs.HopDongDTO;
 import homestay.Server.Models.HopDongThue;
 import homestay.Server.Models.KhachHang;
 
@@ -60,20 +60,20 @@ public class HopDongThueService {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false); // Bắt đầu Transaction
 
-            KhachHang kh = khachHangDAO.findByCCCD(conn, dto.getCccd());
+            KhachHang kh = khachHangDAO.findByCCCD(conn, dto.cccd());
             int maKH;
             if (kh == null) {
                 kh = new KhachHang();
-                kh.setHoTen(dto.getTenKhachHang());
-                kh.setSoDienThoai(dto.getSoDienThoai());
-                kh.setCccd(dto.getCccd());
+                kh.setHoTen(dto.tenKhachHang());
+                kh.setSoDienThoai(dto.soDienThoai());
+                kh.setCccd(dto.cccd());
                 khachHangDAO.insert(conn, kh);
 
-                kh = khachHangDAO.findByCCCD(conn, dto.getCccd());
+                kh = khachHangDAO.findByCCCD(conn, dto.cccd());
             } else {
                 // Cập nhật thông tin nếu có thay đổi
-                kh.setHoTen(dto.getTenKhachHang());
-                kh.setSoDienThoai(dto.getSoDienThoai());
+                kh.setHoTen(dto.tenKhachHang());
+                kh.setSoDienThoai(dto.soDienThoai());
                 khachHangDAO.update(conn, kh);
             }
             maKH = kh.getMaKH();
@@ -81,16 +81,16 @@ public class HopDongThueService {
             // 2. Tạo hợp đồng thuê
             HopDongThue hd = new HopDongThue();
             hd.setMaKhachHang(maKH);
-            hd.setMaPhong(dto.getMaPhongDangThue());
-            hd.setLoaiHinhThue(dto.getLoaiHinhThue());
+            hd.setMaPhong(dto.maPhong());
+            hd.setLoaiHinhThue(dto.loaiHinhThue());
             hd.setMaNhanVien(MaNhanVien);
-            hd.setNgayBatDau(LocalDate.parse(dto.getNgayBatDau()));
-            hd.setNgayKetThuc(LocalDate.parse(dto.getNgayKetThuc()));
+            hd.setNgayBatDau(LocalDate.parse(dto.ngayBatDau()));
+            hd.setNgayKetThuc(LocalDate.parse(dto.ngayKetThuc()));
             hd.setTrangThaiHopDong("Active");
 
             hopDongThueDAO.create(conn, hd);
 
-            phongDAO.updateTrangThaiPhong(conn, dto.getMaPhongDangThue(), PhongDAO.TRANG_THAI_SU_DUNG);
+            phongDAO.updateTrangThaiPhong(conn, dto.maPhong(), PhongDAO.TRANG_THAI_SU_DUNG);
 
             conn.commit();
         } catch (SQLException e) {
@@ -118,25 +118,25 @@ public class HopDongThueService {
             conn.setAutoCommit(false);
 
             // 1. Tìm hợp đồng cũ để lấy MaKH
-            HopDongThue hdOld = hopDongThueDAO.findById(conn, dto.getMaHopDong());
+            HopDongThue hdOld = hopDongThueDAO.findById(conn, dto.maPhong());
             if (hdOld == null) {
                 throw new RuntimeException("Không tìm thấy hợp đồng");
             }
 
             int maPhongCu = hdOld.getMaPhong();
-            int maPhongMoi = dto.getMaPhongDangThue();
+            int maPhongMoi = dto.maPhong();
 
             // 2. Cập nhật thông tin khách hàng
             KhachHang kh = new KhachHang();
             kh.setMaKH(hdOld.getMaKhachHang());
-            kh.setHoTen(dto.getTenKhachHang());
-            kh.setSoDienThoai(dto.getSoDienThoai());
-            kh.setCccd(dto.getCccd());
+            kh.setHoTen(dto.tenKhachHang());
+            kh.setSoDienThoai(dto.soDienThoai());
+            kh.setCccd(dto.cccd());
             khachHangDAO.update(conn, kh);
 
             // 3. Cập nhật thông tin hợp đồng
             hdOld.setMaPhong(maPhongMoi);
-            hdOld.setLoaiHinhThue(dto.getLoaiHinhThue());
+            hdOld.setLoaiHinhThue(dto.loaiHinhThue());
             hopDongThueDAO.update(conn, hdOld);
 
             // 4. Nếu đổi phòng → cập nhật trạng thái phòng

@@ -178,3 +178,19 @@
 [2025-12-23 02:03:21] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Quản Trị Viên
 [2025-12-23 02:03:21] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Quản Trị Viên
 [2025-12-23 02:03:22] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Quản Trị Viên
+[2025-12-23 17:05:42] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:05:44] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:05:44] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:05:46] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:05:46] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:05:48] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:05:48] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:05:50] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:07:05] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:07:07] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:07:07] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:07:09] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:07:09] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:07:11] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 17:07:11] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 17:07:13] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị

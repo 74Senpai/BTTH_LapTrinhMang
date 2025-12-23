@@ -3,9 +3,9 @@ package homestay.Server.Services;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import homestay.DTOs.NhanVienDTO;
 import homestay.Server.DAO.DBConnection;
 import homestay.Server.DAO.NhanVienDAO;
-import homestay.Server.DTOs.NhanVienDTO;
 import homestay.Server.Models.NhanVien;
 
 public class NhanVienService {
@@ -15,7 +15,7 @@ public class NhanVienService {
     public NhanVienDTO.LoginStatus checkLogin(NhanVienDTO.Login login) {
         try {
             Connection conn = DBConnection.getConnection();
-            NhanVien nv = this.dao.findByUserName(conn, login.getUsername());
+            NhanVien nv = this.dao.findByUserName(conn, login.username());
             if (nv == null) {
                 return new NhanVienDTO.LoginStatus(
                         -1,
@@ -25,7 +25,7 @@ public class NhanVienService {
                         null
                 );
             }
-            if (nv.getPassword().equals(login.getPassword())) {
+            if (nv.getPassword().equals(login.password())) {
                 return new NhanVienDTO.LoginStatus(
                         nv.getMaNV(),
                         nv.getHoTen(),
