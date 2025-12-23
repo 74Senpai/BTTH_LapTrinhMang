@@ -1,6 +1,9 @@
 package homestay.Client.Views;
 
+import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -24,10 +27,28 @@ public class DashboardView extends Panel implements Components.IViewCheck {
     Panel pnlOverviewCards = new Panel(new GridLayout(1, 4, 15, 0));
     Label lblWelcome = new Label("Chào mừng bạn quay trở lại!");
 
+    // Thêm nút Tải lại
+    Button btnRefresh = new Button("Tải lại dữ liệu");
+
+    private Runnable onRefresh;
+
     public DashboardView() {
         setLayout(new java.awt.BorderLayout());
         add(pnlMain, java.awt.BorderLayout.CENTER);
         setupLayout();
+        setupEvents();
+    }
+
+    public void setOnRefresh(Runnable onRefresh) {
+        this.onRefresh = onRefresh;
+    }
+
+    private void setupEvents() {
+        btnRefresh.addActionListener(e -> {
+            if (onRefresh != null) {
+                onRefresh.run();
+            }
+        });
     }
 
     private void setupLayout() {
@@ -36,14 +57,25 @@ public class DashboardView extends Panel implements Components.IViewCheck {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 20, 10, 20);
-        gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        // --- Header Welcome ---
-        gbc.gridy = 0;
+        // --- Header Panel (Chứa Welcome và Nút Tải lại) ---
+        Panel pnlHeader = new Panel(new BorderLayout());
+
         lblWelcome.setFont(new Font("Arial", Font.BOLD, 22));
-        pnlMain.add(lblWelcome, gbc);
+        pnlHeader.add(lblWelcome, BorderLayout.WEST);
+
+        // Trang trí nút tải lại
+        btnRefresh.setBackground(Color.WHITE);
+        btnRefresh.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        Panel pnlActions = new Panel(new FlowLayout(FlowLayout.RIGHT));
+        pnlActions.add(btnRefresh);
+        pnlHeader.add(pnlActions, BorderLayout.EAST);
+
+        gbc.gridy = 0;
+        pnlMain.add(pnlHeader, gbc);
 
         // --- Overview Cards Container ---
         gbc.gridy = 1;
@@ -56,37 +88,29 @@ public class DashboardView extends Panel implements Components.IViewCheck {
         gbc.weighty = 1.0;
         pnlMain.add(new Panel(), gbc);
 
-        // Khởi tạo mặc định khi chưa có dữ liệu
         renderCards(0, 0, 0, 0);
     }
 
-    /**
-     * Hàm này được gọi từ Controller/Client sau khi nhận được dữ liệu từ Server
-     */
     public void updateData(ThongKeDTO.BaoCaoTongHop data) {
         int totalRooms = 0;
         int occupiedRooms = 0;
         int emptyRooms = 0;
 
-        // 1. Tính toán số lượng từ danh sách trạng thái
-        if (data.dsTrangThai != null) {
+        if (data != null && data.dsTrangThai != null) {
             for (ThongKeDTO.TrangThaiPhong tt : data.dsTrangThai) {
                 totalRooms += tt.soLuong;
-                if (tt.tenTrangThai.equalsIgnoreCase("Đang sử dụng")) {
+                if (tt.tenTrangThai.equalsIgnoreCase("Đang sử dụng") || tt.tenTrangThai.equalsIgnoreCase("Đang ở")) {
                     occupiedRooms = tt.soLuong;
                 } else if (tt.tenTrangThai.equalsIgnoreCase("Trống")) {
                     emptyRooms = tt.soLuong;
                 }
             }
+            renderCards(totalRooms, occupiedRooms, emptyRooms, data.doanhThuThangNay);
         }
-
-        // 2. Vẽ lại các Card với dữ liệu mới
-        renderCards(totalRooms, occupiedRooms, emptyRooms, data.doanhThuThangNay);
     }
 
     private void renderCards(int total, int occupied, int empty, double revenue) {
         pnlOverviewCards.removeAll();
-
         NumberFormat vnFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         String revenueStr = vnFormat.format(revenue);
 

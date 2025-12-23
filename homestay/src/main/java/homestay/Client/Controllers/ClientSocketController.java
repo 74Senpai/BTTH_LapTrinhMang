@@ -21,9 +21,10 @@ public class ClientSocketController {
     private static DataInputStream inputStream = null;
     private static final int SO_TIMEOUT = 10000;
 
-    private ClientSocketController() {}
+    private ClientSocketController() {
+    }
 
-    public static void serverURL(String address, int p){
+    public static void serverURL(String address, int p) {
         domain = address;
         port = p;
     }
@@ -95,7 +96,9 @@ public class ClientSocketController {
         return inputStream.readUTF();
     }
 
-    public static BaseDTO.Response sendRequest(String dir, String action, Object data, boolean fallback) {
+    public static BaseDTO.Response sendRequest(
+            String dir, String action, Object data, boolean fallback
+    ) throws Exception {
         if (!ensureConnected()) {
             System.err.println("Không có kết nối tới server. Gửi request thất bại!");
             return null;
@@ -113,10 +116,13 @@ public class ClientSocketController {
             return gson.fromJson(responseJson, BaseDTO.Response.class);
         } catch (JsonSyntaxException e) {
             System.err.println("Lỗi khi parser dữ liệu từ server: " + e.getMessage());
-            return null;
-        } catch (Exception e){
+            throw e;
+        } catch (IllegalArgumentException e) {
+            System.err.println("Timeout error: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
             System.err.println("Lỗi khi gửi request: " + e.getMessage());
-            return null;
+            throw e;
         }
     }
 
@@ -139,17 +145,17 @@ public class ClientSocketController {
 
     private static String buildMessage(String dir, String action, Object data) {
         BaseDTO.Request request = new BaseDTO.Request(
-            dir, action, gson.toJsonTree(data), SessionManager.getSession());
+                dir, action, gson.toJsonTree(data), SessionManager.getSession());
         return gson.toJson(request);
     }
 
     public static boolean ensureConnected() {
-        if(socket != null){
+        if (socket != null) {
             if (socket.isConnected()) {
                 return true;
             }
         }
-        
+
         System.err.println("Không có kết nối tới server");
         System.out.println("Thử kết nối lại");
         try {
@@ -161,7 +167,7 @@ public class ClientSocketController {
         return true;
     }
 
-    public static boolean isConnected(){
+    public static boolean isConnected() {
         return socket != null ? socket.isConnected() : false;
     }
 }

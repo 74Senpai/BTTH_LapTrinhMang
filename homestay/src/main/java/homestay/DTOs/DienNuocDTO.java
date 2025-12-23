@@ -1,5 +1,7 @@
 package homestay.DTOs;
 
+import java.util.List;
+
 public class DienNuocDTO {
 
     public record View(
@@ -17,9 +19,7 @@ public class DienNuocDTO {
 
     }
 
-    public record Create(
-            int maPhong
-            ) {
+    public record Create(int maPhong) {
 
     }
 
@@ -29,5 +29,22 @@ public class DienNuocDTO {
             int chiSoNuocMoi
             ) {
 
+    }
+
+    public static class ListDienNuoc {
+
+        private List<DienNuocDTO.View> records;
+
+        public ListDienNuoc(List<DienNuocDTO.View> records) {
+            this.records = records;
+        }
+
+        public List<DienNuocDTO.View> getRecords() {
+            return records;
+        }
+
+        public void addRecord(DienNuocDTO.View record) {
+            records.add(record);
+        }
     }
 }
