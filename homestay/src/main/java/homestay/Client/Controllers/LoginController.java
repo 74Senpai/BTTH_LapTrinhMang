@@ -33,7 +33,7 @@ public class LoginController {
             BaseDTO.Response response
                     = ClientSocketController.sendRequest("AUTH", action, data, true);
             if(response == null){
-
+                throw new Exception("Không nhận được phản hồi từ server.");
             }
             if (response.action().equals(action)) {
                 NhanVienDTO.LoginStatus res = new Gson().fromJson(response.data(), NhanVienDTO.LoginStatus.class);
