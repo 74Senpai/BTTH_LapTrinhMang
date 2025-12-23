@@ -1,10 +1,10 @@
 package homestay.Server.Models;
 
 public class Phong {
-    private String maPhong;
+    private int maPhong;
     private String tenPhong;
     private int maTrangThai;
-    private String tenTrangThai;  
+    private String tenTrangThai;
     private int soDienHienTai;
     private int soNuocHienTai;
     private double giaThueNgay;
@@ -12,8 +12,8 @@ public class Phong {
 
     public Phong() {}
 
-    public String getMaPhong() { return maPhong; }
-    public void setMaPhong(String maPhong) { this.maPhong = maPhong; }
+    public int getMaPhong() { return maPhong; }
+    public void setMaPhong(int maPhong) { this.maPhong = maPhong; }
 
     public String getTenPhong() { return tenPhong; }
     public void setTenPhong(String tenPhong) { this.tenPhong = tenPhong; }

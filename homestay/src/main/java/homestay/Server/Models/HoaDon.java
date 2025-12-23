@@ -1,36 +1,102 @@
 package homestay.Server.Models;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class HoaDon {
-    private String maHoaDon;
-    private String maHopDong;
+
+    private int maThanhToan;          
+    private int maHopDong;            
+    private Integer maDienNuoc;       
     private double tienPhong;
-    private double tienDichVu;
+    private double tienChiPhiPhu;
     private double tongTien;
-    private LocalDate ngayThanhToan;
+    private LocalDateTime ngayThanhToan;
+    private Integer trangThaiThanhToan; 
 
-    public HoaDon() {}
+    private String tenKhachHang;
+    private String tenPhong;
 
-    public double tinhTongTien() {
-        return tienPhong + tienDichVu;
+    public HoaDon() {
     }
 
-    public String getMaHoaDon() { return maHoaDon; }
-    public void setMaHoaDon(String maHoaDon) { this.maHoaDon = maHoaDon; }
+    // Getters và Setters
+    public int getMaThanhToan() {
+        return maThanhToan;
+    }
 
-    public String getMaHopDong() { return maHopDong; }
-    public void setMaHopDong(String maHopDong) { this.maHopDong = maHopDong; }
+    public void setMaThanhToan(int maThanhToan) {
+        this.maThanhToan = maThanhToan;
+    }
 
-    public double getTienPhong() { return tienPhong; }
-    public void setTienPhong(double tienPhong) { this.tienPhong = tienPhong; }
+    public int getMaHopDong() {
+        return maHopDong;
+    }
 
-    public double getTienDichVu() { return tienDichVu; }
-    public void setTienDichVu(double tienDichVu) { this.tienDichVu = tienDichVu; }
+    public void setMaHopDong(int maHopDong) {
+        this.maHopDong = maHopDong;
+    }
 
-    public double getTongTien() { return tongTien; }
-    public void setTongTien(double tongTien) { this.tongTien = tongTien; }
+    public Integer getMaDienNuoc() {
+        return maDienNuoc;
+    }
 
-    public LocalDate getNgayThanhToan() { return ngayThanhToan; }
-    public void setNgayThanhToan(LocalDate ngayThanhToan) { this.ngayThanhToan = ngayThanhToan; }
+    public void setMaDienNuoc(Integer maDienNuoc) {
+        this.maDienNuoc = maDienNuoc;
+    }
+
+    public double getTienPhong() {
+        return tienPhong;
+    }
+
+    public void setTienPhong(double tienPhong) {
+        this.tienPhong = tienPhong;
+    }
+
+    public double getTienChiPhiPhu() {
+        return tienChiPhiPhu;
+    }
+
+    public void setTienChiPhiPhu(double tienChiPhiPhu) {
+        this.tienChiPhiPhu = tienChiPhiPhu;
+    }
+
+    public double getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(double tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public LocalDateTime getNgayThanhToan() {
+        return ngayThanhToan;
+    }
+
+    public void setNgayThanhToan(LocalDateTime ngayThanhToan) {
+        this.ngayThanhToan = ngayThanhToan;
+    }
+
+    public Integer getTrangThaiThanhToan() {
+        return trangThaiThanhToan;
+    }
+
+    public void setTrangThaiThanhToan(Integer trangThaiThanhToan) {
+        this.trangThaiThanhToan = trangThaiThanhToan;
+    }
+
+    public String getTenKhachHang() {
+        return tenKhachHang;
+    }
+
+    public void setTenKhachHang(String tenKhachHang) {
+        this.tenKhachHang = tenKhachHang;
+    }
+
+    public String getTenPhong() {
+        return tenPhong;
+    }
+
+    public void setTenPhong(String tenPhong) {
+        this.tenPhong = tenPhong;
+    }
 }

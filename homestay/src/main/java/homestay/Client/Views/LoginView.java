@@ -12,151 +12,123 @@ import java.awt.Insets;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.TextField;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * Login View
+ * CHỈ HIỂN THỊ + GỌI CONTROLLER
+ */
 public class LoginView extends Frame {
 
-    private Label lblMessage;
-
-    // private LoginController controller;
+    // ================= UI =================
     private TextField txtUsername;
     private TextField txtPassword;
-    
+    private Label lblMessage;
+    private Button btnLogin;
+
     public LoginView() {
         super("Login - Homestay");
-        //Cấu hình Frame chính đầy fullwindowscreen
-        // Toolkit tk = Toolkit.getDefaultToolkit();
-        // Dimension d = tk.getScreenSize();
-        // setSize(d.width, d.height);
-        // setExtendedState(Frame.MAXIMIZED_BOTH);
-        setSize(800, 600);
+        initUI();
+    }
 
-        setLayout(new BorderLayout());
+    private void initUI() {
+        setSize(420, 360);
+        setLayout(new BorderLayout(10, 10));
+        setBackground(new Color(248, 249, 250));
 
-        //Tạo Background Panel 
-        BackgroundPanel bgPanel = new BackgroundPanel(
-                "D:\\box\\javaM\\BTTH_LapTrinhMang\\homestay\\src\\main\\java\\homestay\\Client\\Views\\bg.png");
+        // ================= TITLE =================
+        Label lblTitle = new Label("HOMESTAY LOGIN", Label.CENTER);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitle.setForeground(new Color(33, 37, 41));
+        add(lblTitle, BorderLayout.NORTH);
 
-        bgPanel.setLayout(new GridBagLayout()); // Căn giữa login box
-        add(bgPanel, BorderLayout.CENTER);
-
-        // --- Tạo Login Box ---
-        Panel box = new Panel();
-        box.setBackground(Color.WHITE);
-        box.setPreferredSize(new Dimension(560, 520));
-        box.setLayout(new GridBagLayout());
+        // ================= FORM PANEL =================
+        Panel pnlForm = new Panel(new GridBagLayout());
+        pnlForm.setBackground(Color.WHITE);
+        add(pnlForm, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 20, 8, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        // Cho bảng full box
-        gbc.weightx = 1;
-        gbc.weighty = 1;
         gbc.gridx = 0;
-        gbc.insets = new Insets(0, 50, 2, 50);
-        
-        // --- TITLE ---
-        Label lblTitle = new Label("Log in", Label.CENTER);
-        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 34));
+        gbc.weightx = 1;
+
+        // -------- Username --------
         gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.CENTER;
-        box.add(lblTitle, gbc);
+        Label lblUser = new Label("Tên đăng nhập");
+        lblUser.setFont(new Font("Arial", Font.BOLD, 14));
+        pnlForm.add(lblUser, gbc);
 
-        // --- SUBTITLE ---
-        Label lblSub = new Label("Welcome back! Please sign in.", Label.CENTER);
-        lblSub.setFont(new Font("SansSerif", Font.PLAIN, 14));
-        lblSub.setForeground(Color.GRAY);
         gbc.gridy = 1;
-        box.add(lblSub, gbc);
-
-        // --- USERNAME ---
-        Label lblUsername = new Label("Username :");
-        lblUsername.setFont(new Font("SansSerif", Font.BOLD, 15));
-        gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.WEST;
-        box.add(lblUsername, gbc);
-
         txtUsername = new TextField();
-        txtUsername.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        txtUsername.setPreferredSize(new Dimension(0, 35));
+        txtUsername.setFont(new Font("Arial", Font.PLAIN, 16));
+        txtUsername.setPreferredSize(new Dimension(0, 32));
+        pnlForm.add(txtUsername, gbc);
+
+        // -------- Password --------
+        gbc.gridy = 2;
+        Label lblPass = new Label("Mật khẩu");
+        lblPass.setFont(new Font("Arial", Font.BOLD, 14));
+        pnlForm.add(lblPass, gbc);
+
         gbc.gridy = 3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(2, 50, 10, 50);
-        box.add(txtUsername, gbc);
-
-        // --- PASSWORD ---
-        Label lblPass = new Label("Password :");
-        lblPass.setFont(new Font("SansSerif", Font.BOLD, 15));
-        gbc.gridy = 4;
-        gbc.insets = new Insets(5, 50, 2, 50);
-        gbc.fill = GridBagConstraints.NONE;
-        box.add(lblPass, gbc);
-
         txtPassword = new TextField();
         txtPassword.setEchoChar('*');
-        txtPassword.setFont(new Font("SansSerif", Font.PLAIN, 20));
-        txtPassword.setPreferredSize(new Dimension(0, 35));
-        gbc.gridy = 5;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(2, 50, 10, 50);
-        box.add(txtPassword, gbc);
-        
-        //--- MESSAGE LABEL ---
-        lblMessage = new Label();
-        lblMessage.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        txtPassword.setFont(new Font("Arial", Font.PLAIN, 16));
+        txtPassword.setPreferredSize(new Dimension(0, 32));
+        pnlForm.add(txtPassword, gbc);
+
+        // -------- Message --------
+        gbc.gridy = 4;
+        lblMessage = new Label("", Label.CENTER);
+        lblMessage.setFont(new Font("Arial", Font.PLAIN, 12));
         lblMessage.setForeground(Color.RED);
-        gbc.gridy = 6;
-        box.add(lblMessage, gbc);
+        pnlForm.add(lblMessage, gbc);
 
-        // --- LOGIN BUTTON ---
-        Button btnLogin = new Button("Log in");
-        btnLogin.setBackground(Color.BLACK);
+        // -------- Button --------
+        gbc.gridy = 5;
+        btnLogin = new Button("Đăng nhập");
+        btnLogin.setFont(new Font("Arial", Font.BOLD, 14));
+        btnLogin.setBackground(new Color(33, 37, 41));
         btnLogin.setForeground(Color.WHITE);
-        btnLogin.setFont(new Font("SansSerif", Font.BOLD, 15));
-        btnLogin.setPreferredSize(new Dimension(0, 40));
-        gbc.gridy = 7;
-        box.add(btnLogin, gbc);
+        btnLogin.setPreferredSize(new Dimension(0, 36));
+        pnlForm.add(btnLogin, gbc);
 
-        btnLogin.addActionListener(e ->{
-            String Username = txtUsername.getText().toString();
-            String Password = txtPassword.getText().toString();
-            if(Username.isEmpty() || Password.isEmpty()){
-                showMessage("Mật khẩu hoặc tên đăng nhập không được để trống!");
-                return;
-            }
-            //Controller xử lý đăng nhập
-            
-            // controller = new LoginController();
-            // controller.handleLogin(username, password); 
-        });
-        
-        // Đưa box vào giữa background
-        bgPanel.add(box);
-        
-
-
+        // ================= WINDOW =================
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 dispose();
                 System.exit(0);
             }
         });
-        
-        
+
         setLocationRelativeTo(null);
     }
+
+    // =====================================================
+    // ================= PUBLIC METHODS ===================
+    // =====================================================
+
+    public String getUsername() {
+        return txtUsername.getText().trim();
+    }
+
+    public String getPassword() {
+        return txtPassword.getText().trim();
+    }
+
     public void showMessage(String msg) {
-        
         lblMessage.setText(msg);
     }
 
-    public static void main(String[] args) {
-        
-        LoginView loginView = new LoginView();
-        loginView.setVisible(true);
-    }
+    // =====================================================
+    // ================= CONTROLLER HOOK ===================
+    // =====================================================
 
+    public void addLoginListener(ActionListener l) {
+        btnLogin.addActionListener(l);
+    }
 }

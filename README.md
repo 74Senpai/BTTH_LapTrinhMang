@@ -4,3 +4,12 @@
 > Mỗi người push lên phải tạo nhánh mới và chỉ được push lên nhánh của mình.
 > Nhánh phải sẵn sàng để merger trước khi yêu cầu PR.
 > Phải đợi review của `Gemini-assit-bot` và ít nhất một người khác.
+
+
+### Check List
+- [x] Client - Server
+- [x] Đăng nhập
+- [x] Quản lý phòng (CURD)
+- [x] Quản lý khách thuê
+- [x] Tình tiền điện nước, internet
+- [x] Thống kê phòng trống, đang sử dụng, đặt trước, báo cáo tổng thu
