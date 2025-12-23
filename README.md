@@ -11,5 +11,5 @@
 - [x] Đăng nhập
 - [x] Quản lý phòng (CURD)
 - [x] Quản lý khách thuê
-- [ ] Tình tiền điện nước, internet
-- [ ] Thống kê phòng trống, đang sử dụng, đặt trước, báo cáo tổng thu
+- [x] Tình tiền điện nước, internet
+- [x] Thống kê phòng trống, đang sử dụng, đặt trước, báo cáo tổng thu
