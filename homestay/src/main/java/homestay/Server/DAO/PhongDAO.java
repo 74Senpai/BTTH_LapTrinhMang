@@ -199,4 +199,42 @@ public class PhongDAO {
             return ps.executeUpdate() > 0;
         }
     }
+
+     public Phong getPhongById(Connection conn, int maPhong) throws SQLException {
+        String query = """
+            SELECT 
+                p.MaPhong,
+                p.TenPhong,
+                p.MaTrangThai,
+                t.TenTrangThai,
+                p.SoDienHienTai,
+                p.SoNuocHienTai,
+                p.GiaThueNgay,
+                p.GiaThueThang
+            FROM Phong p
+            INNER JOIN TrangThaiPhong t
+                ON p.MaTrangThai = t.MaTrangThai
+            WHERE p.MaPhong = ?
+        """;
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, maPhong);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Phong p = new Phong();
+                    p.setMaPhong(rs.getInt("MaPhong"));
+                    p.setTenPhong(rs.getString("TenPhong"));
+                    p.setMaTrangThai(rs.getInt("MaTrangThai"));
+                    p.setTenTrangThai(rs.getString("TenTrangThai"));
+                    p.setSoDienHienTai(rs.getInt("SoDienHienTai"));
+                    p.setSoNuocHienTai(rs.getInt("SoNuocHienTai"));
+                    p.setGiaThueNgay(rs.getDouble("GiaThueNgay"));
+                    p.setGiaThueThang(rs.getDouble("GiaThueThang"));
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
 }

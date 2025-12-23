@@ -89,18 +89,18 @@ public class ServerController {
 
     private String switchRequest(String request) {
         BaseDTO.Request req = gson.fromJson(request, BaseDTO.Request.class);
-        if(req.getDir().equals("AUTH") && req.getAction().equals("LOGIN")){
+        if (req.getDir().equals("AUTH") && req.getAction().equals("LOGIN")) {
             return NhanVienController.login(req);
         }
         boolean isLogin = AuthController.isAuthenticated(req.getSession());
         if (!isLogin) {
-            return DataBuilder.buildResponse(req, 403, "Unauthorized", null);
+            return DataBuilder.unAuthRes(req);
         }
 
         System.out.println("Request: " + request);
         String userName = AuthController.getUsername(req.getSession());
         LogService.writeLog(request, userName, new Date());
-        
+
         switch (req.getDir()) {
             case "BASE" -> {
                 return BaseDataController.baseDataController(req);
@@ -110,6 +110,12 @@ public class ServerController {
             }
             case "HOP_DONG" -> {
                 return HopDongController.hopDongController(req);
+            }
+            case "DIEN_NUOC" -> {
+                return DienNuocController.dienNuocController(req);
+            }
+            case "HOA_DON" -> {
+                return HoaDonController.hoaDonController(req);
             }
             default -> {
                 return DataBuilder.notFoundRes(req);
