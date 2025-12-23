@@ -10,7 +10,8 @@ public class RoomController {
     private final Gson gson = new Gson();
     private final String dir = "ROOM";
 
-    public RoomController() {}
+    public RoomController() {
+    }
 
     // ================== HELPER PARSING AN TOÀN ==================
     private double parseDoubleSafe(Object value) {
@@ -71,7 +72,6 @@ public class RoomController {
         }
     }
 
-    // ================== CÁC ACTION GỬI LÊN SERVER ==================
     public PhongDTO.View handleAddRoom(Object[] rowData) {
         PhongDTO.Create dto = parseToCreateDTO(rowData);
         if (dto == null) {
@@ -80,20 +80,22 @@ public class RoomController {
 
         try {
             validateRoom(dto);
+
+            final String action = "CREATE_ROOM";
+            ClientSocketController.ensureConnected();
+
+            // Gọi sendRequest và bắt lỗi
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, action, dto, true);
+
+            if (response != null && response.statusCode() == 200) {
+                return gson.fromJson(response.data(), PhongDTO.View.class);
+            }
         } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-            return null;
+            System.err.println("Lỗi validate phòng: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Lỗi kết nối khi thêm phòng: " + e.getMessage());
         }
-
-        final String action = "CREATE_ROOM";
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, dto, true);
-
-        if (response != null && response.statusCode() == 200) {
-            return gson.fromJson(response.data(), PhongDTO.View.class);
-        }
-        return null;
+        return null; // Trả về null nếu có bất kỳ lỗi nào xảy ra
     }
 
     public boolean handleUpdateRoom(int roomId, Object[] rowData) {
@@ -103,11 +105,15 @@ public class RoomController {
         }
 
         final String action = "UPDATE_ROOM";
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, dto, true);
+        try {
+            ClientSocketController.ensureConnected();
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, action, dto, true);
 
-        return response != null && response.statusCode() == 200;
+            return response != null && response.statusCode() == 200;
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật phòng: " + e.getMessage());
+            return false;
+        }
     }
 
     public boolean handleDeleteRoom(int roomId) throws Exception {

@@ -1,7 +1,5 @@
 package homestay.Server.Controllers;
 
-import java.util.List;
-
 import com.google.gson.Gson;
 
 import homestay.DTOs.BaseDTO;
@@ -19,7 +17,7 @@ public class DienNuocController {
         try {
             switch (req.action()) {
                 case "GET_ALL_DIEN_NUOC" -> {
-                    List<DienNuocDTO.View> list = dienNuocService.getAll();
+                    DienNuocDTO.ListDienNuoc list = dienNuocService.getAll();
                     return DataBuilder.successRes(req, list);
                 }
 

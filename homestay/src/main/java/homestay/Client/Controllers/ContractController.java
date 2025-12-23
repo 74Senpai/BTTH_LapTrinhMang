@@ -23,17 +23,21 @@ public class ContractController {
 
         try {
             validateContract(dto.tenKhachHang(), dto.soDienThoai());
+
+            final String action = "CREATE_CONTRACT";
+            ClientSocketController.ensureConnected();
+
+            // Bao bọc sendRequest trong try-catch
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, action, dto, true);
+
+            return response != null && response.statusCode() == 200;
         } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Dữ liệu không hợp lệ: " + e.getMessage());
+            return false;
+        } catch (Exception e) {
+            System.err.println("Lỗi hệ thống khi thêm hợp đồng: " + e.getMessage());
             return false;
         }
-
-        final String action = "CREATE_CONTRACT";
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, dto, true);
-
-        return response != null && response.statusCode() == 200;
     }
 
     public boolean handleUpdateContract(int contractId, Object[] rowData) {
@@ -44,11 +48,15 @@ public class ContractController {
         }
 
         final String action = "UPDATE_CONTRACT";
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, dto, true);
+        try {
+            ClientSocketController.ensureConnected();
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, action, dto, true);
 
-        return response != null && response.statusCode() == 200;
+            return response != null && response.statusCode() == 200;
+        } catch (Exception e) {
+            System.err.println("Lỗi khi cập nhật hợp đồng: " + e.getMessage());
+            return false;
+        }
     }
 
     public boolean handleDeleteContract(int contractId) throws Exception {

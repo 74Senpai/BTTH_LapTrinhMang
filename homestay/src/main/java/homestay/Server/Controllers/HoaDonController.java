@@ -17,22 +17,22 @@ public class HoaDonController {
         try {
             switch (req.action()) {
                 case "GET_ALL_HOA_DON" -> {
-                    return DataBuilder.buildResponse(req, 200, "OKE", gson.toJsonTree(hoaDonService.getAllHoaDon()));
+                    return DataBuilder.successRes(req, gson.toJsonTree(hoaDonService.getAllHoaDon()));
                 }
                 case "CREATE_HOA_DON" -> {
                     HoaDonDTO.Create createDto = gson.fromJson(req.data(), HoaDonDTO.Create.class);
                     hoaDonService.createHoaDon(createDto);
-                    return DataBuilder.buildResponse(req, 200, "Tạo hóa đơn thành công", null);
+                    return DataBuilder.successRes(req, null);
                 }
                 case "UPDATE_HOA_DON" -> {
                     HoaDonDTO.Update updateDto = gson.fromJson(req.data(), HoaDonDTO.Update.class);
                     hoaDonService.updateHoaDon(updateDto);
-                    return DataBuilder.buildResponse(req, 200, "Cập nhật hóa đơn thành công", null);
+                    return DataBuilder.successRes(req, null);
                 }
                 case "DELETE_HOA_DON" -> {
                     HoaDonDTO.Update deleteDto = gson.fromJson(req.data(), HoaDonDTO.Update.class);
                     hoaDonService.deleteHoaDon(deleteDto.maThanhToan());
-                    return DataBuilder.buildResponse(req, 200, "Xóa hóa đơn thành công", null);
+                    return DataBuilder.successRes(req, null);
                 }
                 default -> {
                     return DataBuilder.notFoundRes(req);

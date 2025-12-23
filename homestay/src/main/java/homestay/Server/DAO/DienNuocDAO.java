@@ -126,6 +126,8 @@ public class DienNuocDAO {
         dn.setChiSoDienMoi(rs.getInt("ChiSoDienMoi"));
         dn.setChiSoNuocCu(rs.getInt("ChiSoNuocCu"));
         dn.setChiSoNuocMoi(rs.getInt("ChiSoNuocMoi"));
+        dn.setSoDienTieuThu(rs.getInt("SoDienTieuThu"));
+        dn.setSoNuocTieuThu(rs.getInt("SoNuocTieuThu"));
         return dn;
     }
 

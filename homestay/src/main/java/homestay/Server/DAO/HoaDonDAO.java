@@ -20,6 +20,7 @@ public class HoaDonDAO {
             SELECT 
                 h.MaThanhToan, h.MaHopDong, h.MaDienNuoc,
                 h.TienPhong, h.TienChiPhiPhu, h.TongTien, h.NgayThanhToan,
+                h.TrangThaiThanhToan,
                 kh.HoTen AS TenKhachHang, p.TenPhong
             FROM HoaDon h
             JOIN HopDongThue hd ON h.MaHopDong = hd.MaHopDong
@@ -29,8 +30,7 @@ public class HoaDonDAO {
         """;
 
         List<HoaDon> list = new ArrayList<>();
-        try (PreparedStatement ps = conn.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = conn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 list.add(mapResultSetToHoaDon(rs));
             }
@@ -46,6 +46,7 @@ public class HoaDonDAO {
             SELECT 
                 h.MaThanhToan, h.MaHopDong, h.MaDienNuoc,
                 h.TienPhong, h.TienChiPhiPhu, h.TongTien, h.NgayThanhToan,
+                h.TrangThaiThanhToan,
                 kh.HoTen AS TenKhachHang, p.TenPhong
             FROM HoaDon h
             JOIN HopDongThue hd ON h.MaHopDong = hd.MaHopDong
@@ -69,26 +70,29 @@ public class HoaDonDAO {
      */
     public int insertHoaDon(Connection conn, HoaDon hd) throws SQLException {
         String sql = """
-            INSERT INTO HoaDon (MaHopDong, MaDienNuoc, TienPhong, TienChiPhiPhu, TongTien, NgayThanhToan)
-            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            INSERT INTO HoaDon (MaHopDong, MaDienNuoc, TienPhong, TienChiPhiPhu, TongTien, NgayThanhToan, TrangThaiThanhToan)
+            VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?)
         """;
         try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, Integer.parseInt(hd.getMaHopDong())); // Ép kiểu nếu Model vẫn để String
-            
+            ps.setInt(1, hd.getMaHopDong());
+
             if (hd.getMaDienNuoc() != null) {
                 ps.setInt(2, hd.getMaDienNuoc());
             } else {
                 ps.setNull(2, java.sql.Types.INTEGER);
             }
-            
+
             ps.setDouble(3, hd.getTienPhong());
             ps.setDouble(4, hd.getTienChiPhiPhu());
             ps.setDouble(5, hd.getTongTien());
+            ps.setInt(6, hd.getTrangThaiThanhToan() != null ? hd.getTrangThaiThanhToan() : 0);
 
             int affected = ps.executeUpdate();
             if (affected > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if (rs.next()) return rs.getInt(1);
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
                 }
             }
         }
@@ -101,19 +105,14 @@ public class HoaDonDAO {
     public boolean updateHoaDon(Connection conn, HoaDon hd) throws SQLException {
         String sql = """
             UPDATE HoaDon 
-            SET MaDienNuoc = ?, TienPhong = ?, TienChiPhiPhu = ?, TongTien = ? 
+            SET TienChiPhiPhu = ?, TongTien = ?, TrangThaiThanhToan = ? 
             WHERE MaThanhToan = ?
         """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (hd.getMaDienNuoc() != null) {
-                ps.setInt(1, hd.getMaDienNuoc());
-            } else {
-                ps.setNull(1, java.sql.Types.INTEGER);
-            }
-            ps.setDouble(2, hd.getTienPhong());
-            ps.setDouble(3, hd.getTienChiPhiPhu());
-            ps.setDouble(4, hd.getTongTien());
-            ps.setInt(5, Integer.parseInt(hd.getMaThanhToan()));
+            ps.setDouble(1, hd.getTienChiPhiPhu());
+            ps.setDouble(2, hd.getTongTien());
+            ps.setInt(3, hd.getTrangThaiThanhToan() != null ? hd.getTrangThaiThanhToan() : 0);
+            ps.setInt(4, hd.getMaThanhToan());
 
             return ps.executeUpdate() > 0;
         }
@@ -131,30 +130,65 @@ public class HoaDonDAO {
     }
 
     /**
-     * Helper mapping để dùng chung cho các hàm SELECT
+     * Helper mapping dữ liệu từ ResultSet sang Object Model
      */
     private HoaDon mapResultSetToHoaDon(ResultSet rs) throws SQLException {
         HoaDon hd = new HoaDon();
-        // Set ID về String để khớp với Model của bạn (nếu Model dùng String)
-        hd.setMaThanhToan(String.valueOf(rs.getInt("MaThanhToan")));
-        hd.setMaHopDong(String.valueOf(rs.getInt("MaHopDong")));
-        
+
+        // Gán các trường ID kiểu int
+        hd.setMaThanhToan(rs.getInt("MaThanhToan"));
+        hd.setMaHopDong(rs.getInt("MaHopDong"));
+
+        // Xử lý MaDienNuoc có thể Null
         int maDN = rs.getInt("MaDienNuoc");
         hd.setMaDienNuoc(rs.wasNull() ? null : maDN);
-        
+
         hd.setTienPhong(rs.getDouble("TienPhong"));
         hd.setTienChiPhiPhu(rs.getDouble("TienChiPhiPhu"));
         hd.setTongTien(rs.getDouble("TongTien"));
-        
-        // Map LocalDateTime
-        if (rs.getTimestamp("NgayThanhToan") != null) {
-            hd.setNgayThanhToan(rs.getTimestamp("NgayThanhToan").toLocalDateTime());
+
+        // Gán trạng thái thanh toán
+        hd.setTrangThaiThanhToan(rs.getInt("TrangThaiThanhToan"));
+
+        // Map LocalDateTime từ SQL Timestamp
+        java.sql.Timestamp ts = rs.getTimestamp("NgayThanhToan");
+        if (ts != null) {
+            hd.setNgayThanhToan(ts.toLocalDateTime());
         }
-        
-        // Gán các trường Join
+
+        // Gán các trường lấy từ câu lệnh JOIN
         hd.setTenKhachHang(rs.getString("TenKhachHang"));
         hd.setTenPhong(rs.getString("TenPhong"));
-        
+
         return hd;
+    }
+
+    public double getGiaThueTuHopDong(Connection conn, int maHopDong) throws SQLException {
+        String sql = "SELECT GiaThue FROM HopDongThue WHERE MaHopDong = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maHopDong);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getDouble("GiaThue");
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Truy vấn chỉ số điện nước và tính tiền dựa trên đơn giá truyền vào
+     */
+    public double getTienDienNuocTuChiSo(Connection conn, int maDienNuoc, double giaDien, double giaNuoc) throws SQLException {
+        String sql = "SELECT SoDienTieuThu, SoNuocTieuThu FROM DienNuoc WHERE MaDienNuoc = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, maDienNuoc);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    double tienDien = rs.getInt("SoDienTieuThu") * giaDien;
+                    double tienNuoc = rs.getInt("SoNuocTieuThu") * giaNuoc;
+                    return tienDien + tienNuoc;
+                }
+            }
+        }
+        return 0;
     }
 }

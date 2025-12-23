@@ -7,6 +7,7 @@ public class ThongKeDTO {
 
     // Thống kê doanh thu theo tháng
     public static class DoanhThuThang {
+
         public int thang;
         public int nam;
         public double tongThu;
@@ -20,6 +21,7 @@ public class ThongKeDTO {
 
     // Thống kê số lượng phòng theo trạng thái
     public static class TrangThaiPhong {
+
         public String tenTrangThai;
         public int soLuong;
 
@@ -31,6 +33,7 @@ public class ThongKeDTO {
 
     // DTO tổng hợp để gửi về Client một lần
     public static class BaoCaoTongHop {
+
         public List<DoanhThuThang> dsDoanhThu = new ArrayList<>();
         public List<TrangThaiPhong> dsTrangThai = new ArrayList<>();
         public int tongKhachDangThue;

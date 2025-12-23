@@ -21,7 +21,7 @@ public class DienNuocService {
     /**
      * LẤY DANH SÁCH CHỈ SỐ ĐIỆN NƯỚC HÀNG THÁNG
      */
-    public List<DienNuocDTO.View> getAll() {
+    public DienNuocDTO.ListDienNuoc getAll() {
         List<DienNuocDTO.View> result = new ArrayList<>();
         try (Connection conn = DBConnection.getConnection()) {
             List<DienNuoc> list = dienNuocDAO.getAll(conn);
@@ -42,7 +42,7 @@ public class DienNuocService {
                 );
                 result.add(view);
             }
-            return result;
+            return new DienNuocDTO.ListDienNuoc(result);
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi lấy danh sách điện nước: " + e.getMessage());
         }

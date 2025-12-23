@@ -25,15 +25,16 @@ public class HoaDonService {
 
             for (HoaDon hd : list) {
                 HoaDonDTO.View view = new HoaDonDTO.View(
-                        Integer.parseInt(hd.getMaThanhToan()),
-                        Integer.parseInt(hd.getMaHopDong()),
+                        hd.getMaThanhToan(),
+                        hd.getMaHopDong(),
                         hd.getMaDienNuoc(),
                         hd.getTienPhong(),
                         hd.getTienChiPhiPhu(),
                         hd.getTongTien(),
                         hd.getNgayThanhToan() != null ? hd.getNgayThanhToan().toString() : "",
                         hd.getTenKhachHang(),
-                        hd.getTenPhong()
+                        hd.getTenPhong(),
+                        hd.getTrangThaiThanhToan()
                 );
                 res.add(view);
             }
@@ -52,40 +53,57 @@ public class HoaDonService {
             if (hd == null) return null;
 
             return new HoaDonDTO.View(
-                    Integer.parseInt(hd.getMaThanhToan()),
-                    Integer.parseInt(hd.getMaHopDong()),
+                    hd.getMaThanhToan(),
+                    hd.getMaHopDong(),
                     hd.getMaDienNuoc(),
                     hd.getTienPhong(),
                     hd.getTienChiPhiPhu(),
                     hd.getTongTien(),
                     hd.getNgayThanhToan().toString(),
                     hd.getTenKhachHang(),
-                    hd.getTenPhong()
+                    hd.getTenPhong(),
+                    hd.getTrangThaiThanhToan()
             );
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi khi lấy chi tiết hóa đơn: " + e.getMessage());
         }
     }
 
+    // Đơn giá quy định
+    private final double GIA_DIEN = 3500;
+    private final double GIA_NUOC = 12000;
+
     /**
      * TẠO MỚI HÓA ĐƠN
-     * Thường gọi khi khách trả phòng hoặc chốt tiền tháng
      */
     public void createHoaDon(HoaDonDTO.Create dto) {
         try (Connection conn = DBConnection.getConnection()) {
             HoaDon hd = new HoaDon();
-            hd.setMaHopDong(String.valueOf(dto.maHopDong()));
+            hd.setMaHopDong(dto.maHopDong());
             hd.setMaDienNuoc(dto.maDienNuoc());
-            hd.setTienPhong(dto.tienPhong());
-            hd.setTienChiPhiPhu(dto.tienChiPhiPhu());
-            hd.setTongTien(dto.tongTien());
+            hd.setTrangThaiThanhToan(dto.trangThaiThanhToan());
 
-            int idMoi = hoaDonDAO.insertHoaDon(conn, hd);
-            if (idMoi == -1) {
-                throw new RuntimeException("Không thể tạo hóa đơn");
+            // 1. Gọi DAO lấy tiền phòng
+            double tienPhong = hoaDonDAO.getGiaThueTuHopDong(conn, dto.maHopDong());
+            
+            // 2. Gọi DAO lấy tiền điện nước (nếu có)
+            double tienDienNuoc = 0;
+            if (dto.maDienNuoc() != null) {
+                tienDienNuoc = hoaDonDAO.getTienDienNuocTuChiSo(conn, dto.maDienNuoc(), GIA_DIEN, GIA_NUOC);
+            }
+
+            // 3. Thiết lập các giá trị
+            hd.setTienPhong(tienPhong);
+            // Phụ phí thực tế = Phụ phí khách nhập + Tiền điện nước
+            hd.setTienChiPhiPhu(dto.tienChiPhiPhu() + tienDienNuoc);
+            // Tổng tiền = Tiền phòng + Phụ phí tổng
+            hd.setTongTien(tienPhong + hd.getTienChiPhiPhu());
+
+            if (hoaDonDAO.insertHoaDon(conn, hd) == -1) {
+                throw new RuntimeException("Lỗi khi thêm hóa đơn vào DB");
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi tạo hóa đơn: " + e.getMessage());
+            throw new RuntimeException("Lỗi hệ thống: " + e.getMessage());
         }
     }
 
@@ -94,19 +112,22 @@ public class HoaDonService {
      */
     public void updateHoaDon(HoaDonDTO.Update dto) {
         try (Connection conn = DBConnection.getConnection()) {
-            // Lấy dữ liệu cũ lên trước
+            // Lấy dữ liệu hiện tại từ DB
             HoaDon hd = hoaDonDAO.getHoaDonById(conn, dto.maThanhToan());
-            if (hd == null) throw new RuntimeException("Hóa đơn không tồn tại");
+            if (hd == null) throw new RuntimeException("Không tìm thấy hóa đơn");
 
-            // Cập nhật các trường cho phép sửa
+            // Cập nhật các thông tin thay đổi
             hd.setTienChiPhiPhu(dto.tienChiPhiPhu());
-            hd.setTongTien(dto.tongTien());
-
-            boolean success = hoaDonDAO.updateHoaDon(conn, hd);
-            if (!success) throw new RuntimeException("Cập nhật hóa đơn thất bại");
+            hd.setTrangThaiThanhToan(dto.trangThaiThanhToan());
             
+            // Tính lại tổng dựa trên tiền phòng đã có sẵn trong DB
+            hd.setTongTien(hd.getTienPhong() + dto.tienChiPhiPhu());
+
+            if (!hoaDonDAO.updateHoaDon(conn, hd)) {
+                throw new RuntimeException("Cập nhật thất bại");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi cập nhật hóa đơn: " + e.getMessage());
+            throw new RuntimeException("Lỗi hệ thống: " + e.getMessage());
         }
     }
 

@@ -13,9 +13,11 @@ public class NhanVienService {
     private final NhanVienDAO dao = new NhanVienDAO();
 
     public NhanVienDTO.LoginStatus checkLogin(NhanVienDTO.Login login) {
-        try {
-            Connection conn = DBConnection.getConnection();
-            NhanVien nv = this.dao.findByUserName(conn, login.username());
+
+        try (Connection conn = DBConnection.getConnection()) {
+
+            NhanVien nv = dao.findByUserName(conn, login.username());
+
             if (nv == null) {
                 return new NhanVienDTO.LoginStatus(
                         -1,
@@ -25,6 +27,7 @@ public class NhanVienService {
                         null
                 );
             }
+
             if (nv.getPassword().equals(login.password())) {
                 return new NhanVienDTO.LoginStatus(
                         nv.getMaNV(),
@@ -33,15 +36,16 @@ public class NhanVienService {
                         "Login success",
                         nv.getUsername() + "_" + nv.getMaNV()
                 );
-            } else {
-                return new NhanVienDTO.LoginStatus(
-                        -1,
-                        null,
-                        false,
-                        "Invalid password",
-                        null
-                );
             }
+
+            return new NhanVienDTO.LoginStatus(
+                    -1,
+                    null,
+                    false,
+                    "Invalid password",
+                    null
+            );
+
         } catch (SQLException e) {
             System.err.println("Không thể truy vấn dữ liệu nhân viên: " + e.getMessage());
             return new NhanVienDTO.LoginStatus(
