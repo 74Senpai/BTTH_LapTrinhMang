@@ -24,7 +24,7 @@ public class AuthController {
         return (status != null) ? status.hoTen() : "Unknown";
     }
 
-    public static int getUserId(String session) {
+    public static Integer getUserId(String session) {
         NhanVienDTO.LoginStatus status = sessionMap.get(session);
         return (status != null) ? status.maNV() : null;
     }
