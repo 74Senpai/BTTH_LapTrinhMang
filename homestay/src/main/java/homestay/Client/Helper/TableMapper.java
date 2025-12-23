@@ -4,8 +4,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import homestay.Client.Controllers.BaseDataController;
-import homestay.Client.DTOs.HopDongDTO;
-import homestay.Client.DTOs.RoomDTO;
+import homestay.DTOs.HopDongDTO;
+import homestay.DTOs.PhongDTO;
 
 public class TableMapper {
 
@@ -42,18 +42,18 @@ public class TableMapper {
     }
 
     // ================== MAPPING CHO PHÒNG (ROOM) ==================
-    public static Object[] mapRoomToRow(RoomDTO.ViewRoomDTO r) {
+    public static Object[] mapRoomToRow(PhongDTO.View r) {
         if (r == null) {
             return null;
         }
         return new Object[]{
-            r.getMaPhong(), r.getTenPhong(), r.getTenTrangThai(),
-            r.getGiaThueNgay(), r.getGiaThueThang(),
-            r.getSoDienHienTai(), r.getSoNuocHienTai()
+            r.maPhong(), r.tenPhong(), r.tenTrangThai(),
+            r.giaThueNgay(), r.giaThueThang(),
+            r.soDienHienTai(), r.soNuocHienTai()
         };
     }
 
-    public static Object[][] mapRoomListToTableData(List<RoomDTO.ViewRoomDTO> rooms) {
+    public static Object[][] mapRoomListToTableData(List<PhongDTO.View> rooms) {
         if (rooms == null) {
             return new Object[0][0];
         }
@@ -65,11 +65,11 @@ public class TableMapper {
     }
 
     // Parse từ hàng trong Table (đã bỏ cột thao tác) sang DTO
-    public static RoomDTO.CreateRoomDTO mapRowToRoomCreate(Object[] rowData) {
+    public static PhongDTO.Create mapRowToRoomCreate(Object[] rowData) {
         String tenTrangThai = rowData[2] != null ? rowData[2].toString() : "";
         int maTrangThai = BaseDataController.getCachedRoomStates().getMaTrangThai(tenTrangThai);
 
-        return new RoomDTO.CreateRoomDTO(
+        return new PhongDTO.Create(
                 rowData[1] != null ? rowData[1].toString() : "",
                 maTrangThai,
                 parseDoubleSafe(rowData[3]),
@@ -77,11 +77,11 @@ public class TableMapper {
         );
     }
 
-    public static RoomDTO.UpdateRoomDTO mapRowToRoomUpdate(int id, Object[] rowData) {
+    public static PhongDTO.Update mapRowToRoomUpdate(int id, Object[] rowData) {
         String tenTrangThai = rowData[2] != null ? rowData[2].toString() : "";
         int maTrangThai = BaseDataController.getCachedRoomStates().getMaTrangThai(tenTrangThai);
 
-        return new RoomDTO.UpdateRoomDTO(
+        return new PhongDTO.Update(
                 id,
                 rowData[1] != null ? rowData[1].toString() : "",
                 maTrangThai,
@@ -96,8 +96,8 @@ public class TableMapper {
             return null;
         }
         return new Object[]{
-            h.maHopDong, h.tenKhachHang, h.soDienThoai, h.cccd,
-            h.phongDangThue, h.ngayBatDau, h.ngayKetThuc, h.loaiHinhThue
+            h.maHopDong(), h.tenKhachHang(), h.soDienThoai(), h.cccd(),
+            h.phongDangThue(), h.ngayBatDau(), h.ngayKetThuc(), h.loaiHinhThue()
         };
     }
 
@@ -113,64 +113,68 @@ public class TableMapper {
     }
 
     public static HopDongDTO.Create mapRowToContractCreate(Object[] row) {
-        HopDongDTO.Create dto = new HopDongDTO.Create();
-        dto.tenKhachHang = row[1] != null ? row[1].toString() : "";
-        dto.soDienThoai = row[2] != null ? row[2].toString() : "";
-        dto.cccd = row[3] != null ? row[3].toString() : "";
+        String tenKhachHang = row[1] != null ? row[1].toString() : "";
+        String soDienThoai = row[2] != null ? row[2].toString() : "";
+        String cccd = row[3] != null ? row[3].toString() : "";
         String val = row[4] != null ? row[4].toString() : "";
 // Lấy phần chứa ID (trước dấu " - ") hoặc lấy toàn bộ nếu không có dấu gạch
         String rawId = val.contains(" - ") ? val.split(" - ")[0].trim() : val.trim();
-
+        Integer maPhong;
         try {
             if (rawId.isEmpty() || rawId.equals("Chọn phòng...")) {
-                dto.maPhong = 0; // Hoặc một giá trị đánh dấu lỗi tùy quy ước của bạn
+                maPhong = 0; // Hoặc một giá trị đánh dấu lỗi tùy quy ước của bạn
             } else {
-                dto.maPhong = Integer.parseInt(rawId);
+                maPhong = Integer.parseInt(rawId);
             }
         } catch (NumberFormatException e) {
             // Trường hợp chuỗi không phải là số (ví dụ: "abc", "Đang thêm...")
-            dto.maPhong = 0;
+            maPhong = 0;
             System.err.println("Lỗi: Không thể chuyển đổi mã phòng '" + rawId + "' sang số.");
         }
-        dto.ngayBatDau = parseDateToStringSafe(row[5]);
-        dto.ngayKetThuc = parseDateToStringSafe(row[6]);
-        dto.loaiHinhThue = row[7] != null ? row[7].toString() : "";
-        return dto;
+        String ngayBatDau = parseDateToStringSafe(row[5]);
+        String ngayKetThuc = parseDateToStringSafe(row[6]);
+        String loaiHinhThue = row[7] != null ? row[7].toString() : "";
+        return new HopDongDTO.Create(
+                tenKhachHang, soDienThoai, cccd, maPhong, ngayBatDau, ngayKetThuc, loaiHinhThue
+        );
     }
 
     public static HopDongDTO.Update mapRowToContractUpdate(int id, Object[] row) {
-        HopDongDTO.Update dto = new HopDongDTO.Update();
-        dto.maHopDong = id;
-        dto.tenKhachHang = row[1] != null ? row[1].toString() : "";
-        dto.soDienThoai = row[2] != null ? row[2].toString() : "";
-        dto.cccd = row[3] != null ? row[3].toString() : "";
+
+        Integer maHopDong = id;
+        String tenKhachHang = row[1] != null ? row[1].toString() : "";
+        String soDienThoai = row[2] != null ? row[2].toString() : "";
+        String cccd = row[3] != null ? row[3].toString() : "";
         String val = row[4] != null ? row[4].toString() : "";
 // Lấy phần chứa ID (trước dấu " - ") hoặc lấy toàn bộ nếu không có dấu gạch
         String rawId = val.contains(" - ") ? val.split(" - ")[0].trim() : val.trim();
-
+        Integer maPhong;
         try {
             if (rawId.isEmpty() || rawId.equals("Chọn phòng...")) {
-                dto.maPhong = 0; // Hoặc một giá trị đánh dấu lỗi tùy quy ước của bạn
+                maPhong = 0; // Hoặc một giá trị đánh dấu lỗi tùy quy ước của bạn
             } else {
-                dto.maPhong = Integer.parseInt(rawId);
+                maPhong = Integer.parseInt(rawId);
             }
         } catch (NumberFormatException e) {
             // Trường hợp chuỗi không phải là số (ví dụ: "abc", "Đang thêm...")
-            dto.maPhong = 0;
+            maPhong = 0;
             System.err.println("Lỗi: Không thể chuyển đổi mã phòng '" + rawId + "' sang số.");
         }
-        dto.ngayBatDau = parseDateToStringSafe(row[5]);
-        dto.ngayKetThuc = parseDateToStringSafe(row[6]);
-        dto.loaiHinhThue = row[7] != null ? row[7].toString() : "";
-        return dto;
+        String ngayBatDau = parseDateToStringSafe(row[5]);
+        String ngayKetThuc = parseDateToStringSafe(row[6]);
+        String loaiHinhThue = row[7] != null ? row[7].toString() : "";
+
+        return new HopDongDTO.Update(
+                maHopDong, tenKhachHang, soDienThoai, cccd, maPhong, ngayBatDau, ngayKetThuc, loaiHinhThue
+        );
     }
 
-    public static String[] mapRoomsToComboList(List<RoomDTO.ViewRoomDTO> rooms) {
+    public static String[] mapRoomsToComboList(List<PhongDTO.View> rooms) {
         if (rooms == null) {
             return new String[0];
         }
         return rooms.stream()
-                .map(r -> r.getMaPhong() + " - " + r.getTenPhong())
+                .map(r -> r.maPhong() + " - " + r.tenPhong())
                 .toArray(String[]::new);
     }
 }

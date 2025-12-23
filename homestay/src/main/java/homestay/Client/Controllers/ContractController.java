@@ -2,9 +2,9 @@ package homestay.Client.Controllers;
 
 import com.google.gson.Gson;
 
-import homestay.Client.DTOs.BaseDTO;
-import homestay.Client.DTOs.HopDongDTO;
 import homestay.Client.Helper.TableMapper;
+import homestay.DTOs.BaseDTO;
+import homestay.DTOs.HopDongDTO;
 
 public class ContractController {
 
@@ -22,7 +22,7 @@ public class ContractController {
         }
 
         try {
-            validateContract(dto.tenKhachHang, dto.soDienThoai);
+            validateContract(dto.tenKhachHang(), dto.soDienThoai());
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
             return false;
@@ -33,7 +33,7 @@ public class ContractController {
         BaseDTO.Response response
                 = ClientSocketController.sendRequest(dir, action, dto, true);
 
-        return response != null && response.getStatusCode() == 200;
+        return response != null && response.statusCode() == 200;
     }
 
     public boolean handleUpdateContract(int contractId, Object[] rowData) {
@@ -48,7 +48,7 @@ public class ContractController {
         BaseDTO.Response response
                 = ClientSocketController.sendRequest(dir, action, dto, true);
 
-        return response != null && response.getStatusCode() == 200;
+        return response != null && response.statusCode() == 200;
     }
 
     public boolean handleDeleteContract(int contractId) throws Exception {
@@ -59,10 +59,10 @@ public class ContractController {
         BaseDTO.Response response
                 = ClientSocketController.sendRequest(dir, action, deleteDto, true);
 
-        if (response != null && response.getStatusCode() == 200) {
+        if (response != null && response.statusCode() == 200) {
             return true;
         } else {
-            throw new Exception(response != null ? response.getMessage() : "Lỗi không xác định");
+            throw new Exception(response != null ? response.message() : "Lỗi không xác định");
         }
     }
 
@@ -72,10 +72,10 @@ public class ContractController {
         BaseDTO.Response response
                 = ClientSocketController.sendRequest(dir, action, null, true);
 
-        if (response != null && response.getStatusCode() == 200 && response.getData() != null) {
-            return gson.fromJson(response.getData(), HopDongDTO.ListHopDong.class);
+        if (response != null && response.statusCode() == 200 && response.data() != null) {
+            return gson.fromJson(response.data(), HopDongDTO.ListHopDong.class);
         }
-        throw new Exception("Không thể lấy danh sách hợp đồng: " + (response != null ? response.getMessage() : "No response"));
+        throw new Exception("Không thể lấy danh sách hợp đồng: " + (response != null ? response.message() : "No response"));
     }
 
     private void validateContract(String ten, String sdt) {

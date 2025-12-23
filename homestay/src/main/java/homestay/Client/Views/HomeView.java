@@ -19,9 +19,10 @@ import javax.swing.JOptionPane;
 import homestay.Client.Controllers.ClientSocketController;
 import homestay.Client.Controllers.ContractController;
 import homestay.Client.Controllers.RoomController;
-import homestay.Client.DTOs.RoomDTO;
 import homestay.Client.Helper.SessionManager;
 import homestay.Client.Helper.TableMapper;
+import homestay.DTOs.HopDongDTO;
+import homestay.DTOs.PhongDTO;
 
 public class HomeView extends Frame {
 
@@ -35,10 +36,10 @@ public class HomeView extends Frame {
         RoomController controller = new RoomController();
         Runnable refresh = (() -> {
             try {
-                RoomDTO.ListRoomDTO list = controller.getRooms();
+                PhongDTO.ListPhong list = controller.getRooms();
                 Object[][] data = list.getRooms().stream().map(r -> new Object[]{
-                    r.getMaPhong(), r.getTenPhong(), r.getTenTrangThai(),
-                    r.getGiaThueNgay(), r.getGiaThueThang(), r.getSoDienHienTai(), r.getSoNuocHienTai()
+                    r.maPhong(), r.tenPhong(), r.tenTrangThai(),
+                    r.giaThueNgay(), r.giaThueThang(), r.soDienHienTai(), r.soNuocHienTai()
                 }).toArray(Object[][]::new);
 
                 view.setRoomData(data);
@@ -50,9 +51,9 @@ public class HomeView extends Frame {
         refresh.run();
 
         view.setOnAddRoom(rowData -> {
-            RoomDTO.ViewRoomDTO result = controller.handleAddRoom(rowData);
-            if (result.getMaPhong() != -1) {
-                view.updateRoomIdAtSelectedRow(result.getMaPhong());
+            PhongDTO.View result = controller.handleAddRoom(rowData);
+            if (result.maPhong() != -1) {
+                view.updateRoomIdAtSelectedRow(result.maPhong());
             } else {
                 JOptionPane.showMessageDialog(view, "Thêm thất bại!");
             }
@@ -95,7 +96,7 @@ public class HomeView extends Frame {
         Runnable refresh = () -> {
             try {
                 loadMetaData.run();
-                homestay.Client.DTOs.HopDongDTO.ListHopDong list = controller.getContracts();
+                HopDongDTO.ListHopDong list = controller.getContracts();
 
                 // Sử dụng TableMapper để chuyển đổi List DTO sang Object[][] cho JTable
                 Object[][] data = homestay.Client.Helper.TableMapper.mapContractListToTableData(list.getContracts());
