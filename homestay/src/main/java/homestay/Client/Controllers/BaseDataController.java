@@ -2,8 +2,8 @@ package homestay.Client.Controllers;
 
 import com.google.gson.Gson;
 
-import homestay.Client.DTOs.BaseDTO;
-import homestay.Client.DTOs.ListRoomStateDTO;
+import homestay.DTOs.BaseDTO;
+import homestay.DTOs.ListRoomStateDTO;
 
 public class BaseDataController {
 
@@ -24,10 +24,10 @@ public class BaseDataController {
         BaseDTO.Response response = 
             ClientSocketController.sendRequest("BASE", action, null, true);
 
-        if (response.getAction().equals(action) && response.getStatusCode() == 200) {
-            cachedRoomStates = new Gson().fromJson(response.getData(), ListRoomStateDTO.class);
+        if (response.action().equals(action) && response.statusCode() == 200) {
+            cachedRoomStates = new Gson().fromJson(response.data(), ListRoomStateDTO.class);
         } else {
-            if(response.getStatusCode() == 403){
+            if(response.statusCode() == 403){
                 throw new Exception("Không có quyền truy cập! Vui lòng đăng nhập.");
             }
             if (cachedRoomStates == null) {

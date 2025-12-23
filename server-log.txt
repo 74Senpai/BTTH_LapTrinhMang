@@ -194,3 +194,11 @@
 [2025-12-23 17:07:11] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
 [2025-12-23 17:07:11] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
 [2025-12-23 17:07:13] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 20:18:56] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 20:18:58] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 20:18:58] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 20:19:00] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 20:19:00] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 20:19:02] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-23 20:19:02] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-23 20:19:04] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị

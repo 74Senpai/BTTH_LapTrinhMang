@@ -9,8 +9,8 @@ import java.net.UnknownHostException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import homestay.Client.DTOs.BaseDTO;
 import homestay.Client.Helper.SessionManager;
+import homestay.DTOs.BaseDTO;
 
 public class ClientSocketController {
 
