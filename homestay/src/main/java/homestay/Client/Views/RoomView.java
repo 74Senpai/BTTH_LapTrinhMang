@@ -69,6 +69,11 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
         tblRoom.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblRoom.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
+        TableColumn colPriceDay = tblRoom.getColumnModel().getColumn(4);   // Giá/ngày
+        TableColumn colPriceMonth = tblRoom.getColumnModel().getColumn(5); // Giá/tháng
+        colPriceDay.setCellEditor(new Components.NumericCellEditor());
+        colPriceMonth.setCellEditor(new Components.NumericCellEditor());
+
         // Cấu hình Dropdown cho cột Trạng thái (Index 3)
         setupStatusComboBox();
 

@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JLabel;
@@ -141,6 +143,29 @@ public class Components {
             String value = (String) getCellEditorValue();
             if (value == null || !value.matches("^0\\d{11}$")) {
                 JOptionPane.showMessageDialog(null, "CCCD không hợp lệ. Phải bắt đầu bằng 0 và có đúng 12 chữ số.");
+                return false;
+            }
+            return super.stopCellEditing();
+        }
+    }
+
+    public static class DateCellEditor extends DefaultCellEditor {
+
+        private static final DateTimeFormatter F =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        public DateCellEditor() {
+            super(new JTextField());
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            String value = ((String) getCellEditorValue()).trim();
+            try {
+                LocalDate.parse(value, F);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,
+                        "Ngày phải đúng định dạng yyyy-MM-dd (VD: 2025-11-10)");
                 return false;
             }
             return super.stopCellEditing();

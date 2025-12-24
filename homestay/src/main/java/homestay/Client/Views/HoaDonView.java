@@ -79,6 +79,11 @@ public class HoaDonView extends JPanel implements Components.IViewCheck {
         tbl.setRowHeight(35);
         tbl.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tbl.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        
+        //validate 
+        TableColumn colPhuPhi = tbl.getColumnModel().getColumn(5);
+        colPhuPhi.setCellEditor(new Components.NumericCellEditor());
+
         Components.centerTable(tbl);
         add(new JScrollPane(tbl), BorderLayout.CENTER);
 
@@ -104,13 +109,6 @@ public class HoaDonView extends JPanel implements Components.IViewCheck {
         btnDelete = new Button("Xóa");
         btnRefresh = new Button("Tải lại");
 
-        // Màu sắc đồng bộ
-        btnAdd.setBackground(new Color(40, 167, 69));
-        btnAdd.setForeground(Color.WHITE);
-        btnEdit.setBackground(new Color(0, 123, 255));
-        btnEdit.setForeground(Color.WHITE);
-        btnDelete.setBackground(new Color(220, 53, 69));
-        btnDelete.setForeground(Color.WHITE);
 
         pnlRightActions.add(lblTotal);
         pnlRightActions.add(btnAdd);
