@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import homestay.DTOs.DienNuocDTO;
 
@@ -68,6 +69,14 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
         tblData.setRowHeight(35);
         tblData.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tblData.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+
+        // validate 
+        TableColumn colDienMoi = tblData.getColumnModel().getColumn(6);
+        TableColumn colNuocMoi = tblData.getColumnModel().getColumn(9);
+        colDienMoi.setCellEditor(new Components.NumericCellEditor());
+        colNuocMoi.setCellEditor(new Components.NumericCellEditor());
+
+
         Components.centerTable(tblData);
         add(new JScrollPane(tblData), BorderLayout.CENTER);
 

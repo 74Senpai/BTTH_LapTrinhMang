@@ -1,6 +1,7 @@
 package homestay.Client.Views;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -10,7 +11,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,12 +18,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class ContractView extends JPanel implements Components.IViewCheck {
 
     private JTable tblContract;
     private DefaultTableModel tableModel;
-    private JButton btnAdd, btnEdit, btnDelete, btnRefresh, btnSave, btnCancel;
+    private Button btnAdd, btnEdit, btnDelete, btnRefresh, btnSave, btnCancel;
 
     private int editingRow = -1;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -56,27 +57,39 @@ public class ContractView extends JPanel implements Components.IViewCheck {
                 return column != 0 && column != 1 && column != 7;
             }
         };
-
+        
         tblContract = new JTable(tableModel);
         tblContract.setRowHeight(35);
         tblContract.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        
+        // Validate 
+        TableColumn colPhoneNumber = tblContract.getColumnModel().getColumn(3);
+        TableColumn colCCCD = tblContract.getColumnModel().getColumn(4);
+        TableColumn colDayBegin = tblContract.getColumnModel().getColumn(6);
+        colPhoneNumber.setCellEditor(new Components.PhoneNumberCellEditor());
+        colCCCD.setCellEditor(new Components.CCCDCellEditor());
+        colDayBegin.setCellEditor(new Components.DateCellEditor());
+        
 
         setupLeaseTypeComboBox();
+        Components.centerTable(tblContract);
         add(new JScrollPane(tblContract), BorderLayout.CENTER);
 
-        // --- BUTTONS (Dùng Swing JButton) ---
+        // --- BUTTONS (Dùng Swing Button) ---
         JPanel pnlSouth = new JPanel(new BorderLayout());
         JPanel pnlLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        btnSave = new JButton("LƯU");
-        btnCancel = new JButton("HỦY");
+        btnSave = new Button("LƯU THAY ĐỔI");
+        btnCancel = new Button("HỦY");
+        btnSave.setForeground(new Color(0, 100, 0));
+        btnCancel.setForeground(new Color(150, 0, 0));
         pnlLeft.add(btnSave);
         pnlLeft.add(btnCancel);
 
         JPanel pnlRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnAdd = new JButton("Thêm mới");
-        btnEdit = new JButton("Sửa");
-        btnDelete = new JButton("Xóa");
-        btnRefresh = new JButton("Tải lại");
+        btnAdd = new Button("Thêm mới");
+        btnEdit = new Button("Sửa");
+        btnDelete = new Button("Xóa");
+        btnRefresh = new Button("Tải lại");
         pnlRight.add(btnAdd);
         pnlRight.add(btnEdit);
         pnlRight.add(btnDelete);
