@@ -14,156 +14,156 @@ public class RoomController {
     }
 
     // ================== HELPER PARSING AN TOÀN ==================
-    private double parseDoubleSafe(Object value) {
+    private double parseDoubleSafe(Object value, String fieldName) throws Exception {
         if (value == null || value.toString().trim().isEmpty()) {
             return 0.0;
         }
         try {
-            if (value instanceof Number number) {
-                return number.doubleValue();
-            }
-            return Double.parseDouble(value.toString().replace(",", ""));
+            // Xóa dấu phẩy hoặc các ký tự không phải số/dấu chấm trước khi parse
+            String cleanValue = value.toString().replaceAll("[^0-9.]", "");
+            return Double.parseDouble(cleanValue);
         } catch (NumberFormatException e) {
-            return 0.0;
+            throw new Exception(fieldName + " phải là một số hợp lệ.");
         }
     }
 
     // ================== LOGIC PARSE DỮ LIỆU TỪ ROW ==================
-    /**
-     * Parse data để tạo phòng mới RowData index (sau khi View đã bỏ cột Thao
-     * tác): [0]: Mã phòng (null), [1]: Tên, [2]: Trạng thái, [3]: Giá ngày,
-     * [4]: Giá tháng
-     */
-    public PhongDTO.Create parseToCreateDTO(Object[] rowData) {
-        try {
-            String tenPhong = rowData[1] != null ? rowData[1].toString() : "Phòng mới";
-            String tenTrangThai = rowData[2] != null ? rowData[2].toString() : "";
-
-            // Lấy mã trạng thái từ Cache
-            int maTrangThai = BaseDataController.getCachedRoomStates().getMaTrangThai(tenTrangThai);
-
-            double giaNgay = parseDoubleSafe(rowData[3]);
-            double giaThang = parseDoubleSafe(rowData[4]);
-
-            return new PhongDTO.Create(tenPhong, maTrangThai, giaNgay, giaThang);
-        } catch (Exception e) {
-            System.err.println("Lỗi parse dữ liệu thêm mới: " + e.getMessage());
-            return null;
+    public PhongDTO.Create parseToCreateDTO(Object[] rowData) throws Exception {
+        if (rowData == null || rowData.length < 5) {
+            throw new Exception("Dữ liệu hàng không đầy đủ.");
         }
+
+        String tenPhong = rowData[1] != null ? rowData[1].toString().trim() : "";
+        String tenTrangThai = rowData[2] != null ? rowData[2].toString() : "";
+
+        // Lấy mã trạng thái từ Cache (ném lỗi nếu không tìm thấy)
+        int maTrangThai = BaseDataController.getCachedRoomStates().getMaTrangThai(tenTrangThai);
+        if (maTrangThai <= 0) {
+            throw new Exception("Trạng thái phòng không hợp lệ.");
+        }
+
+        double giaNgay = parseDoubleSafe(rowData[3], "Giá thuê theo ngày");
+        double giaThang = parseDoubleSafe(rowData[4], "Giá thuê theo tháng");
+
+        return new PhongDTO.Create(tenPhong, maTrangThai, giaNgay, giaThang);
     }
 
-    /**
-     * Parse data để cập nhật phòng
-     */
-    public PhongDTO.Update parseToUpdateDTO(int roomId, Object[] rowData) {
-        try {
-            String tenPhong = rowData[1] != null ? rowData[1].toString() : "";
-            String tenTrangThai = rowData[2] != null ? rowData[2].toString() : "";
-
-            int maTrangThai = BaseDataController.getCachedRoomStates().getMaTrangThai(tenTrangThai);
-
-            double giaNgay = parseDoubleSafe(rowData[3]);
-            double giaThang = parseDoubleSafe(rowData[4]);
-
-            return new PhongDTO.Update(roomId, tenPhong, maTrangThai, giaNgay, giaThang);
-        } catch (Exception e) {
-            System.err.println("Lỗi parse dữ liệu cập nhật: " + e.getMessage());
-            return null;
+    public PhongDTO.Update parseToUpdateDTO(int roomId, Object[] rowData) throws Exception {
+        if (roomId <= 0) {
+            throw new Exception("Mã phòng không hợp lệ.");
         }
+        if (rowData == null || rowData.length < 5) {
+            throw new Exception("Dữ liệu hàng không đầy đủ.");
+        }
+
+        String tenPhong = rowData[1] != null ? rowData[1].toString().trim() : "";
+        String tenTrangThai = rowData[2] != null ? rowData[2].toString() : "";
+
+        int maTrangThai = BaseDataController.getCachedRoomStates().getMaTrangThai(tenTrangThai);
+
+        double giaNgay = parseDoubleSafe(rowData[3], "Giá thuê theo ngày");
+        double giaThang = parseDoubleSafe(rowData[4], "Giá thuê theo tháng");
+
+        return new PhongDTO.Update(roomId, tenPhong, maTrangThai, giaNgay, giaThang);
     }
 
-    public PhongDTO.View handleAddRoom(Object[] rowData) {
+    // ================== HANDLE REQUESTS ==================
+    public void handleAddRoom(Object[] rowData) throws Exception {
         PhongDTO.Create dto = parseToCreateDTO(rowData);
-        if (dto == null) {
-            return null;
-        }
+        validateRoom(dto);
 
         try {
-            validateRoom(dto);
-
-            final String action = "CREATE_ROOM";
             ClientSocketController.ensureConnected();
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, "CREATE_ROOM", dto, true);
 
-            // Gọi sendRequest và bắt lỗi
-            BaseDTO.Response response = ClientSocketController.sendRequest(dir, action, dto, true);
-
-            if (response != null && response.statusCode() == 200) {
-                return gson.fromJson(response.data(), PhongDTO.View.class);
+            if (response == null) {
+                throw new Exception("Máy chủ không phản hồi.");
             }
-        } catch (IllegalArgumentException e) {
-            System.err.println("Lỗi validate phòng: " + e.getMessage());
+            if (response.statusCode() != 200) {
+                throw new Exception(response.message());
+            }
         } catch (Exception e) {
-            System.err.println("Lỗi kết nối khi thêm phòng: " + e.getMessage());
+            throw new Exception("Lỗi khi thêm phòng: " + e.getMessage());
         }
-        return null; // Trả về null nếu có bất kỳ lỗi nào xảy ra
     }
 
-    public boolean handleUpdateRoom(int roomId, Object[] rowData) {
+    public void handleUpdateRoom(int roomId, Object[] rowData) throws Exception {
         PhongDTO.Update dto = parseToUpdateDTO(roomId, rowData);
-        if (dto == null) {
-            return false;
+        // Có thể reuse validateRoom nếu logic tương đương
+        if (dto.tenPhong().isEmpty()) {
+            throw new Exception("Tên phòng không được để trống.");
         }
 
-        final String action = "UPDATE_ROOM";
         try {
             ClientSocketController.ensureConnected();
-            BaseDTO.Response response = ClientSocketController.sendRequest(dir, action, dto, true);
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, "UPDATE_ROOM", dto, true);
 
-            return response != null && response.statusCode() == 200;
+            if (response == null) {
+                throw new Exception("Máy chủ không phản hồi.");
+            }
+            if (response.statusCode() != 200) {
+                throw new Exception(response.message());
+            }
         } catch (Exception e) {
-            System.err.println("Lỗi khi cập nhật phòng: " + e.getMessage());
-            return false;
+            throw new Exception("Lỗi khi cập nhật phòng: " + e.getMessage());
         }
     }
 
-    public boolean handleDeleteRoom(int roomId) throws Exception {
-
+    public void handleDeleteRoom(int roomId) throws Exception {
+        if (roomId <= 0) {
+            throw new Exception("ID phòng không hợp lệ.");
+        }
         PhongDTO.Delete room = new PhongDTO.Delete(roomId);
 
-        final String action = "DELETE_ROOM";
-        ClientSocketController.ensureConnected();
+        try {
+            ClientSocketController.ensureConnected();
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, "DELETE_ROOM", room, true);
 
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, room, true);
-
-        int statusCode = response.statusCode();
-        if (statusCode == 200) {
-            return true;
-        } else {
-            throw new Exception(response.message());
+            if (response == null) {
+                throw new Exception("Máy chủ không phản hồi.");
+            }
+            if (response.statusCode() != 200) {
+                throw new Exception(response.message());
+            }
+        } catch (Exception e) {
+            throw new Exception("Lỗi khi xóa phòng: " + e.getMessage());
         }
     }
 
     public PhongDTO.ListPhong getRooms() throws Exception {
-        final String action = "GET_ROOMS";
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, null, true);
+        try {
+            ClientSocketController.ensureConnected();
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, "GET_ROOMS", null, true);
 
-        if (response != null && response.statusCode() == 200 && response.data() != null) {
-            return gson.fromJson(response.data(), PhongDTO.ListPhong.class);
+            if (response != null && response.statusCode() == 200 && response.data() != null) {
+                return gson.fromJson(response.data(), PhongDTO.ListPhong.class);
+            }
+            throw new Exception(response != null ? response.message() : "Không thể lấy dữ liệu.");
+        } catch (Exception e) {
+            throw new Exception("Lỗi tải danh sách phòng: " + e.getMessage());
         }
-        throw new Exception("Không thể lấy danh sách phòng: " + (response != null ? response.message() : "No response"));
     }
 
     public PhongDTO.ListPhong getEmptyRooms() throws Exception {
-        final String action = "GET_EMPTY_ROOMS";
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response
-                = ClientSocketController.sendRequest(dir, action, null, true);
+        try {
+            ClientSocketController.ensureConnected();
+            BaseDTO.Response response = ClientSocketController.sendRequest(dir, "GET_EMPTY_ROOMS", null, true);
 
-        if (response != null && response.statusCode() == 200 && response.data() != null) {
-            return gson.fromJson(response.data(), PhongDTO.ListPhong.class);
+            if (response != null && response.statusCode() == 200 && response.data() != null) {
+                return gson.fromJson(response.data(), PhongDTO.ListPhong.class);
+            }
+            throw new Exception(response != null ? response.message() : "Không thể lấy dữ liệu.");
+        } catch (Exception e) {
+            throw new Exception("Lỗi tải danh sách phòng trống: " + e.getMessage());
         }
-        throw new Exception("Không thể lấy danh sách phòng trống: " + (response != null ? response.message() : "No response"));
     }
 
-    public void validateRoom(PhongDTO.Create room) throws IllegalArgumentException {
+    private void validateRoom(PhongDTO.Create room) throws Exception {
         if (room.tenPhong() == null || room.tenPhong().trim().isEmpty()) {
-            throw new IllegalArgumentException("Tên phòng không được để trống");
+            throw new Exception("Tên phòng không được để trống.");
         }
         if (room.giaThueNgay() < 0 || room.giaThueThang() < 0) {
-            throw new IllegalArgumentException("Giá thuê không được nhỏ hơn 0");
+            throw new Exception("Giá thuê không được nhỏ hơn 0.");
         }
     }
 }

@@ -105,7 +105,8 @@ public class ContractView extends JPanel implements Components.IViewCheck {
                 return;
             }
             String today = LocalDate.now().format(formatter);
-            Object[] newRow = {"🆕 Thêm", null, "", "", "", "Chọn phòng...", today, today, "Ngày"};
+            String nextDay = LocalDate.now().plusDays(1).format(formatter);
+            Object[] newRow = {"🆕 Thêm", null, "", "", "", "Chọn phòng...", today, nextDay, "Ngày"};
             tableModel.addRow(newRow);
             editingRow = tableModel.getRowCount() - 1;
             startEditing(editingRow, 2);

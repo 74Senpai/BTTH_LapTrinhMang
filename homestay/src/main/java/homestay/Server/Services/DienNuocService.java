@@ -27,8 +27,7 @@ public class DienNuocService {
             List<DienNuoc> list = dienNuocDAO.getAll(conn);
 
             for (DienNuoc dn : list) {
-                // Map từ Model sang DTO View (sử dụng Constructor đã định nghĩa trong DTO)
-                DienNuocDTO.View view = new DienNuocDTO.View(
+                result.add(new DienNuocDTO.View(
                         dn.getMaDienNuoc(),
                         dn.getMaPhong(),
                         dn.getThang(),
@@ -39,96 +38,104 @@ public class DienNuocService {
                         dn.getChiSoNuocCu(),
                         dn.getChiSoNuocMoi(),
                         dn.getSoNuocTieuThu()
-                );
-                result.add(view);
+                ));
             }
             return new DienNuocDTO.ListDienNuoc(result);
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi lấy danh sách điện nước: " + e.getMessage());
+            throw new RuntimeException("Lỗi hệ thống khi truy xuất dữ liệu: " + e.getMessage());
         }
     }
 
     /**
-     * TẠO MỚI BẢN GHI ĐIỆN NƯỚC (Thường dùng khi bắt đầu tháng mới)
-     * Lấy chỉ số hiện tại của phòng để làm "Chỉ số cũ" cho bản ghi mới.
+     * TẠO MỚI BẢN GHI ĐIỆN NƯỚC
      */
     public void createPhieuThuDienNuoc(DienNuocDTO.Create dto) {
+        // VALIDATE DỮ LIỆU ĐẦU VÀO
         if (dto == null) {
-            throw new IllegalArgumentException("Dữ liệu không được null");
+            throw new RuntimeException("Dữ liệu yêu cầu (DTO) không được null.");
+        }
+        if (dto.maPhong() <= 0) {
+            throw new RuntimeException("Mã phòng không hợp lệ (phải là số dương).");
         }
 
         try (Connection conn = DBConnection.getConnection()) {
-            // 1. Lấy thông tin phòng để lấy chỉ số hiện tại
-            // Giả định bạn có hàm findById trong PhongDAO
-            Phong phong = phongDAO.getPhongById(conn, dto.maPhong()); 
+            Phong phong = phongDAO.getPhongById(conn, dto.maPhong());
             if (phong == null) {
-                throw new RuntimeException("Không tìm thấy phòng tương ứng");
+                throw new RuntimeException("Phòng không tồn tại.");
             }
 
-            // 2. Chuẩn bị dữ liệu cho tháng hiện tại
             LocalDate now = LocalDate.now();
             DienNuoc dn = new DienNuoc();
             dn.setMaPhong(dto.maPhong());
             dn.setThang(now.getMonthValue());
             dn.setNam(now.getYear());
-            
-            // Chỉ số cũ của tháng này = Chỉ số hiện tại của phòng
+
             dn.setChiSoDienCu(phong.getSoDienHienTai());
             dn.setChiSoNuocCu(phong.getSoNuocHienTai());
-            
-            // Mới khởi tạo nên chỉ số mới tạm bằng chỉ số cũ
             dn.setChiSoDienMoi(phong.getSoDienHienTai());
             dn.setChiSoNuocMoi(phong.getSoNuocHienTai());
 
             dienNuocDAO.insertDienNuocHangThang(conn, dn);
 
         } catch (SQLException e) {
-            throw new RuntimeException("Lỗi khi tạo phiếu điện nước: " + e.getMessage());
+            throw new RuntimeException("Lỗi SQL khi tạo bản ghi: " + e.getMessage());
         }
     }
 
     /**
-     * CẬP NHẬT CHỈ SỐ (Chốt số cuối tháng)
-     * Thực hiện: 1. Cập nhật bảng DienNuocHangThang | 2. Cập nhật bảng Phong
+     * CẬP NHẬT CHỈ SỐ
      */
     public void updateChiSoCuoiKy(DienNuocDTO.Update dto) {
+        // VALIDATE DỮ LIỆU ĐẦU VÀO
+        if (dto == null) {
+            throw new RuntimeException("Dữ liệu cập nhật không được để trống.");
+        }
+        if (dto.maDienNuoc() <= 0) {
+            throw new RuntimeException("ID bản ghi điện nước không hợp lệ.");
+        }
+        if (dto.chiSoDienMoi() < 0 || dto.chiSoNuocMoi() < 0) {
+            throw new RuntimeException("Chỉ số mới không được là số âm.");
+        }
+
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false); // Bắt đầu Transaction
+            conn.setAutoCommit(false);
 
-            // 1. Tìm bản ghi điện nước để lấy MaPhong
             DienNuoc dnOld = dienNuocDAO.getDienNuocById(conn, dto.maDienNuoc());
             if (dnOld == null) {
-                throw new RuntimeException("Không tìm thấy bản ghi điện nước cần cập nhật");
+                throw new RuntimeException("Không tìm thấy dữ liệu điện nước cần cập nhật.");
             }
 
-            // 2. Cập nhật chỉ số mới vào bảng DienNuocHangThang
-            dienNuocDAO.updateChiSoDienNuoc(conn, 
-                dto.maDienNuoc(), 
-                dto.chiSoDienMoi(), 
-                dto.chiSoNuocMoi()
+            // Thực hiện cập nhật
+            dienNuocDAO.updateChiSoDienNuoc(conn,
+                    dto.maDienNuoc(),
+                    dto.chiSoDienMoi(),
+                    dto.chiSoNuocMoi()
             );
 
-            // 3. Cập nhật số điện/nước hiện tại vào bảng Phong để đồng bộ
-            dienNuocDAO.updateChiSoHienTaiCuaPhong(conn, 
-                dnOld.getMaPhong(), 
-                dto.chiSoDienMoi(), 
-                dto.chiSoNuocMoi()
+            dienNuocDAO.updateChiSoHienTaiCuaPhong(conn,
+                    dnOld.getMaPhong(),
+                    dto.chiSoDienMoi(),
+                    dto.chiSoNuocMoi()
             );
 
-            conn.commit(); // Thành công thì lưu tất cả
+            conn.commit();
         } catch (SQLException e) {
             if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ex) {}
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                }
             }
-            throw new RuntimeException("Lỗi hệ thống khi cập nhật chỉ số: " + e.getMessage());
+            throw new RuntimeException("Lỗi hệ thống khi cập nhật: " + e.getMessage());
         } finally {
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
                     conn.close();
-                } catch (SQLException e) {}
+                } catch (SQLException e) {
+                }
             }
         }
     }

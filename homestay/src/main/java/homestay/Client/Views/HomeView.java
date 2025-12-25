@@ -36,46 +36,66 @@ public class HomeView extends Frame {
     // --- SETUP ROOM ---
     private void roomSetup(RoomView view) {
         RoomController controller = new RoomController();
-        Runnable refresh = (() -> {
+
+        // 1. Logic tải và làm mới dữ liệu
+        Runnable refresh = () -> {
             try {
                 PhongDTO.ListPhong list = controller.getRooms();
                 Object[][] data = list.getRooms().stream().map(r -> new Object[]{
-                    r.maPhong(), r.tenPhong(), r.tenTrangThai(),
-                    r.giaThueNgay(), r.giaThueThang(), r.soDienHienTai(), r.soNuocHienTai()
+                    r.maPhong(),
+                    r.tenPhong(),
+                    r.tenTrangThai(),
+                    r.giaThueNgay(),
+                    r.giaThueThang(),
+                    r.soDienHienTai(),
+                    r.soNuocHienTai()
                 }).toArray(Object[][]::new);
                 view.setRoomData(data);
             } catch (Exception e) {
                 Components.showError(view, "Lỗi tải dữ liệu: " + e.getMessage());
             }
-        });
+        };
+
         view.setOnRefresh(refresh);
         refresh.run();
 
+        // 2. Logic thêm phòng mới
         view.setOnAddRoom(rowData -> {
-            PhongDTO.View result = controller.handleAddRoom(rowData);
-            if (result.maPhong() != -1) {
-                view.updateRoomIdAtSelectedRow(result.maPhong());
+            try {
+                // Gọi hàm thêm (giờ là kiểu void, ném lỗi nếu thất bại)
+                controller.handleAddRoom(rowData);
+
                 Components.showInfo(view, "Thêm phòng thành công!");
-            } else {
-                Components.showError(view, "Thêm thất bại!");
+                refresh.run(); // Refresh để lấy ID mới cấp từ Server và cập nhật lại bảng
+            } catch (Exception e) {
+                // e.getMessage() sẽ chứa lỗi như "Tên phòng không được để trống" hoặc lỗi từ Server
+                Components.showError(view, e.getMessage());
             }
         });
 
+        // 3. Logic cập nhật phòng
         view.setOnUpdateRoom((id, rowData) -> {
-            if (!controller.handleUpdateRoom(id, rowData)) {
-                Components.showError(view, "Cập nhật thất bại!");
-            } else {
+            try {
+                controller.handleUpdateRoom(id, rowData);
+
                 Components.showInfo(view, "Cập nhật phòng thành công!");
                 refresh.run();
+            } catch (Exception e) {
+                Components.showError(view, e.getMessage());
+                refresh.run(); // Refresh lại để đưa dữ liệu bảng về trạng thái đúng trong DB
             }
         });
 
+        // 4. Logic xóa phòng
         view.setOnDeleteRoom(id -> {
+            // Thêm xác nhận trước khi xóa để đảm bảo an toàn
             try {
                 controller.handleDeleteRoom(id);
+
                 Components.showInfo(view, "Xóa phòng thành công!");
                 refresh.run();
             } catch (Exception e) {
+                // Hiển thị lỗi cụ thể (VD: "Không thể xóa phòng đang có khách thuê")
                 Components.showError(view, e.getMessage());
             }
         });
@@ -101,6 +121,7 @@ public class HomeView extends Frame {
         ContractController controller = new ContractController();
         RoomController roomCtrl = new RoomController();
 
+        // 1. Hàm Refresh dữ liệu
         Runnable refresh = () -> {
             try {
                 var emptyRooms = roomCtrl.getEmptyRooms().getRooms();
@@ -109,39 +130,44 @@ public class HomeView extends Frame {
                 HopDongDTO.ListHopDong list = controller.getContracts();
                 view.setContractData(TableMapper.mapContractListToTableData(list.getContracts()));
             } catch (Exception e) {
-                Components.showError(view, "Lỗi dữ liệu hợp đồng: " + e.getMessage());
+                Components.showError(view, "Lỗi tải dữ liệu: " + e.getMessage());
             }
         };
+
         view.setOnRefresh(refresh);
         refresh.run();
 
+        // 2. Xử lý THÊM hợp đồng
         view.setOnAddContract(rowData -> {
-            if (controller.handleAddContract(rowData)) {
+            try {
+                controller.handleAddContract(rowData);
                 Components.showInfo(view, "Thêm hợp đồng thành công!");
                 refresh.run();
-            } else {
-                Components.showError(view, "Thêm thất bại!");
-                refresh.run();
+            } catch (Exception e) {
+                // Hiển thị thông báo lỗi cụ thể (VD: "Tên không được để trống", "Phòng đã có người thuê")
+                Components.showError(view, e.getMessage());
             }
         });
 
+        // 3. Xử lý CẬP NHẬT hợp đồng
         view.setOnUpdateContract((id, rowData) -> {
-            if (!controller.handleUpdateContract(id, rowData)) {
-                Components.showError(view, "Cập nhật thất bại!");
-                refresh.run();
-            } else {
+            try {
+                controller.handleUpdateContract(id, rowData);
                 Components.showInfo(view, "Cập nhật hợp đồng thành công!");
                 refresh.run();
+            } catch (Exception e) {
+                Components.showError(view, e.getMessage());
             }
         });
 
+        // 4. Xử lý XÓA hợp đồng
         view.setOnDeleteContract(id -> {
             try {
                 controller.handleDeleteContract(id);
                 Components.showInfo(view, "Xóa hợp đồng thành công!");
                 refresh.run();
             } catch (Exception e) {
-                Components.showError(view, "Xóa thất bại!");
+                Components.showError(view, e.getMessage());
             }
         });
     }
@@ -215,41 +241,44 @@ public class HomeView extends Frame {
 
         // 2. Logic thêm hóa đơn mới
         view.setOnAdd(rowData -> {
-            // Controller sẽ parse rowData và gửi request CREATE_INVOICE
-            boolean success = controller.handleAddHoaDon(rowData);
-            if (success) {
-                Components.showError(view, "Tạo hóa đơn thành công!");
-                refresh.run(); // Tải lại để hiển thị mã ID thật và ngày thanh toán từ DB
-            } else {
-                Components.showError(view, "Thêm thất bại! Vui lòng kiểm tra lại Mã hợp đồng.");
+            try {
+                // Controller sẽ validate và gửi request, nếu lỗi sẽ ném Exception
+                controller.handleAddHoaDon(rowData);
+
+                Components.showInfo(view, "Tạo hóa đơn thành công!");
+                refresh.run();
+            } catch (Exception e) {
+                // Hiển thị lỗi chi tiết (VD: "Hợp đồng này đã bị hủy, không thể tạo hóa đơn")
+                Components.showError(view, e.getMessage());
                 refresh.run(); // Trả lại trạng thái bảng cũ
             }
         });
 
         // 3. Logic cập nhật hóa đơn (Sửa phụ phí hoặc trạng thái)
         view.setOnUpdate((id, rowData) -> {
-            // Controller gửi request UPDATE_INVOICE
-            boolean success = controller.handleUpdateHoaDon(id, rowData);
-            if (success) {
-                Components.showError(view, "Cập nhật hóa đơn thành công!");
+            try {
+                controller.handleUpdateHoaDon(id, rowData);
+
+                Components.showInfo(view, "Cập nhật hóa đơn thành công!");
                 refresh.run();
-            } else {
-                Components.showError(view, "Cập nhật thất bại!");
+            } catch (Exception e) {
+                // Hiển thị lỗi chi tiết (VD: "Cập nhật thất bại! Hóa đơn đã được thanh toán")
+                Components.showError(view, e.getMessage());
                 refresh.run();
             }
         });
 
         // 4. Logic xóa hóa đơn
         view.setOnDelete(id -> {
+            // Thêm xác nhận trước khi xóa
             try {
-                // Controller gửi request DELETE_INVOICE
-                boolean success = controller.handleDeleteHoaDon(id);
+                controller.handleDeleteHoaDon(id);
+
+                Components.showInfo(view, "Xóa hóa đơn thành công!");
                 refresh.run();
-                if (success) {
-                    refresh.run();
-                }
             } catch (Exception e) {
-                Components.showError(view, "Lỗi khi xóa hóa đơn: " + e.getMessage());
+                // Hiển thị lỗi chi tiết (VD: "Không thể xóa hóa đơn đã thanh toán")
+                Components.showError(view, e.getMessage());
             }
         });
     }
