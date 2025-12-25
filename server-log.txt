@@ -808,3 +808,9 @@
 [2025-12-25 21:49:21] | action=Response: DIEN_NUOC/CREATE_DIEN_NUOC| Status : 500| Message: Lỗi khi tạo phiếu điện nước: Duplicate entry '1-12-2025' for key 'DienNuocHangThang.uq_phong_thang' | user=Nguyễn Quản Trị
 [2025-12-25 21:49:28] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
 [2025-12-25 21:49:30] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:55:31] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:55:33] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:57:22] | action={"dir":"DIEN_NUOC","action":"CREATE_DIEN_NUOC","data":{"maPhong":1},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:57:24] | action=Response: DIEN_NUOC/CREATE_DIEN_NUOC| Status : 500| Message: Lỗi khi tạo phiếu điện nước: Duplicate entry '1-12-2025' for key 'DienNuocHangThang.uq_phong_thang' | user=Nguyễn Quản Trị
+[2025-12-25 21:57:59] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:58:00] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị

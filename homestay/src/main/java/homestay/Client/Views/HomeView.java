@@ -171,6 +171,7 @@ public class HomeView extends Frame {
             } catch (Exception e) {
                 // Hiển thị thông báo lỗi chi tiết từ Controller ném ra
                 Components.showError(view, e.getMessage());
+                refresh.run();
             }
         });
 
@@ -184,6 +185,7 @@ public class HomeView extends Frame {
             } catch (Exception e) {
                 // Hiển thị thông báo lỗi chi tiết (VD: "Chỉ số điện mới không được để trống")
                 Components.showError(view, e.getMessage());
+                refresh.run();
             }
         });
     }
