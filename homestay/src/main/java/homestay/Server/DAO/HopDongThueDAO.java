@@ -160,9 +160,11 @@ public class HopDongThueDAO {
 
     public void cancel(Connection conn, int maHopDong) throws SQLException {
         String sql = """
-            UPDATE HopDongThue
-            SET TrangThaiHopDong = 'Cancelled'
-            WHERE MaHopDong = ?
+            UPDATE HopDongThue hd
+            JOIN Phong p ON hd.MaPhong = p.MaPhong
+            SET hd.TrangThaiHopDong = 'Cancelled',
+                p.MaTrangThai = 1
+            WHERE hd.MaHopDong = ?
         """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -121,12 +121,14 @@ public class HomeView extends Frame {
                 refresh.run();
             } else {
                 Components.showError(view, "Thêm thất bại!");
+                refresh.run();
             }
         });
 
         view.setOnUpdateContract((id, rowData) -> {
             if (!controller.handleUpdateContract(id, rowData)) {
                 Components.showError(view, "Cập nhật thất bại!");
+                refresh.run();
             } else {
                 Components.showInfo(view, "Cập nhật hợp đồng thành công!");
                 refresh.run();
