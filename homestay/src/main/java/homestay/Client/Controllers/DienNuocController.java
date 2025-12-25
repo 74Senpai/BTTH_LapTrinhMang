@@ -13,83 +13,107 @@ public class DienNuocController {
     public DienNuocController() {
     }
 
-    // ================== HELPER PARSING AN TOÀN ==================
-    private int parseIntSafe(Object value) {
+    // ================== HELPER PARSING ==================
+    private int parseIntSafe(Object value, String fieldName) throws Exception {
         if (value == null || value.toString().trim().isEmpty()) {
-            return 0;
+            throw new Exception(fieldName + " không được để trống.");
         }
         try {
-            String cleanValue = value.toString().replaceAll("[^0-9]", ""); // Xóa bỏ ký tự không phải số
+            // Xóa bỏ tất cả ký tự không phải số (phòng trường hợp có dấu phân cách nghìn)
+            String cleanValue = value.toString().replaceAll("[^0-9]", "");
             return Integer.parseInt(cleanValue);
         } catch (NumberFormatException e) {
-            return 0;
+            throw new Exception(fieldName + " phải là một số nguyên hợp lệ.");
         }
     }
 
-    // ================== LOGIC PARSE DỮ LIỆU TỪ ROW ==================
+    // ================== LOGIC PARSE DỮ LIỆU ==================
+    public DienNuocDTO.Create parseToCreateDTO(Object[] rowData) throws Exception {
+        if (rowData == null || rowData.length < 2) {
+            throw new Exception("Dữ liệu dòng chọn không hợp lệ hoặc bị thiếu.");
+        }
+        int maPhong = parseIntSafe(rowData[1], "Mã phòng");
+        return new DienNuocDTO.Create(maPhong);
+    }
+
+    public DienNuocDTO.Update parseToUpdateDTO(int id, Object[] rowData) throws Exception {
+        if (rowData == null || rowData.length < 9) {
+            throw new Exception("Dữ liệu dòng chọn không đầy đủ thông tin.");
+        }
+        int dienMoi = parseIntSafe(rowData[5], "Chỉ số điện mới");
+        int nuocMoi = parseIntSafe(rowData[8], "Chỉ số nước mới");
+
+        return new DienNuocDTO.Update(id, dienMoi, nuocMoi);
+    }
+
+    // ================== HANDLE REQUESTS (THÊM, SỬA, XÓA) ==================
     /**
-     * Index dựa trên View mới: [0]:ID, [1]:Mã Phòng, [2]:Tháng, [3]:Năm,
-     * [4]:Điện Cũ, [5]:Điện Mới, [7]:Nước Cũ, [8]:Nước Mới
+     * Thêm mới điện nước
      */
-    public DienNuocDTO.Create parseToCreateDTO(Object[] rowData) {
-        try {
-            int maPhong = parseIntSafe(rowData[1]);
-            return new DienNuocDTO.Create(maPhong);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public DienNuocDTO.Update parseToUpdateDTO(int id, Object[] rowData) {
-        try {
-            int dienMoi = parseIntSafe(rowData[5]);
-            int nuocMoi = parseIntSafe(rowData[8]);
-            return new DienNuocDTO.Update(id, dienMoi, nuocMoi);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    // ================== HANDLE REQUESTS ==================
-    public boolean handleAddDienNuoc(Object[] rowData) {
+    public void handleAddDienNuoc(Object[] rowData) throws Exception {
+        // 1. Parse dữ liệu (Có lỗi sẽ ném ra tại đây)
         DienNuocDTO.Create dto = parseToCreateDTO(rowData);
-        if (dto == null || dto.maPhong() <= 0) {
-            return false;
-        }
 
         try {
+            // 2. Kết nối và gửi request
             ClientSocketController.ensureConnected();
-            BaseDTO.Response response = 
-                ClientSocketController.sendRequest(dir, "CREATE_DIEN_NUOC", dto, true);
-            return response != null && response.statusCode() == 200;
+            BaseDTO.Response response
+                    = ClientSocketController.sendRequest(dir, "CREATE_DIEN_NUOC", dto, true);
+
+            // 3. Kiểm tra phản hồi từ Server
+            if (response == null) {
+                throw new Exception("Không nhận được phản hồi từ máy chủ.");
+            }
+            if (response.statusCode() != 200) {
+                // Ném lỗi do server trả về (Ví dụ: "Phòng này đã chốt điện nước tháng này rồi")
+                throw new Exception(response.message());
+            }
         } catch (Exception e) {
-            return false;
+            // Ném lỗi ra ngoài cho UI xử lý
+            throw new Exception("Lỗi thêm mới: " + e.getMessage());
         }
     }
 
-    public boolean handleUpdateDienNuoc(int id, Object[] rowData) {
+    /**
+     * Cập nhật điện nước
+     */
+    public void handleUpdateDienNuoc(int id, Object[] rowData) throws Exception {
+        // 1. Parse dữ liệu
         DienNuocDTO.Update dto = parseToUpdateDTO(id, rowData);
-        if (dto == null) {
-            return false;
-        }
 
         try {
             ClientSocketController.ensureConnected();
-            BaseDTO.Response response = 
-                ClientSocketController.sendRequest(dir, "UPDATE_DIEN_NUOC", dto, true);
-            return response != null && response.statusCode() == 200;
+            BaseDTO.Response response
+                    = ClientSocketController.sendRequest(dir, "UPDATE_DIEN_NUOC", dto, true);
+
+            if (response == null) {
+                throw new Exception("Không nhận được phản hồi từ máy chủ.");
+            }
+            if (response.statusCode() != 200) {
+                throw new Exception(response.message());
+            }
         } catch (Exception e) {
-            return false;
+            throw new Exception("Lỗi cập nhật: " + e.getMessage());
         }
     }
 
+    /**
+     * Lấy toàn bộ danh sách
+     */
     public DienNuocDTO.ListDienNuoc getAllDienNuoc() throws Exception {
-        ClientSocketController.ensureConnected();
-        BaseDTO.Response response = 
-            ClientSocketController.sendRequest(dir, "GET_ALL_DIEN_NUOC", null, true);
-        if (response != null && response.statusCode() == 200 && response.data() != null) {
-            return gson.fromJson(response.data(), DienNuocDTO.ListDienNuoc.class);
+        try {
+            ClientSocketController.ensureConnected();
+            BaseDTO.Response response
+                    = ClientSocketController.sendRequest(dir, "GET_ALL_DIEN_NUOC", null, true);
+
+            if (response != null && response.statusCode() == 200 && response.data() != null) {
+                return gson.fromJson(response.data(), DienNuocDTO.ListDienNuoc.class);
+            } else {
+                String error = (response != null) ? response.message() : "Kết nối thất bại";
+                throw new Exception(error);
+            }
+        } catch (Exception e) {
+            throw new Exception("Lỗi lấy danh sách: " + e.getMessage());
         }
-        throw new Exception("Không thể lấy dữ liệu!");
     }
 }

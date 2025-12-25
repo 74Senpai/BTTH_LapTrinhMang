@@ -1,14 +1,22 @@
 package homestay.Client.Views;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Label;
+import java.awt.Panel;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -21,7 +29,7 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
     private DefaultTableModel tableModel;
     private Label lblGrandTotal;
 
-    private Button btnAdd, btnEdit, btnDelete, btnRefresh, btnSave, btnCancel;
+    private Button btnAdd, btnEdit, btnRefresh, btnSave, btnCancel;
 
     private int editingRow = -1;
     private final NumberFormat cur = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
@@ -29,7 +37,6 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
     // Callbacks cho Setup
     private Consumer<Object[]> onAddRecord;
     private BiConsumer<Integer, Object[]> onUpdateRecord;
-    private Consumer<Integer> onDeleteRecord;
     private Runnable onRefresh;
 
     public UtilityBillingView() {
@@ -96,12 +103,10 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
         lblGrandTotal.setFont(new Font("Arial", Font.BOLD, 14));
         btnAdd = new Button("Ghi số mới");
         btnEdit = new Button("Sửa số");
-        btnDelete = new Button("Xóa");
         btnRefresh = new Button("Tải lại");
         pnlRight.add(lblGrandTotal);
         pnlRight.add(btnAdd);
         pnlRight.add(btnEdit);
-        pnlRight.add(btnDelete);
         pnlRight.add(btnRefresh);
 
         pnlSouth.add(pnlLeft, BorderLayout.WEST);
@@ -174,19 +179,6 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
             exitEditMode();
         });
 
-        btnDelete.addActionListener(e -> {
-            int row = tblData.getSelectedRow();
-            if (row == -1 || editingRow != -1) {
-                return;
-            }
-            int id = Integer.parseInt(valueAt(row, 1));
-            if (confirm("Xóa bản ghi điện nước này?")) {
-                if (onDeleteRecord != null) {
-                    onDeleteRecord.accept(id);
-                }
-            }
-        });
-
         tblData.getSelectionModel().addListSelectionListener(e -> updateUIState());
         updateUIState();
     }
@@ -247,7 +239,6 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
         btnCancel.setEnabled(isEditing);
         btnAdd.setEnabled(!isEditing);
         btnEdit.setEnabled(!isEditing && hasSelection);
-        btnDelete.setEnabled(!isEditing && hasSelection);
         btnRefresh.setEnabled(!isEditing);
     }
 
@@ -275,10 +266,6 @@ public class UtilityBillingView extends javax.swing.JPanel implements Components
 
     public void setOnUpdate(BiConsumer<Integer, Object[]> cb) {
         this.onUpdateRecord = cb;
-    }
-
-    public void setOnDelete(Consumer<Integer> cb) {
-        this.onDeleteRecord = cb;
     }
 
     public void setOnRefresh(Runnable cb) {

@@ -195,7 +195,6 @@ public class RoomView extends javax.swing.JPanel implements Components.IViewChec
                 if (onDeleteRoom != null && roomId >= 0) {
                     onDeleteRoom.accept(roomId);
                 }
-                tableModel.removeRow(row);
             }
         });
 

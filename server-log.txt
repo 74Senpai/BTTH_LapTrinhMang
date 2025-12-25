@@ -650,3 +650,161 @@
 [2025-12-24 00:36:10] | action=Response: HOA_DON/UPDATE_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
 [2025-12-24 00:36:11] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
 [2025-12-24 00:36:13] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:09] | action={"dir":"BASE","action":"GET_DASHBOARD_STATS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:12] | action=Response: BASE/GET_DASHBOARD_STATS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:12] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:14] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:14] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:16] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:16] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:18] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:18] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:20] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:20] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:22] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:22] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:24] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:57:46] | action={"dir":"ROOM","action":"DELETE_ROOM","data":{"maPhong":16},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:48] | action=Response: ROOM/DELETE_ROOM| Status : 500| Message: Không thể xóa phòng ở trạng thái hiện tại | user=Nguyễn Quản Trị
+[2025-12-25 20:57:52] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:57:54] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:58:11] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":16,"tenPhong":"Phòng mới ne","maTrangThai":1,"giaThueNgay":123.0,"giaThueThang":1.23123123E8},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:58:13] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 20:58:17] | action={"dir":"ROOM","action":"DELETE_ROOM","data":{"maPhong":16},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 20:58:19] | action=Response: ROOM/DELETE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:01:47] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":13,"tenPhong":"Phòng chong ma toe","maTrangThai":1,"giaThueNgay":50000.0,"giaThueThang":1000000.0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:01:49] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:02:21] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":14,"tenPhong":"Phòng mới ken","maTrangThai":1,"giaThueNgay":0.0,"giaThueThang":0.0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:02:23] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:02:35] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":15,"tenPhong":"Phòng mới vo cung","maTrangThai":1,"giaThueNgay":0.0,"giaThueThang":0.0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:02:37] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:02:50] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":10,"tenPhong":"Phòng thai","maTrangThai":1,"giaThueNgay":500000.0,"giaThueThang":8000000.0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:02:52] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:02:55] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:02:57] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:04:40] | action={"dir":"HOA_DON","action":"UPDATE_HOA_DON","data":{"maThanhToan":6,"tienChiPhiPhu":1000.0,"tongTien":0.0,"trangThaiThanhToan":1},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:04:42] | action=Response: HOA_DON/UPDATE_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:04:43] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:04:45] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:04:56] | action={"dir":"BASE","action":"GET_DASHBOARD_STATS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:04:59] | action=Response: BASE/GET_DASHBOARD_STATS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:06:26] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:06:28] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:06:28] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:06:30] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:06:30] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:06:32] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:06:32] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:06:34] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:23:34] | action={"dir":"ROOM","action":"UPDATE_ROOM","data":{"maPhong":1,"tenPhong":"Phòng 306","maTrangThai":2,"giaThueNgay":300000.0,"giaThueThang":5000000.0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:23:36] | action=Response: ROOM/UPDATE_ROOM| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:24:21] | action={"dir":"BASE","action":"GET_DASHBOARD_STATS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:24:24] | action=Response: BASE/GET_DASHBOARD_STATS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:24:25] | action={"dir":"BASE","action":"GET_DASHBOARD_STATS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:24:28] | action=Response: BASE/GET_DASHBOARD_STATS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:21] | action={"dir":"BASE","action":"GET_DASHBOARD_STATS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:24] | action=Response: BASE/GET_DASHBOARD_STATS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:24] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:25] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:26] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:27] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:27] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:29] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:29] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:31] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:31] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:33] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:37:33] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:37:35] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:40:56] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:40:58] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:41:57] | action={"dir":"HOA_DON","action":"CREATE_HOA_DON","data":{"maHopDong":11,"tienPhong":0.0,"tienChiPhiPhu":0.0,"tongTien":0.0,"trangThaiThanhToan":0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:41:59] | action=Response: HOA_DON/CREATE_HOA_DON| Status : 500| Message: Lỗi hệ thống: Unknown column 'GiaThue' in 'field list' | user=Nguyễn Quản Trị
+[2025-12-25 21:42:03] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:42:05] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:42:31] | action={"dir":"HOA_DON","action":"CREATE_HOA_DON","data":{"maHopDong":10,"tienPhong":0.0,"tienChiPhiPhu":0.0,"tongTien":0.0,"trangThaiThanhToan":0},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:42:33] | action=Response: HOA_DON/CREATE_HOA_DON| Status : 500| Message: Lỗi hệ thống: Unknown column 'GiaThue' in 'field list' | user=Nguyễn Quản Trị
+[2025-12-25 21:42:56] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:42:58] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:43:09] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:11] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:43:11] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:13] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:43:18] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":3},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:20] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:43:21] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:23] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:43:23] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:25] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:43:41] | action={"dir":"HOP_DONG","action":"UPDATE_CONTRACT","data":{"maHopDong":2,"tenKhachHang":"Phạm Thị 36","soDienThoai":"0909333444","cccd":"001090000002","maPhong":0,"ngayBatDau":"2025-11-15","ngayKetThuc":"2026-05-15","loaiHinhThue":"Tháng"},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:44] | action=Response: HOP_DONG/UPDATE_CONTRACT| Status : 500| Message: Lỗi khi cập nhật hợp đồng | user=Nguyễn Quản Trị
+[2025-12-25 21:43:49] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:51] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:43:51] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:43:53] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:44:50] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":2},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:44:52] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:44:53] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:44:55] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:44:55] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:44:57] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:44:59] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":4},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:02] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:45:05] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:07] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:07] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:09] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:12] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":5},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:14] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:45:16] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:18] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:18] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:20] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:23] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":6},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:25] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:45:26] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:28] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:28] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:30] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:32] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":7},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:34] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:45:36] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:38] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:38] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:39] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:45] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":8},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:47] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:45:48] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:50] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:45:50] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:45:52] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:01] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":9},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:03] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:46:04] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:06] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:06] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:08] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:11] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":10},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:12] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:46:14] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:16] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:16] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:18] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:21] | action={"dir":"HOP_DONG","action":"DELETE_CONTRACT","data":{"maHopDong":11},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:22] | action=Response: HOP_DONG/DELETE_CONTRACT| Status : 200| Message: Hủy hợp đồng thành công | user=Nguyễn Quản Trị
+[2025-12-25 21:46:24] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:26] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:26] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:28] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:46:31] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:46:33] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:47:45] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:47:49] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:48:20] | action={"dir":"DIEN_NUOC","action":"UPDATE_DIEN_NUOC","data":{"maDienNuoc":5,"chiSoDienMoi":10564,"chiSoNuocMoi":36},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:48:23] | action=Response: DIEN_NUOC/UPDATE_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:48:25] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:48:27] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-25 21:49:19] | action={"dir":"DIEN_NUOC","action":"CREATE_DIEN_NUOC","data":{"maPhong":1},"session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:49:21] | action=Response: DIEN_NUOC/CREATE_DIEN_NUOC| Status : 500| Message: Lỗi khi tạo phiếu điện nước: Duplicate entry '1-12-2025' for key 'DienNuocHangThang.uq_phong_thang' | user=Nguyễn Quản Trị
+[2025-12-25 21:49:28] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-25 21:49:30] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị

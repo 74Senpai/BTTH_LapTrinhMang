@@ -14,13 +14,11 @@ import java.awt.ScrollPane;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JOptionPane;
-
 import homestay.Client.Controllers.ClientSocketController;
 import homestay.Client.Controllers.ContractController;
 import homestay.Client.Controllers.DienNuocController;
-import homestay.Client.Controllers.HoaDonController; // Thêm controller mới
-import homestay.Client.Controllers.RoomController;
+import homestay.Client.Controllers.HoaDonController;
+import homestay.Client.Controllers.RoomController; // Thêm controller mới
 import homestay.Client.Controllers.ThongKeController;
 import homestay.Client.Helper.SessionManager;
 import homestay.Client.Helper.TableMapper;
@@ -47,7 +45,7 @@ public class HomeView extends Frame {
                 }).toArray(Object[][]::new);
                 view.setRoomData(data);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(view, "Lỗi tải dữ liệu: " + e.getMessage());
+                Components.showError(view, "Lỗi tải dữ liệu: " + e.getMessage());
             }
         });
         view.setOnRefresh(refresh);
@@ -57,20 +55,26 @@ public class HomeView extends Frame {
             PhongDTO.View result = controller.handleAddRoom(rowData);
             if (result.maPhong() != -1) {
                 view.updateRoomIdAtSelectedRow(result.maPhong());
+                Components.showInfo(view, "Thêm phòng thành công!");
             } else {
-                JOptionPane.showMessageDialog(view, "Thêm thất bại!");
+                Components.showError(view, "Thêm thất bại!");
             }
         });
 
         view.setOnUpdateRoom((id, rowData) -> {
             if (!controller.handleUpdateRoom(id, rowData)) {
-                JOptionPane.showMessageDialog(view, "Cập nhật thất bại!");
+                Components.showError(view, "Cập nhật thất bại!");
+            } else {
+                Components.showInfo(view, "Cập nhật phòng thành công!");
+                refresh.run();
             }
         });
 
         view.setOnDeleteRoom(id -> {
             try {
                 controller.handleDeleteRoom(id);
+                Components.showInfo(view, "Xóa phòng thành công!");
+                refresh.run();
             } catch (Exception e) {
                 Components.showError(view, e.getMessage());
             }
@@ -85,7 +89,7 @@ public class HomeView extends Frame {
                 ThongKeDTO.BaoCaoTongHop data = controller.getBaoCaoTongHop();
                 view.updateData(data);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(view, "Lỗi tải thống kê: " + e.getMessage());
+                Components.showError(view, "Lỗi tải thống kê: " + e.getMessage());
             }
         };
         view.setOnRefresh(refresh);
@@ -113,8 +117,9 @@ public class HomeView extends Frame {
 
         view.setOnAddContract(rowData -> {
             if (controller.handleAddContract(rowData)) {
-                refresh.run(); 
-            }else {
+                Components.showInfo(view, "Thêm hợp đồng thành công!");
+                refresh.run();
+            } else {
                 Components.showError(view, "Thêm thất bại!");
             }
         });
@@ -122,12 +127,16 @@ public class HomeView extends Frame {
         view.setOnUpdateContract((id, rowData) -> {
             if (!controller.handleUpdateContract(id, rowData)) {
                 Components.showError(view, "Cập nhật thất bại!");
+            } else {
+                Components.showInfo(view, "Cập nhật hợp đồng thành công!");
+                refresh.run();
             }
         });
 
         view.setOnDeleteContract(id -> {
             try {
                 controller.handleDeleteContract(id);
+                Components.showInfo(view, "Xóa hợp đồng thành công!");
                 refresh.run();
             } catch (Exception e) {
                 Components.showError(view, "Xóa thất bại!");
@@ -138,26 +147,45 @@ public class HomeView extends Frame {
     // --- SETUP UTILITY (ĐIỆN NƯỚC) ---
     private void utilityBillingSetup(UtilityBillingView view) {
         DienNuocController controller = new DienNuocController();
+
+        // Hàm refresh dữ liệu
         Runnable refresh = () -> {
             try {
                 view.setData(controller.getAllDienNuoc().getRecords());
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(view, "Lỗi: " + e.getMessage());
+                Components.showError(view, "Lỗi tải dữ liệu: " + e.getMessage());
             }
         };
+
         view.setOnRefresh(refresh);
         refresh.run();
 
+        // Xử lý sự kiện THÊM
         view.setOnAdd(rowData -> {
-            if (controller.handleAddDienNuoc(rowData)) {
-                refresh.run();
-        
-            }});
+            try {
+                // Gọi hàm và chờ thực thi, nếu có lỗi nó sẽ nhảy thẳng xuống catch
+                controller.handleAddDienNuoc(rowData);
+
+                Components.showInfo(view, "Thêm thành công!");
+                refresh.run(); // Làm mới bảng sau khi thêm thành công
+            } catch (Exception e) {
+                // Hiển thị thông báo lỗi chi tiết từ Controller ném ra
+                Components.showError(view, e.getMessage());
+            }
+        });
+
+        // Xử lý sự kiện CẬP NHẬT
         view.setOnUpdate((id, rowData) -> {
-            if (controller.handleUpdateDienNuoc(id, rowData)) {
-                refresh.run();
-        
-            }});
+            try {
+                controller.handleUpdateDienNuoc(id, rowData);
+
+                Components.showInfo(view, "Cập nhật thành công!");
+                refresh.run(); // Làm mới bảng sau khi cập nhật thành công
+            } catch (Exception e) {
+                // Hiển thị thông báo lỗi chi tiết (VD: "Chỉ số điện mới không được để trống")
+                Components.showError(view, e.getMessage());
+            }
+        });
     }
 
     // --- SETUP HOA DON ---
@@ -172,7 +200,7 @@ public class HomeView extends Frame {
                 // Đổ dữ liệu vào bảng trong View
                 view.setHoaDonData(list.dsHoaDon());
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(view, "Lỗi tải danh sách hóa đơn: " + e.getMessage());
+                Components.showError(view, "Lỗi tải danh sách hóa đơn: " + e.getMessage());
             }
         };
 
@@ -186,10 +214,10 @@ public class HomeView extends Frame {
             // Controller sẽ parse rowData và gửi request CREATE_INVOICE
             boolean success = controller.handleAddHoaDon(rowData);
             if (success) {
-                JOptionPane.showMessageDialog(view, "Tạo hóa đơn thành công!");
+                Components.showError(view, "Tạo hóa đơn thành công!");
                 refresh.run(); // Tải lại để hiển thị mã ID thật và ngày thanh toán từ DB
             } else {
-                JOptionPane.showMessageDialog(view, "Thêm thất bại! Vui lòng kiểm tra lại Mã hợp đồng.");
+                Components.showError(view, "Thêm thất bại! Vui lòng kiểm tra lại Mã hợp đồng.");
                 refresh.run(); // Trả lại trạng thái bảng cũ
             }
         });
@@ -199,10 +227,10 @@ public class HomeView extends Frame {
             // Controller gửi request UPDATE_INVOICE
             boolean success = controller.handleUpdateHoaDon(id, rowData);
             if (success) {
-                JOptionPane.showMessageDialog(view, "Cập nhật hóa đơn thành công!");
+                Components.showError(view, "Cập nhật hóa đơn thành công!");
                 refresh.run();
             } else {
-                JOptionPane.showMessageDialog(view, "Cập nhật thất bại!");
+                Components.showError(view, "Cập nhật thất bại!");
                 refresh.run();
             }
         });
@@ -212,15 +240,16 @@ public class HomeView extends Frame {
             try {
                 // Controller gửi request DELETE_INVOICE
                 boolean success = controller.handleDeleteHoaDon(id);
+                refresh.run();
                 if (success) {
                     refresh.run();
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(view, "Lỗi khi xóa hóa đơn: " + e.getMessage());
+                Components.showError(view, "Lỗi khi xóa hóa đơn: " + e.getMessage());
             }
         });
     }
-    
+
     public HomeView() {
         // 1. Cấu hình Frame
         setTitle("Homestay Management System");
