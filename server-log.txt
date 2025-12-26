@@ -1038,3 +1038,19 @@
 [2025-12-26 00:00:52] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
 [2025-12-26 00:01:00] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
 [2025-12-26 00:01:03] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:01] | action={"dir":"BASE","action":"GET_DASHBOARD_STATS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:04] | action=Response: BASE/GET_DASHBOARD_STATS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:04] | action={"dir":"BASE","action":"GET_ROOM_STATES","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:06] | action=Response: BASE/GET_ROOM_STATES| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:06] | action={"dir":"ROOM","action":"GET_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:08] | action=Response: ROOM/GET_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:08] | action={"dir":"ROOM","action":"GET_EMPTY_ROOMS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:10] | action=Response: ROOM/GET_EMPTY_ROOMS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:10] | action={"dir":"HOP_DONG","action":"GET_CONTRACTS","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:12] | action=Response: HOP_DONG/GET_CONTRACTS| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:12] | action={"dir":"DIEN_NUOC","action":"GET_ALL_DIEN_NUOC","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:13] | action=Response: DIEN_NUOC/GET_ALL_DIEN_NUOC| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:14] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:15] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
+[2025-12-26 00:22:49] | action={"dir":"HOA_DON","action":"GET_ALL_HOA_DON","session":"admin_1"} | user=Nguyễn Quản Trị
+[2025-12-26 00:22:51] | action=Response: HOA_DON/GET_ALL_HOA_DON| Status : 200| Message: OKE | user=Nguyễn Quản Trị
