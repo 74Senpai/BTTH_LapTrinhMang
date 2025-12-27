@@ -5,6 +5,7 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Panel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.function.BiConsumer;
@@ -75,21 +76,26 @@ public class ContractView extends JPanel implements Components.IViewCheck {
         Components.centerTable(tblContract);
         add(new JScrollPane(tblContract), BorderLayout.CENTER);
 
-        // --- BUTTONS (Dùng Swing Button) ---
-        JPanel pnlSouth = new JPanel(new BorderLayout());
-        JPanel pnlLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // --- Panel Buttons (South)  ---
+        Panel pnlSouth = new Panel(new BorderLayout());
+
+        // Bên trái: Lưu & Hủy
+        Panel pnlLeft = new Panel(new FlowLayout(FlowLayout.LEFT));
         btnSave = new Button("LƯU THAY ĐỔI");
         btnCancel = new Button("HỦY");
         btnSave.setForeground(new Color(0, 100, 0));
         btnCancel.setForeground(new Color(150, 0, 0));
         pnlLeft.add(btnSave);
         pnlLeft.add(btnCancel);
+        
+        // Bên phải: Các chức năng chính
+        Panel pnlRight = new Panel(new FlowLayout(FlowLayout.RIGHT));
 
-        JPanel pnlRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnAdd = new Button("Thêm mới");
         btnEdit = new Button("Sửa");
         btnDelete = new Button("Xóa");
         btnRefresh = new Button("Tải lại");
+
         pnlRight.add(btnAdd);
         pnlRight.add(btnEdit);
         pnlRight.add(btnDelete);
@@ -98,6 +104,7 @@ public class ContractView extends JPanel implements Components.IViewCheck {
         pnlSouth.add(pnlLeft, BorderLayout.WEST);
         pnlSouth.add(pnlRight, BorderLayout.EAST);
         add(pnlSouth, BorderLayout.SOUTH);
+
 
         // --- ACTIONS ---
         btnAdd.addActionListener(e -> {
