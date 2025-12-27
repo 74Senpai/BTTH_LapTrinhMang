@@ -5,6 +5,7 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Panel;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.function.BiConsumer;
@@ -76,8 +77,8 @@ public class ContractView extends JPanel implements Components.IViewCheck {
         add(new JScrollPane(tblContract), BorderLayout.CENTER);
 
         // --- BUTTONS (Dùng Swing Button) ---
-        JPanel pnlSouth = new JPanel(new BorderLayout());
-        JPanel pnlLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        Panel pnlSouth = new Panel(new BorderLayout());
+        Panel pnlLeft = new Panel(new FlowLayout(FlowLayout.LEFT));
         btnSave = new Button("LƯU THAY ĐỔI");
         btnCancel = new Button("HỦY");
         btnSave.setForeground(new Color(0, 100, 0));
@@ -85,7 +86,7 @@ public class ContractView extends JPanel implements Components.IViewCheck {
         pnlLeft.add(btnSave);
         pnlLeft.add(btnCancel);
 
-        JPanel pnlRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        Panel pnlRight = new Panel(new FlowLayout(FlowLayout.RIGHT));
         btnAdd = new Button("Thêm mới");
         btnEdit = new Button("Sửa");
         btnDelete = new Button("Xóa");
